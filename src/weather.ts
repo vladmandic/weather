@@ -3,7 +3,8 @@ import { log } from './log';
 import { getLocation, findLocation, findAddress, printLocation } from './location';
 import { getForecast } from './forecast';
 import { getMap } from './map';
-import { printCurrent } from './current';
+import { printCurrent, printForecast } from './current';
+import { WeatherChart } from './chart';
 import * as keys from '../secrets.json';
 
 async function hashChange(evt) {
@@ -21,7 +22,16 @@ async function main() {
   printLocation(address);
 
   const data = await getForecast(loc.lat, loc.lon, keys.tomorrow);
-  printCurrent(data);
+  const charts: Record<string, WeatherChart> = {};
+  for (const timeline of data) {
+    if (timeline.timestep === 'current') {
+      printCurrent(timeline.intervals[0].values);
+    } else {
+      charts[timeline.timestep] = new WeatherChart(timeline.timestep);
+      charts[timeline.timestep].update(timeline.intervals);
+      printForecast(timeline.timestep, timeline.intervals);
+    }
+  }
 
   // await getMap(loc.lat, loc.lon, keys.tomorrow);
 }

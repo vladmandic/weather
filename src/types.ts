@@ -29,9 +29,13 @@ export interface Value {
   weatherCode: number,
 }
 
+export interface Interval {
+  startTime: string,
+  values: Value,
+}
 export interface Data {
   timestep: 'current' | '1m' | '5m' | '15m' | '30m' | '1h' | '1d',
   startTime: string,
   endTime: string,
-  intervals: [{ startTime: string, values: Value }],
+  intervals: Interval[],
 }

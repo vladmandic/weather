@@ -4,7 +4,6 @@ import { log } from './log';
 export async function getMap(lat: number, lon: number, apikey: string) {
   let div = document.getElementById('map') as HTMLDivElement;
   if (!div) {
-    log('create element: map');
     div = document.createElement('div');
     div.id = 'map';
     document.body.append(div);

@@ -3,10 +3,9 @@ import { log } from './log';
 export async function printLocation(name: string) {
   let div = document.getElementById('location') as HTMLDivElement;
   if (!div) {
-    log('create element: location');
     div = document.createElement('div');
     div.id = 'location';
-    document.body.append(div);
+    (document.getElementById('header') as HTMLDivElement).append(div);
   }
   log('upodate element: location');
   div.innerHTML = name;

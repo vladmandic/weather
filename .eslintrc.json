@@ -12,6 +12,8 @@
   },
   "plugins": [
     "@typescript-eslint",
+    "import",
+    "json",
     "html"
   ],
   "extends": [
@@ -34,6 +36,9 @@
     "import/extensions": "off",
     "import/prefer-default-export": "off",
     "prefer-template":"off",
-    "object-curly-newline":"off"
+    "object-curly-newline":"off",
+    "no-continue":"off",
+    "no-plusplus":"off",
+    "no-nested-ternary":"off"
   }
 }
