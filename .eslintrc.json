@@ -39,6 +39,8 @@
     "object-curly-newline":"off",
     "no-continue":"off",
     "no-plusplus":"off",
-    "no-nested-ternary":"off"
+    "no-nested-ternary":"off",
+    "no-mixed-operators":"off",
+    "lines-between-class-members":"off"
   }
 }

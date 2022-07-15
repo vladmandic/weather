@@ -9,7 +9,7 @@
     "development": ["serve", "watch", "lint", "compile"]
   },
   "lint": {
-    "locations": [ "*.json", "src/**/*.ts" ],
+    "locations": [ "*.json", "darksky/**/*.ts", "tomorrow/**/*.ts" ],
     "rules": { }
   },
   "serve": {
@@ -38,19 +38,24 @@
     },
     "targets": [
       {
-        "name": "main-app",
-        "input": "src/weather.ts",
-        "output": "public/weather.js"
+        "name": "tomorrow",
+        "input": "tomorrow/tomorrow.ts",
+        "output": "public/tomorrow.js"
       },
       {
         "name": "service-worker",
-        "input": "src/pwa-serviceworker.ts",
+        "input": "tomorrow/pwa-serviceworker.ts",
         "output": "public/pwa-serviceworker.js"
+      },
+      {
+        "name": "darksky",
+        "input": "darksky/darksky.ts",
+        "output": "public/darksky.js"
       }
     ]
   },
   "watch": {
-    "locations": [ "src/**/*" ]
+    "locations": [ "tomorrow/**/*", "darksky/**/*" ]
   },
   "typescript": {
     "allowJs": false
