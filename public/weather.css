@@ -1,0 +1,9 @@
+@font-face { font-family: 'Century-Gothic'; font-display: swap; font-style: normal; font-weight: 400; src: local('Century-Gothic'), url('/assets/century-gothic.ttf') format('truetype'); }
+html { font-size: 16px; }
+body { font-size: 1rem; font-family: "Century-Gothic", "Segoe UI", sans-serif; font-variant: small-caps; width: 99%; height: 100%; background: black; color: white; }
+.header {}
+.nav {}
+.main {}
+.footer {}
+.aside {}
+.install { font-size: 0.8rem; font-weight: bold; background: white; color: black; position: fixed; bottom: 0; right: 0; width: 100vw; padding: 4px; text-align: center; cursor: pointer; z-index: 1; display: none; }

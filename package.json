@@ -1,0 +1,48 @@
+{
+  "name": "@vladmandic/weather",
+  "version": "0.0.1",
+  "description": "Yet another weather app",
+  "sideEffects": false,
+  "main": "dist/weather.js",
+  "author": "Vladimir Mandic <mandic00@live.com>",
+  "bugs": {
+    "url": "https://github.com/vladmandic/weather/issues"
+  },
+  "homepage": "https://vladmandic.github.io/weather/index.html",
+  "license": "MIT",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vladmandic/weather.git"
+  },
+  "scripts": {
+    "dev": "build --profile development"
+  },
+  "keywords": [
+    "weather"
+  ],
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.30.6",
+    "@typescript-eslint/parser": "^5.30.6",
+    "@vladmandic/build": "link:../build",
+    "esbuild": "^0.14.49",
+    "eslint": "8.19.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-html": "^6.2.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-json": "^3.1.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^6.0.0",
+    "tslib": "^2.4.0",
+    "typescript": "4.7.4"
+  },
+  "dependencies": {
+    "@googlemaps/js-api-loader": "^1.14.3",
+    "@types/leaflet": "^1.7.11",
+    "leaflet": "^1.8.0",
+    "moment": "^2.29.4",
+    "query-string": "^7.1.1"
+  }
+}
