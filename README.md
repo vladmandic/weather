@@ -11,6 +11,6 @@ Yet another weather app
 ## Todo
 
 - input filed for location
+- instant address lookup
 - gradient colors: [https://www.chartjs.org/docs/latest/samples/advanced/linear-gradient.html]
-- pollen, polution
-- weather map
+- secondary radars
