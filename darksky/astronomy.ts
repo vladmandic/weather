@@ -34,19 +34,15 @@ class ComponentAstronomy extends HTMLElement { // watch for attributes
     if (pos.phase <= 0.20) img = '/assets/phases/moon-12.webp';
     if (pos.phase <= 0.08) img = '/assets/phases/moon-0.webp';
     this.innerHTML = `
-      <table class="component-astronomy-data" style="display: block">
+      <table class="component-astronomy-data" style="display: block; margin: 20px 0 20px 0">
         <tr>
           <td><img src="/assets/phases/sun.webp" width="100px" height="100px" alt="sunrise"></img></td>
           <td>Dawn<br>Sunrise<br>Noon<td>
           <td>${hhmm(sun.dawn)}<br>${hhmm(sun.sunrise)} - ${hhmm(sun.sunriseEnd)}<br>${hhmm(sun.solarNoon)}</td>
-        </tr>
-        <tr>
-          <td><img src="/assets/phases/moon.webp" width="100px" height="100px" alt="sunset"></img></td>
+          <td><img src="/assets/phases/moon.webp" width="100px" height="100px" alt="sunset" style="margin-left: 20px"></img></td>
           <td style="padding-right: 10px">Golden hour<br>Sunset<br>Dusk<br>Night<td>
           <td>${hhmm(sun.goldenHour)}<br>${hhmm(sun.sunsetStart)} - ${hhmm(sun.sunset)}<br>${hhmm(sun.dusk)}<br>${hhmm(sun.night)}</td>
-        </tr>
-        <tr>
-          <td><img src="${img}" width="50px" height="50px" alt="moonrise" style="margin-left: 30px"></img></td>
+          <td><img src="${img}" width="50px" height="50px" alt="moonrise" style="margin-left: 50px"></img></td>
           <td>Moonrise<br>Moonset<br>Phase<td>
           <td>${hhmm(moon.rise)}<br>${hhmm(moon.set)}<br>${Math.round(100 * (1 - 2 * Math.abs(0.5 - pos.phase)))}% ${phase}</td>
         </tr>

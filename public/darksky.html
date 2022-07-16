@@ -18,23 +18,25 @@
   <link rel="apple-touch-icon" href="/assets/dash-256.png">
   <link rel="apple-touch-startup-image" href="/assets/dash-256.png">
   <link rel="stylesheet" href="darksky.css">
+  <link rel="stylesheet" href="../assets/leaflet.css">
   <script src="darksky.js"></script>
 </head>
 <body>
   <noscript><h1>javascript is required</h1></noscript>
-  <header><div id="header" class="header"></div></header>
   <nav><div id="nav" class="nav"></div></nav>
-  <main>
-    <div id="main" class="main">
+  <header>
+    <div id="header" class="header">
       <component-address></component-address>
       <component-location></component-location>
+    </div>
+  </header>
+  <main>
+    <div id="main" class="main">
       <component-today></component-today>
       <component-forecast></component-forecast>
-      <div style="display: flex; justify-content: center">
-        <component-legend></component-legend>
-        <component-chart></component-chart>
-      </div>
       <component-astronomy></component-astronomy>
+      <component-chart></component-chart>
+      <component-radar></component-radar>
     </div>
   </main>
   <footer><div id="footer" class="footer"></div></footer>

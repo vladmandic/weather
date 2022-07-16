@@ -15,7 +15,8 @@ async function main() {
   log('weather app');
   await register('/public/pwa-serviceworker.js');
 
-  // const loc = await findLocation('brickell', keys.google);
+  const loc1 = await findLocation('brickell', keys.google);
+  log(loc1);
 
   const loc = await getLocation();
   const address = await findAddress(loc.lat, loc.lon, keys.google);
@@ -33,7 +34,7 @@ async function main() {
     }
   }
 
-  // await getMap(loc.lat, loc.lon, keys.tomorrow);
+  await getMap(loc.lat, loc.lon, keys.tomorrow);
 }
 
 window.onhashchange = (evt) => hashChange(evt);

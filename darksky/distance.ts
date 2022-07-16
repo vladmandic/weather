@@ -19,7 +19,9 @@ class ComponentLocation extends HTMLElement { // watch for attributes
     if (name !== 'loc') return;
     const [lat, lon, distance] = newValue.split(',');
     this.innerHTML = `
-      <div style="margin: 8px">${Math.round(1000 * lat) / 1000}°, ${Math.round(1000 * lon) / 1000}° nearest station ${distance !== 'Infinity' ? distance + 'mi' : 'N/A'}</div>
+      <div style="margin: 20px 0 0 0">
+        ${Math.round(1000 * lat) / 1000}°, ${Math.round(1000 * lon) / 1000}° nearest station ${distance !== 'Infinity' ? distance + 'mi' : 'N/A'}
+      </div>
     `;
   }
 }

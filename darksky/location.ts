@@ -71,7 +71,7 @@ class ComponentAddress extends HTMLElement { // watch for attributes
   attributeChangedCallback(name, _oldValue, newValue) { // triggered on attribute change
     if (name !== 'address') return;
     this.innerHTML = `
-      <div style="margin: 8px">${newValue}</div>
+      <div style="margin: 20px 0 0 0; font-size: 2rem">${newValue}</div>
     `;
   }
 }

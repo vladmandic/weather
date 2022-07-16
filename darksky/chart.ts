@@ -11,7 +11,18 @@ const chartOptions: ChartOptions = {
   },
   plugins: {
     title: { display: false },
-    legend: { display: false },
+    legend: {
+      position: 'bottom',
+      fullSize: true,
+      labels: {
+        padding: 14,
+        color: 'rgb(200, 200, 200)',
+        font: {
+          family: 'CenturyGothic',
+          size: 12,
+        },
+      },
+    },
   },
   scales: {
     x: {
@@ -44,26 +55,6 @@ export async function updateChart(data) {
   if (!data || !data.hourly) return;
   const canvas = document.getElementById('weather-canvas') as HTMLCanvasElement;
   if (!canvas) return;
-  const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
-  const bg1 = ctx.createLinearGradient(0, 0, 0, 250);
-  bg1.addColorStop(1, 'rgba(127,122,0, 0.1)');
-  bg1.addColorStop(0, 'rgba(255,225,0, 0.1)');
-  const bg2 = ctx.createLinearGradient(0, 0, 0, 250);
-  bg2.addColorStop(1, 'rgba(40,122,125, 0.1)');
-  bg2.addColorStop(0, 'rgba(80,225,150, 0.1)');
-  const bg3 = ctx.createLinearGradient(0, 0, 0, 250);
-  bg3.addColorStop(1, 'rgba(0,95,62, 0.1)');
-  bg3.addColorStop(0, 'rgba(0,190,255, 0.1)');
-  const bg4 = ctx.createLinearGradient(0, 0, 0, 250);
-  bg4.addColorStop(1, 'rgba(100,100,31, 0.1)');
-  bg4.addColorStop(0, 'rgba(200,200,200, 0.1)');
-  const bg5 = ctx.createLinearGradient(0, 0, 0, 250);
-  bg5.addColorStop(1, 'rgba(127,75,125, 0.1)');
-  bg5.addColorStop(0, 'rgba(255,150,150, 0.1)');
-  const bg6 = ctx.createLinearGradient(0, 0, 0, 250);
-  bg6.addColorStop(1, 'rgba(127,122,0, 0.1)');
-  bg6.addColorStop(0, 'rgba(255,225,0, 0.9)');
-
   const labelOptions = {
     borderWidth: 2,
     fill: false,
@@ -77,12 +68,12 @@ export async function updateChart(data) {
     data: {
       labels: [],
       datasets: [
-        { label: 'Temp [F]', borderColor: '#ffe100', ...labelOptions, data: [] },
-        { label: 'Humidity [%]', borderColor: '#ff9696', ...labelOptions, data: [] },
-        { label: 'Cloud [%]', borderColor: '#cccccc', ...labelOptions, data: [] },
-        { label: 'Rain [in]', borderColor: '#52ff97', ...labelOptions, data: [] },
-        { label: 'Wind [mph]', borderColor: '#00bbff', ...labelOptions, data: [] },
-        { label: 'Feel [F]', borderColor: '#cca100', ...labelOptions, data: [], fill: '-1' },
+        { label: 'Temp [F]', borderColor: '#ff9696', backgroundColor: '#ff9696', ...labelOptions, borderWidth: 3, data: [] },
+        { label: 'Humidity [%]', borderColor: '#ffe100', backgroundColor: '#ffe100', ...labelOptions, data: [] },
+        { label: 'Cloud [%]', borderColor: '#cccccc', backgroundColor: '#cccccc', ...labelOptions, data: [] },
+        { label: 'Rain [in]', borderColor: '#52ff97', backgroundColor: '#52ff97', ...labelOptions, data: [] },
+        { label: 'Wind [mph]', borderColor: '#00bbff', backgroundColor: '#00bbff', ...labelOptions, data: [] },
+        { label: 'Feel [F]', borderColor: '#cca100', backgroundColor: '#cca100', ...labelOptions, data: [] },
       ],
     },
     options: chartOptions,
@@ -106,8 +97,8 @@ export async function updateChart(data) {
 class ComponentChart extends HTMLElement { // watch for attributes
   connectedCallback() { // triggered on insert
     this.innerHTML = `
-      <div id="weather-chart" style="margin: 0 20px 0 20px; max-width: 600px">
-        <canvas id="weather-canvas" height=300 width=650></canvas>
+      <div id="weather-chart" style="margin: 20px 0 40px 0; max-width: 800px">
+        <canvas id="weather-canvas" height=300 width=800></canvas>
       </div>
     `;
   }

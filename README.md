@@ -12,4 +12,5 @@ Yet another weather app
 
 - input filed for location
 - gradient colors: [https://www.chartjs.org/docs/latest/samples/advanced/linear-gradient.html]
-- search future weather codes
+- pollen, polution
+- weather map

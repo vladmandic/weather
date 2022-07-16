@@ -7,6 +7,7 @@ import { updateLegend } from './legend';
 import { updateToday } from './today';
 import { updateForecast } from './forecast';
 import { updateChart } from './chart';
+import { updateRadar } from './radar';
 
 async function hashChange(evt) {
   log('hash change:', evt.newURL);
@@ -22,6 +23,7 @@ async function cors(url: string) {
 
 async function main() {
   log('weather app');
+  (document.getElementById('header') as HTMLDivElement).style.width = `${window.innerWidth}px`;
 
   // lookup based on string
   const lookup = await findLocation('Brickell', keys.google);
@@ -43,6 +45,7 @@ async function main() {
   updateForecast(data);
   updateLegend(data);
   updateChart(data);
+  updateRadar(loc.lat, loc.lon);
 }
 
 window.onhashchange = (evt) => hashChange(evt);
