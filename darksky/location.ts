@@ -54,6 +54,7 @@ export async function getLocation(): Promise<{lat: number, lon: number}> {
 }
 
 export function updateAddress(address: string) {
+  log('updateAddress');
   const collection = document.getElementsByTagName('component-address');
   for (let i = 0; i < collection.length; i++) {
     collection[i].setAttribute('address', address);

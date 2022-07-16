@@ -16,10 +16,6 @@ class ComponentAstronomy extends HTMLElement { // watch for attributes
   connectedCallback() { // triggered on insert
     this.innerHTML = '';
     this.style.display = 'inline-block';
-    this.onclick = () => {
-      const elements = document.getElementsByClassName('component-astronomy-data');
-      for (let i = 0; i < elements.length; i++) (elements[i] as HTMLElement).style.display = (elements[i] as HTMLElement).style.display === 'block' ? 'none' : 'block';
-    };
   }
 
   attributeChangedCallback(name, _oldValue, newValue) { // triggered on attribute change
@@ -38,8 +34,7 @@ class ComponentAstronomy extends HTMLElement { // watch for attributes
     if (pos.phase <= 0.20) img = '/assets/phases/moon-12.webp';
     if (pos.phase <= 0.08) img = '/assets/phases/moon-0.webp';
     this.innerHTML = `
-      <div style="margin: 8px">astronomy</div>
-      <table class="component-astronomy-data" style="display: block; margin: 8px">
+      <table class="component-astronomy-data" style="display: block">
         <tr>
           <td><img src="/assets/phases/sun.webp" width="100px" height="100px" alt="sunrise"></img></td>
           <td>Dawn<br>Sunrise<br>Noon<td>

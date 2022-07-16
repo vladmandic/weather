@@ -1,4 +1,7 @@
+import { log } from './log';
+
 export function updateLocation(lat, lon, distance) {
+  log('updateLocation', { lat, lon, distance });
   const collection = document.getElementsByTagName('component-location');
   for (let i = 0; i < collection.length; i++) {
     collection[i].setAttribute('loc', `${lat},${lon},${distance}`);

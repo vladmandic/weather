@@ -3,6 +3,10 @@ import { getLocation, findLocation, findAddress, updateAddress } from './locatio
 import * as keys from '../secrets.json';
 import { updateAstronomy } from './astronomy';
 import { updateLocation } from './distance';
+import { updateLegend } from './legend';
+import { updateToday } from './today';
+import { updateForecast } from './forecast';
+import { updateChart } from './chart';
 
 async function hashChange(evt) {
   log('hash change:', evt.newURL);
@@ -33,8 +37,12 @@ async function main() {
   updateLocation(loc.lat, loc.lon, Number.POSITIVE_INFINITY);
 
   const data = await cors(`https://api.darksky.net/forecast/${keys.darksky}/${loc.lat},${loc.lon}`);
-  updateLocation(loc.lat, loc.lon, data.flags['nearest-station']);
   log('weatherData', data);
+  updateLocation(loc.lat, loc.lon, data.flags['nearest-station']);
+  updateToday(data);
+  updateForecast(data);
+  updateLegend(data);
+  updateChart(data);
 }
 
 window.onhashchange = (evt) => hashChange(evt);
