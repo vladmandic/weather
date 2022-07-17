@@ -40,7 +40,7 @@ const update = async (loc) => {
 async function main() {
   log('weather app');
   window.addEventListener('beforeinstallprompt', (evt) => installable(evt));
-  await registerPWA('/public/pwa-serviceworker.js');
+  await registerPWA('pwa-serviceworker.js');
   let loc = { lat: 0, lon: 0, name: '' };
 
   // init based on string
