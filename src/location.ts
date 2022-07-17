@@ -1,6 +1,8 @@
 import { log } from './log';
 
-export async function findLocation(name: string, apiKey: string) {
+export type Loc = { lat: number, lon: number, name: string }
+
+export async function findLocation(name: string, apiKey: string): Promise<Loc> {
   const res = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?key=${apiKey}&address=${name}`);
   if (res && res.ok) {
     const json = await res.json();
@@ -15,7 +17,7 @@ export async function findLocation(name: string, apiKey: string) {
   } else {
     log('findLocation', res.status, res.statusText);
   }
-  return {};
+  return { lat: 0, lon: 0, name: '' };
 }
 
 export async function findAddress(lat: number, lon: number, apiKey: string) {
@@ -34,27 +36,27 @@ export async function findAddress(lat: number, lon: number, apiKey: string) {
   return address;
 }
 
-export async function getLocation(): Promise<{lat: number, lon: number}> {
+export async function getLocation(): Promise<Loc> {
   if (!navigator.geolocation) {
     log('getLocation denied');
-    return { lat: 0, lon: 0 };
+    return { lat: 0, lon: 0, name: '' };
   }
   return new Promise((resolve) => {
     navigator.geolocation.getCurrentPosition(
       (position: GeolocationPosition) => { // eslint-disable-line no-undef
         log('getLocation', position);
-        resolve({ lat: position.coords.latitude, lon: position.coords.longitude });
+        resolve({ lat: position.coords.latitude, lon: position.coords.longitude, name: '' });
       },
       (error: GeolocationPositionError) => { // eslint-disable-line no-undef
         log('getLocation error', error);
-        resolve({ lat: 0, lon: 0 });
+        resolve({ lat: 0, lon: 0, name: '' });
       },
     );
   });
 }
 
 export function updateAddress(address: string) {
-  log('updateAddress');
+  log('updateAddress', address);
   const collection = document.getElementsByTagName('component-address');
   for (let i = 0; i < collection.length; i++) {
     collection[i].setAttribute('address', address);

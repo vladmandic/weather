@@ -1,4 +1,5 @@
 import * as L from 'leaflet';
+import { log } from './log';
 
 export const Radar = L.Control.extend({
   NEXRAD_URL: 'https://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0q.cgi',
@@ -20,6 +21,7 @@ export const Radar = L.Control.extend({
   },
 
   onAdd(map) {
+    log('addLayer', { url: this.NEXRAD_URL, layer: this.NEXRAD_LAYER });
     this.map = map;
     this.container = L.DomUtil.create('div', 'leaflet-radar');
     this.container.style.background = 'transparent';

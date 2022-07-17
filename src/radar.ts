@@ -2,22 +2,30 @@ import * as L from 'leaflet';
 import { Radar } from './leaflet-radar.js';
 import { log } from './log';
 
+const mapUrl = 'https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png';
+
+let map: L.Map;
+
 export async function updateRadar(lat: number, lon: number) {
-  log('updateRadar');
+  log('updateMap', mapUrl);
   const div = document.getElementById('weather-radar');
   if (!div) return;
-  const map = new L.Map(div, {
-    center: new L.LatLng(lat, lon),
-    zoom: 8,
-    zoomControl: false,
-    attributionControl: false,
-  });
-  L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png', {}).addTo(map);
-  // L.tileLayer('https://tile-{s}.openstreetmap.fr/hot/{z}/{x}/{y}.png', {}).addTo(map);
-  // @ts-ignore property does not exist
-  L.control.radar = () => new Radar({});
-  // @ts-ignore property does not exist
-  L.control.radar({}).addTo(map);
+  if (!map) {
+    map = new L.Map(div, {
+      center: new L.LatLng(lat, lon),
+      zoom: 8,
+      zoomControl: false,
+      attributionControl: false,
+    });
+    L.tileLayer(mapUrl, {}).addTo(map);
+    // L.tileLayer('https://tile-{s}.openstreetmap.fr/hot/{z}/{x}/{y}.png', {}).addTo(map);
+    // @ts-ignore property does not exist
+    L.control.radar = () => new Radar({});
+    // @ts-ignore property does not exist
+    L.control.radar({}).addTo(map);
+  } else {
+    map.setView(new L.LatLng(lat, lon));
+  }
 }
 
 class ComponentRadar extends HTMLElement { // watch for attributes

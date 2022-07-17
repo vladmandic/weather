@@ -23,7 +23,11 @@
 </head>
 <body>
   <noscript><h1>javascript is required</h1></noscript>
-  <nav><div id="nav" class="nav"></div></nav>
+  <nav>
+    <div id="nav" class="nav">
+      <input type="text" id="input-address" name="input-address" size="10">
+    </div>
+  </nav>
   <header>
     <div id="header" class="header">
       <component-address></component-address>
@@ -34,6 +38,7 @@
     <div id="main" class="main">
       <component-today></component-today>
       <component-forecast></component-forecast>
+      <component-aqi></component-aqi>
       <component-astronomy></component-astronomy>
       <component-chart></component-chart>
       <component-radar></component-radar>

@@ -4,7 +4,7 @@ import { log } from './log';
 const imgPath = '/assets/weather';
 
 export async function updateForecast(data) {
-  log('updateForecast');
+  log('updateForecast', data);
   if (!data || !data.currently) return;
   const card = document.getElementById('weather-forecast');
   if (!card) return;

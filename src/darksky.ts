@@ -2,6 +2,7 @@ import { log } from './log';
 import { getLocation, findLocation, findAddress, updateAddress } from './location';
 import * as keys from '../secrets.json';
 import { registerPWA } from './pwa-register';
+import { cors } from './cors';
 import { updateAstronomy } from './astronomy';
 import { updateLocation } from './distance';
 import { updateLegend } from './legend';
@@ -9,36 +10,17 @@ import { updateToday } from './today';
 import { updateForecast } from './forecast';
 import { updateChart } from './chart';
 import { updateRadar } from './radar';
+import { updateAQI } from './aqi';
 
 async function hashChange(evt) {
   log('hash change:', evt.newURL);
 }
 
-async function cors(url: string) {
-  const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`);
-  if (!res || !res.ok) return {};
-  const content = (await res.json()).contents;
-  const json = JSON.parse(content);
-  return json;
-}
-
-async function main() {
-  log('weather app');
-  (document.getElementById('header') as HTMLDivElement).style.width = `${window.innerWidth}px`;
-  await registerPWA('/public/pwa-serviceworker.js');
-
-  // lookup based on string
-  const lookup = await findLocation('Brickell', keys.google);
-  updateAddress(lookup.name);
-  updateAstronomy(lookup.lat, lookup.lon);
-  updateLocation(lookup.lat, lookup.lon, Number.POSITIVE_INFINITY);
-
-  // lookup based on gps
-  const loc = await getLocation();
-  const address = await findAddress(loc.lat, loc.lon, keys.google);
+const update = async (loc) => {
   updateAstronomy(loc.lat, loc.lon);
-  updateAddress(address);
+  updateAddress(loc.name);
   updateLocation(loc.lat, loc.lon, Number.POSITIVE_INFINITY);
+  updateAQI(loc.lat, loc.lon, keys.aqicn);
 
   const data = await cors(`https://api.darksky.net/forecast/${keys.darksky}/${loc.lat},${loc.lon}`);
   log('weatherData', data);
@@ -48,6 +30,38 @@ async function main() {
   updateLegend(data);
   updateChart(data);
   updateRadar(loc.lat, loc.lon);
+};
+
+async function main() {
+  log('weather app');
+  // (document.getElementById('header') as HTMLDivElement).style.width = `${window.innerWidth}px`;
+  await registerPWA('/public/pwa-serviceworker.js');
+  let loc = { lat: 0, lon: 0, name: '' };
+
+  // init based on string
+  loc = await findLocation('Brickell', keys.google);
+  updateAddress(loc.name);
+  updateAstronomy(loc.lat, loc.lon);
+  updateLocation(loc.lat, loc.lon, Number.POSITIVE_INFINITY);
+
+  // lookup based on gps
+  const locGPS = await getLocation();
+  if (locGPS.lat !== 0) {
+    loc = locGPS;
+    loc.name = await findAddress(loc.lat, loc.lon, keys.google);
+  }
+
+  // lookup based on input
+  const input = (document.getElementById('input-address') as HTMLInputElement);
+  input.onchange = async () => {
+    log('inputAddress', input.value);
+    const adr = input.value.trim();
+    loc = await findLocation(adr, keys.google);
+    update(loc);
+  };
+
+  // @ts-ignore
+  update(loc); // eslint-disable-line no-use-before-define
 }
 
 window.onhashchange = (evt) => hashChange(evt);
