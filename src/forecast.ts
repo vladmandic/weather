@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon';
 import { log } from './log';
 
-const imgPath = '/assets/weather';
+const imgPath = '../assets/weather';
 
 export async function updateForecast(data) {
   log('updateForecast', { daily: data.daily });

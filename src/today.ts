@@ -1,6 +1,6 @@
 import { log } from './log';
 
-const imgPath = '/assets/weather';
+const imgPath = '../assets/weather';
 
 export async function updateToday(data) {
   log('updateToday', { currently: data.currently });
