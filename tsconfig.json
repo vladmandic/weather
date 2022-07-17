@@ -52,5 +52,5 @@
     "tabSize": 2
   },
   "exclude": ["node_modules/"],
-  "include": ["tomorrow", "darksky"]
+  "include": ["src"]
 }

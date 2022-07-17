@@ -1,7 +1,5 @@
 import * as L from 'leaflet';
 
-// https://strasis.com/documentation/limelight-xe/reference/tile-map-servers
-
 export const Radar = L.Control.extend({
   NEXRAD_URL: 'https://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0q.cgi',
   NEXRAD_LAYER: 'nexrad-n0q-900913', // base reflectivity radar

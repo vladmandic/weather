@@ -14,3 +14,4 @@ Yet another weather app
 - instant address lookup
 - gradient colors: [https://www.chartjs.org/docs/latest/samples/advanced/linear-gradient.html]
 - secondary radars
+- pwa / service worker / installable app

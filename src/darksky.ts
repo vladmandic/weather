@@ -1,6 +1,7 @@
 import { log } from './log';
 import { getLocation, findLocation, findAddress, updateAddress } from './location';
 import * as keys from '../secrets.json';
+import { registerPWA } from './pwa-register';
 import { updateAstronomy } from './astronomy';
 import { updateLocation } from './distance';
 import { updateLegend } from './legend';
@@ -24,6 +25,7 @@ async function cors(url: string) {
 async function main() {
   log('weather app');
   (document.getElementById('header') as HTMLDivElement).style.width = `${window.innerWidth}px`;
+  await registerPWA('/public/pwa-serviceworker.js');
 
   // lookup based on string
   const lookup = await findLocation('Brickell', keys.google);

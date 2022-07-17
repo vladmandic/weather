@@ -29,18 +29,19 @@
   ],
   "rules": {
     "max-len": [1, 275, 3],
-    "@typescript-eslint/no-unused-vars": "off",
     "@typescript-eslint/ban-ts-comment": "off",
-    "no-restricted-syntax": "off",
-    "radix":"off",
+    "@typescript-eslint/no-unused-vars": "off",
     "import/extensions": "off",
+    "import/no-extraneous-dependencies":"off",
     "import/prefer-default-export": "off",
-    "prefer-template":"off",
-    "object-curly-newline":"off",
+    "lines-between-class-members":"off",
     "no-continue":"off",
-    "no-plusplus":"off",
-    "no-nested-ternary":"off",
     "no-mixed-operators":"off",
-    "lines-between-class-members":"off"
+    "no-nested-ternary":"off",
+    "no-plusplus":"off",
+    "no-restricted-syntax": "off",
+    "object-curly-newline":"off",
+    "prefer-template":"off",
+    "radix":"off"
   }
 }

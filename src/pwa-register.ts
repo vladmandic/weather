@@ -2,7 +2,7 @@ import { log } from './log';
 
 const cacheName = 'weather';
 
-export async function register(path) {
+export async function registerPWA(path) {
   if ('serviceWorker' in navigator) {
     try {
       let found;

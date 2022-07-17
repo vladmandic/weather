@@ -1,5 +1,5 @@
 import * as L from 'leaflet';
-import { Radar } from '../assets/leaflet-radar.js';
+import { Radar } from './leaflet-radar.js';
 import { log } from './log';
 
 export async function updateRadar(lat: number, lon: number) {
