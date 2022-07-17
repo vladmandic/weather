@@ -1,10 +1,9 @@
-import { DateTime } from 'luxon';
 import { log } from './log';
 
 const imgPath = '/assets/weather';
 
 export async function updateToday(data) {
-  log('updateToday', data);
+  log('updateToday', { currently: data.currently });
   if (!data || !data.currently) return;
   const card = document.getElementById('weather-today');
   if (!card) return;
@@ -39,22 +38,6 @@ export async function updateToday(data) {
   text += `Wind <b>${Math.round(data.currently.windSpeed)} to ${Math.round(data.currently.windGust)} mph &nbsp<span style="display:inline-block;transform:rotate(${data.currently.windBearing}deg);"> ↑ </span></b><br>`;
   text += `Nearest storm &nbsp${storm}<br>`;
   div2.innerHTML = text;
-
-  const divAlerts = document.getElementById('weather-alerts');
-  if (!divAlerts) return;
-  text = '';
-  if (data.alerts) {
-    text += '<span style="font-size: 1.8rem">Alerts</span><br>';
-    for (const alert of data.alerts) {
-      text += `
-      <div style="text-align: left">
-        from ${DateTime.fromSeconds(alert.time).toFormat('ccc LLL d T')} to ${DateTime.fromSeconds(alert.expires).toFormat('ccc LLL d T')} ${alert.severity} for ${alert.regions.join(', ')}<br>
-        &nbsp ${alert.title} - ${alert.description}
-      </div>
-    `;
-    }
-  }
-  divAlerts.innerHTML = text;
 }
 
 class ComponentToday extends HTMLElement { // watch for attributes
@@ -68,9 +51,9 @@ class ComponentToday extends HTMLElement { // watch for attributes
             <div class="temp-feel" style="line-height: 2rem"></div>
             <div class="temp-minmax"></div>
           </div>
-          <div id="weather-today-details1" class="weather-details" style="margin: 30px 10px 0 20px; line-height: 1.4rem">
+          <div id="weather-today-details1" class="weather-details" style="margin: 30px 10px 0 20px; line-height: 1.5rem">
           </div>
-          <div id="weather-today-details2" class="weather-details" style="margin: 30px 10px 0 20px; line-height: 1.4rem">
+          <div id="weather-today-details2" class="weather-details" style="margin: 30px 10px 0 20px; line-height: 1.5rem">
           </div>
         </div>
         <div class="description" style="font-size: 1.4rem; line-height: 1.8rem; text-align: center">
@@ -79,7 +62,6 @@ class ComponentToday extends HTMLElement { // watch for attributes
           <div class="desc-hour"></div>
           <div class="desc-daily"></div>
         </div>
-        <div class=alerts" id="weather-alerts" style="margin-top: 20px"></div>
       </div>
     `;
   }

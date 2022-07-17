@@ -27,6 +27,7 @@ const chartOptions: ChartOptions = {
   scales: {
     x: {
       display: true,
+      grid: { color: '#222222' },
       ticks: {
         color: 'rgb(255, 255, 255)',
         font: {
@@ -44,6 +45,7 @@ const chartOptions: ChartOptions = {
       stacked: false,
       min: 0,
       max: 120,
+      grid: { color: '#222222' },
       // gridLines: { zeroLineWidth: 3, zeroLineColor: '#aaaaaa', color: '#888888' },
       // ticks: { beginAtZero: true, suggestedMax: 120, stepSize: 10 },
     },
@@ -64,13 +66,13 @@ const chartConfig: ChartConfiguration = {
   data: {
     labels: [],
     datasets: [
-      { label: 'Temp', borderColor: '#ff9696', backgroundColor: '#ff9696', ...labelOptions, borderWidth: 4, data: [] },
-      { label: 'Humidity', borderColor: '#ffe100', backgroundColor: '#ffe100', ...labelOptions, data: [] },
-      { label: 'Cloud', borderColor: '#cccccc', backgroundColor: '#cccccc', ...labelOptions, data: [] },
-      { label: 'Rain', borderColor: '#52ff97', backgroundColor: '#52ff97', ...labelOptions, data: [] },
-      { label: 'Wind', borderColor: '#00bbff', backgroundColor: '#00bbff', ...labelOptions, data: [] },
-      { label: 'Feel', borderColor: '#cca100', backgroundColor: '#cca100', ...labelOptions, data: [] },
-      { label: 'Pressure', borderColor: '#515c20', backgroundColor: '#515c20', ...labelOptions, data: [] },
+      { label: 'temperature', borderColor: '#ff9696', backgroundColor: '#ff9696', ...labelOptions, data: [], borderWidth: 5 },
+      { label: 'humidity', borderColor: '#ffe100', backgroundColor: '#ffe100', ...labelOptions, data: [], borderWidth: 2 },
+      { label: 'cloud', borderColor: '#cccccc', backgroundColor: '#cccccc', ...labelOptions, data: [] },
+      { label: 'rain', borderColor: '#52ff97', backgroundColor: '#52ff97', ...labelOptions, data: [], borderWidth: 5 },
+      { label: 'wind', borderColor: '#00bbff', backgroundColor: '#00bbff', ...labelOptions, data: [] },
+      { label: 'feel', borderColor: '#cca100', backgroundColor: '#cca100', ...labelOptions, data: [] },
+      { label: 'pressure', borderColor: '#515c20', backgroundColor: '#515c20', ...labelOptions, data: [], borderWidth: 2 },
     ],
   },
   options: chartOptions,
@@ -86,21 +88,21 @@ async function initChart() {
 }
 
 export async function updateChart(data) {
-  log('updateChart', data);
+  log('updateChart', data.hourly);
   if (!data || !data.hourly) return;
   if (!chart) await initChart();
   if (chartConfig.data.labels) chartConfig.data.labels.length = 0;
   for (const dataSet of chartConfig.data.datasets) dataSet.data.length = 0;
   data.hourly.data.forEach((point) => {
-    chartConfig.data.labels?.push([DateTime.fromSeconds(point.time).toFormat('ccc'), DateTime.fromSeconds(point.time).toFormat('HH:mm')]);
+    chartConfig.data.labels?.push([DateTime.fromSeconds(point.time).toFormat('ccc').toUpperCase(), DateTime.fromSeconds(point.time).toFormat('HH:mm')]);
     chartConfig.data.datasets.forEach((dataset) => {
-      if (dataset.label === 'Temp') dataset.data.push(point.temperature);
-      if (dataset.label === 'Feel') dataset.data.push(point.apparentTemperature);
-      if (dataset.label === 'Rain') dataset.data.push(Math.min((5 * 100 * point.precipIntensity), 100));
-      if (dataset.label === 'Wind') dataset.data.push(point.windSpeed);
-      if (dataset.label === 'Cloud') dataset.data.push(100 * point.cloudCover);
-      if (dataset.label === 'Humidity') dataset.data.push(100 * point.humidity);
-      if (dataset.label === 'Pressure') dataset.data.push(point.pressure / 10);
+      if (dataset.label === 'temperature') dataset.data.push(point.temperature);
+      if (dataset.label === 'feel') dataset.data.push(point.apparentTemperature);
+      if (dataset.label === 'rain') dataset.data.push(Math.min((5 * 100 * point.precipIntensity), 100));
+      if (dataset.label === 'wind') dataset.data.push(point.windSpeed);
+      if (dataset.label === 'cloud') dataset.data.push(100 * point.cloudCover);
+      if (dataset.label === 'humidity') dataset.data.push(100 * point.humidity);
+      if (dataset.label === 'pressure') dataset.data.push(point.pressure / 10);
     });
   });
   chart.update();
@@ -109,7 +111,7 @@ export async function updateChart(data) {
     gradients[d.label as string] = chart.ctx.createLinearGradient(0, chart.chartArea.bottom, 0, chart.chartArea.top);
     const min = Math.min(...d.data as number[]);
     const max = Math.max(...d.data as number[]);
-    gradients[d.label as string].addColorStop(Math.max(min / 120 - 0.2, 0), '#000000');
+    gradients[d.label as string].addColorStop(Math.max(min / 120 - 0.1, 0), '#000000');
     gradients[d.label as string].addColorStop(max / 120, d.backgroundColor as string);
     const current = chartConfig.data.datasets.find((c) => c.label === d.label);
     if (current) current.borderColor = gradients[d.label as string];
@@ -121,7 +123,7 @@ class ComponentChart extends HTMLElement { // watch for attributes
   connectedCallback() { // triggered on insert
     this.innerHTML = `
       <div id="weather-chart" style="margin: 20px 0 40px 0; max-width: 800px">
-        <canvas id="weather-canvas" height=400 width=800></canvas>
+        <canvas id="weather-canvas" height=500 width=800></canvas>
       </div>
     `;
   }

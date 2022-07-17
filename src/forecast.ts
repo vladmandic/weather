@@ -4,8 +4,8 @@ import { log } from './log';
 const imgPath = '/assets/weather';
 
 export async function updateForecast(data) {
-  log('updateForecast', data);
-  if (!data || !data.currently) return;
+  log('updateForecast', { daily: data.daily });
+  if (!data || !data.currently || !data.daily) return;
   const card = document.getElementById('weather-forecast');
   if (!card) return;
   const week = card.querySelectorAll('.future .oneday');

@@ -11,7 +11,4 @@ Yet another weather app
 
 ## Todo
 
-- input filed for location
-- instant address lookup
-- secondary radars
 - pwa / service worker / installable app

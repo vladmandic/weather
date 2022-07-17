@@ -1,6 +1,6 @@
 import { log } from './log';
 
-export function updateLocation(lat, lon, distance) {
+export function updateDistance(lat, lon, distance) {
   log('updateLocation', { lat, lon, distance });
   const collection = document.getElementsByTagName('component-location');
   for (let i = 0; i < collection.length; i++) {
@@ -8,7 +8,7 @@ export function updateLocation(lat, lon, distance) {
   }
 }
 
-class ComponentLocation extends HTMLElement { // watch for attributes
+class ComponentDistance extends HTMLElement { // watch for attributes
   static get observedAttributes() { return ['loc']; }
 
   connectedCallback() { // triggered on insert
@@ -26,4 +26,4 @@ class ComponentLocation extends HTMLElement { // watch for attributes
   }
 }
 
-customElements.define('component-location', ComponentLocation);
+customElements.define('component-distance', ComponentDistance);

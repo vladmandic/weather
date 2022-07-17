@@ -2,7 +2,7 @@ import { color } from './color';
 import { log } from './log';
 
 export async function updateLegend(data) {
-  log('updateLegend', data);
+  log('updateLegend', { currently: data.currently });
   if (!data || !data.currently) return;
   const div = document.getElementById('weather-legend');
   if (!div) return;

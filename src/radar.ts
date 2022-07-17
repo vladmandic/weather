@@ -7,7 +7,7 @@ const mapUrl = 'https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{
 let map: L.Map;
 
 export async function updateRadar(lat: number, lon: number) {
-  log('updateMap', mapUrl);
+  log('updateMap', { lat, lon, mapUrl });
   const div = document.getElementById('weather-radar');
   if (!div) return;
   if (!map) {
@@ -17,7 +17,9 @@ export async function updateRadar(lat: number, lon: number) {
       zoomControl: false,
       attributionControl: false,
     });
-    L.tileLayer(mapUrl, {}).addTo(map);
+    const layer = L.tileLayer(mapUrl, {});
+    // layer.addEventListener('loading', () => log('map layer loading'));
+    layer.addTo(map);
     // L.tileLayer('https://tile-{s}.openstreetmap.fr/hot/{z}/{x}/{y}.png', {}).addTo(map);
     // @ts-ignore property does not exist
     L.control.radar = () => new Radar({});
@@ -31,12 +33,9 @@ export async function updateRadar(lat: number, lon: number) {
 class ComponentRadar extends HTMLElement { // watch for attributes
   connectedCallback() { // triggered on insert
     this.innerHTML = `
-      <div id="weather-radar" style="width: 100%; height: 740px; margin: 40px 0 40px 0"></div>
+      <div id="weather-radar" style="width: 800px; height: 800px; margin: 40px 0 40px 0"></div>
     `;
   }
 }
 
 customElements.define('component-radar', ComponentRadar);
-
-// eslint-disable-next-line max-len
-// <iframe width="650" height="450" src="https://embed.windy.com/embed2.html?lat=24.916&lon=-80.464&detailLat=25.794&detailLon=-80.460&width=650&height=450&zoom=7&level=surface&overlay=radar&product=radar&menu=&message=true&marker=&calendar=now&pressure=true&type=map&location=coordinates&detail=&metricWind=mph&metricTemp=%C2%B0F&radarRange=-1" frameborder="0"></iframe>

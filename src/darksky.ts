@@ -1,16 +1,19 @@
 import { log } from './log';
 import { getLocation, findLocation, findAddress, updateAddress } from './location';
 import * as keys from '../secrets.json';
+import { installable } from './install';
 import { registerPWA } from './pwa-register';
 import { cors } from './cors';
 import { updateAstronomy } from './astronomy';
-import { updateLocation } from './distance';
+import { updateDistance } from './distance';
 import { updateLegend } from './legend';
 import { updateToday } from './today';
 import { updateForecast } from './forecast';
 import { updateChart } from './chart';
 import { updateRadar } from './radar';
 import { updateAQI } from './aqi';
+import { updateAlerts } from './alerts';
+import { updateWindy } from './windy';
 
 async function hashChange(evt) {
   log('hash change:', evt.newURL);
@@ -19,22 +22,24 @@ async function hashChange(evt) {
 const update = async (loc) => {
   updateAstronomy(loc.lat, loc.lon);
   updateAddress(loc.name);
-  updateLocation(loc.lat, loc.lon, Number.POSITIVE_INFINITY);
+  updateDistance(loc.lat, loc.lon, Number.POSITIVE_INFINITY);
   updateAQI(loc.lat, loc.lon, keys.aqicn);
 
   const data = await cors(`https://api.darksky.net/forecast/${keys.darksky}/${loc.lat},${loc.lon}`);
   log('weatherData', data);
-  updateLocation(loc.lat, loc.lon, data.flags['nearest-station']);
+  updateDistance(loc.lat, loc.lon, data.flags['nearest-station']);
   updateToday(data);
   updateForecast(data);
   updateLegend(data);
   updateChart(data);
+  updateAlerts(data);
   updateRadar(loc.lat, loc.lon);
+  updateWindy(loc.lat, loc.lon);
 };
 
 async function main() {
   log('weather app');
-  // (document.getElementById('header') as HTMLDivElement).style.width = `${window.innerWidth}px`;
+  window.addEventListener('beforeinstallprompt', (evt) => installable(evt));
   await registerPWA('/public/pwa-serviceworker.js');
   let loc = { lat: 0, lon: 0, name: '' };
 
@@ -42,7 +47,7 @@ async function main() {
   loc = await findLocation('Brickell', keys.google);
   updateAddress(loc.name);
   updateAstronomy(loc.lat, loc.lon);
-  updateLocation(loc.lat, loc.lon, Number.POSITIVE_INFINITY);
+  updateDistance(loc.lat, loc.lon, Number.POSITIVE_INFINITY);
 
   // lookup based on gps
   const locGPS = await getLocation();

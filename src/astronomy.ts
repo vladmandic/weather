@@ -1,5 +1,6 @@
 import { DateTime } from 'luxon';
 import * as SunCalc from 'suncalc';
+import { log } from './log';
 
 const hhmm = (dt) => DateTime.fromJSDate(dt).toFormat('HH:mm');
 
@@ -24,6 +25,7 @@ class ComponentAstronomy extends HTMLElement { // watch for attributes
     const sun = SunCalc.getTimes(new Date(), lat, lon);
     const moon = SunCalc.getMoonTimes(new Date(), lat, lon);
     const pos = SunCalc.getMoonIllumination(new Date());
+    log('updateAstronomy', { lat, lon, sun, moon, pos });
     const phase = `<span style="display:inline-block;transform:rotate(${(pos.phase <= 0.5) ? 0 : 180}deg);"> ↑ </span>`;
     let img = '/assets/phases/moon-100.webp';
     if (pos.phase <= 0.88) img = '/assets/phases/moon-87.webp';
