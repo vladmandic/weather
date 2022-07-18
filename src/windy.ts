@@ -14,7 +14,7 @@ export async function updateWindy(lat: number, lon: number) {
 
 class ComponentWindy extends HTMLElement { // watch for attributes
   connectedCallback() { // triggered on insert
-    this.innerHTML = '<div class=windy" id="weather-windy" style="margin-top: 20px; margin-bottom: 20px">more maps</div>';
+    this.innerHTML = '<div class=windy" id="weather-windy" style="margin-top: 20px; margin-bottom: 20px; font-size: 1.4rem">more maps</div>';
     this.addEventListener('click', () => {
       if (this.children.length > 1) {
         log('removeWindy');

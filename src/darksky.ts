@@ -1,3 +1,4 @@
+import PullToRefresh from 'pulltorefreshjs';
 import { log } from './log';
 import { getLocation, findLocation, findAddress, updateAddress } from './location';
 import * as keys from '../secrets.json';
@@ -42,6 +43,7 @@ async function main() {
   window.addEventListener('beforeinstallprompt', (evt) => installable(evt));
   await registerPWA('pwa-serviceworker.js');
   let loc = { lat: 0, lon: 0, name: '' };
+  PullToRefresh.init({ mainElement: 'body', onRefresh() { window.location.reload(); } });
 
   // init based on string
   loc = await findLocation('Brickell', keys.google);

@@ -16,8 +16,9 @@ export async function updateAQI(lat: number, lon: number, apiKey) {
     return `<span style="background: #009966; padding: 2px">${v} - Good</span>`;
   };
 
-  let text = `<span style="font-size: 1.4rem">Air Quality Index ${code(aqi.data.aqi)}</span><br>`;
+  let text = `<span style="font-size: 1.4rem; color: beige">Air Quality Index ${code(aqi.data.aqi)}</span><br>`;
   for (const data of Object.entries(aqi.data.iaqi)) {
+    if (data[0] === 'p') continue;
     // @ts-ignore
     text += ` | ${data[0]} <span style="color: beige">${data[1].v}</span>`.toUpperCase();
   }

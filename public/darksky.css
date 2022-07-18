@@ -1,11 +1,11 @@
 @font-face { font-family: 'CenturyGothic'; font-display: swap; font-style: normal; font-weight: 400; src: local('CenturyGothic'), url('/assets/century-gothic.ttf') format('truetype'); }
-html { font-size: 16px; }
-body { font-size: 1rem; font-family: "CenturyGothic", "Segoe UI", sans-serif; font-variant: small-caps; width: 100%; height: 100%; background: black; color: white; overflow-x: hidden; margin: 0; text-align: -webkit-center;}
-.header { display: block; }
-.nav { display: block; }
-.main { display: block; width: max-content; }
-.footer { display: block; }
-.aside { display: block; }
-.install { padding: 8px; width: 800px; background: maroon; display: none; }
+html { font-size: 18px; text-align: -webkit-center; }
+body { font-size: 1rem; font-family: "CenturyGothic", "Segoe UI", sans-serif; font-variant: small-caps; width: max-content; height: 100%; background: black; color: white; overflow-x: hidden; margin: 0; text-align: -webkit-center;}
+.header { display: block; background: black; }
+.nav { display: block; background: black; }
+.main { display: block; width: max-content; background: black; }
+.footer { display: block; background: black; }
+.aside { display: block; background: black; }
+.install { padding: 8px; width: max-content; background: maroon; display: none; }
 input[type=text] { width: 700px; padding: 10px; background: none; border: none; outline: none; font-family: CenturyGothic; font-variant: small-caps; font-size: 2rem; margin: 20px; border-bottom: 4px solid #555555; color: white; }
 input[type=text]:focus { background-color: #555555; border: none; outline: none; }

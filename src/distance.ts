@@ -16,9 +16,9 @@ class ComponentDistance extends HTMLElement { // watch for attributes
     const [lat, lon, distance] = newValue.split(',');
     log('updateLocation', { lat, lon, distance });
     this.innerHTML = `
-      <div style="margin: 20px 0 0 0; color: beige">
+      <div style="margin: 20px 0 0 0; color: beige; font-size: 1.2rem">
         ${DateTime.now().toLocaleString(DateTime.DATETIME_HUGE)}<br>
-        ${Math.round(1000 * lat) / 1000}°, ${Math.round(1000 * lon) / 1000}° nearest station ${distance !== 'Infinity' ? distance + 'mi' : 'N/A'}
+        ${Math.round(1000 * lat) / 1000}°, ${Math.round(1000 * lon) / 1000}° nearest station ${distance !== 'Infinity' ? distance + ' mi' : 'N/A'}
       </div>
     `;
   }

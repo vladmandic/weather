@@ -53,7 +53,7 @@ const chartOptions: ChartOptions = {
 };
 
 const labelOptions = {
-  borderWidth: 3,
+  borderWidth: 4,
   fill: false,
   showLine: true,
   pointRadius: 0,
@@ -66,13 +66,13 @@ const chartConfig: ChartConfiguration = {
   data: {
     labels: [],
     datasets: [
-      { label: 'temperature', borderColor: '#ff9696', backgroundColor: '#ff9696', ...labelOptions, data: [], borderWidth: 5 },
-      { label: 'humidity', borderColor: '#ffe100', backgroundColor: '#ffe100', ...labelOptions, data: [], borderWidth: 2 },
+      { label: 'temperature', borderColor: '#ff9696', backgroundColor: '#ff9696', ...labelOptions, data: [], borderWidth: 6 },
+      { label: 'humidity', borderColor: '#ffe100', backgroundColor: '#ffe100', ...labelOptions, data: [], borderWidth: 3 },
       { label: 'cloud', borderColor: '#cccccc', backgroundColor: '#cccccc', ...labelOptions, data: [] },
-      { label: 'rain', borderColor: '#52ff97', backgroundColor: '#52ff97', ...labelOptions, data: [], borderWidth: 5 },
+      { label: 'rain', borderColor: '#52ff97', backgroundColor: '#52ff97', ...labelOptions, data: [], borderWidth: 6 },
       { label: 'wind', borderColor: '#00bbff', backgroundColor: '#00bbff', ...labelOptions, data: [] },
       { label: 'feel', borderColor: '#cca100', backgroundColor: '#cca100', ...labelOptions, data: [] },
-      { label: 'pressure', borderColor: '#515c20', backgroundColor: '#515c20', ...labelOptions, data: [], borderWidth: 2 },
+      { label: 'pressure', borderColor: '#515c20', backgroundColor: '#515c20', ...labelOptions, data: [], borderWidth: 3 },
     ],
   },
   options: chartOptions,
