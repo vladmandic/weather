@@ -11,8 +11,8 @@ export function updateAlerts(data) {
     for (const alert of data.alerts) {
       text += `
       <div style="text-align: left">
-        ▪ from ${DateTime.fromSeconds(alert.time).toFormat('ccc LLL d T')} to ${DateTime.fromSeconds(alert.expires).toFormat('ccc LLL d T')} ${alert.severity} for ${alert.regions.join(', ')}<br>
-        &nbsp ${alert.title} - ${alert.description}
+        <span style="color: beige">▪ ${DateTime.fromSeconds(alert.time).toFormat('ccc LLL d T')} to ${DateTime.fromSeconds(alert.expires).toFormat('ccc LLL d T')} ${alert.severity} for ${alert.regions.join(', ')}</span><br>
+        <span style="margin-left: 10px; -webkit-box-decoration-break: clone">${alert.title} - ${alert.description}</span>
       </div>
     `;
     }
@@ -24,7 +24,7 @@ class ComponentAlerts extends HTMLElement { // watch for attributes
   static get observedAttributes() { return ['loc']; }
 
   connectedCallback() { // triggered on insert
-    this.innerHTML = '<div class=alerts" id="weather-alerts" style="margin-top: 20px; width: 800px; overflow-wrap: "></div>';
+    this.innerHTML = '<div class=alerts" id="weather-alerts" style="margin-top: 20px; width: 800px"></div>';
   }
 }
 

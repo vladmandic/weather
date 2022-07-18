@@ -32,11 +32,11 @@ export async function updateToday(data) {
   const div2 = document.getElementById('weather-today-details2');
   if (!div2) return;
   text = '';
-  const storm = data.currently.nearestStormDistance ? `<b>${data.currently.nearestStormDistance} mi <span style="display:inline-block;transform:rotate(${data.currently.nearestStormBearing}deg);"> ↑ </span></b>` : 'none';
+  const storm = data.currently.nearestStormDistance ? `<b>${data.currently.nearestStormDistance} mi &nbsp<span style="display:inline-block;transform:rotate(${data.currently.nearestStormBearing}deg);"> ↑ </span></b>` : 'none';
   text += `UV index <span style="background-color: rgba(${15 * data.currently.uvIndex}, ${15 * (15 - data.currently.uvIndex)}, ${0}, 1)"><b>&nbsp${data.currently.uvIndex}&nbsp</b></span><br>`;
   text += `Visibility <b>${data.currently.visibility} mi</b><br>`;
-  text += `Wind <b>${Math.round(data.currently.windSpeed)} to ${Math.round(data.currently.windGust)} mph &nbsp<span style="display:inline-block;transform:rotate(${data.currently.windBearing}deg);"> ↑ </span></b><br>`;
-  text += `Nearest storm &nbsp${storm}<br>`;
+  text += `Wind <b>${Math.round(data.currently.windSpeed)} to ${Math.round(data.currently.windGust)} mph &nbsp&nbsp<span style="display:inline-block;transform:rotate(${data.currently.windBearing}deg);"> ↑ </span></b><br>`;
+  text += `Nearest storm ${storm}<br>`;
   div2.innerHTML = text;
 }
 

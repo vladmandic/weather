@@ -19,7 +19,7 @@ export async function updateAQI(lat: number, lon: number, apiKey) {
   let text = `<span style="font-size: 1.4rem">Air Quality Index ${code(aqi.data.aqi)}</span><br>`;
   for (const data of Object.entries(aqi.data.iaqi)) {
     // @ts-ignore
-    text += ` | ${data[0]} ${data[1].v}`.toUpperCase();
+    text += ` | ${data[0]} <span style="color: beige">${data[1].v}</span>`.toUpperCase();
   }
   text += ' |';
   div.innerHTML = text;

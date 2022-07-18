@@ -2,7 +2,10 @@ import * as L from 'leaflet';
 import { Radar } from './leaflet-radar.js';
 import { log } from './log';
 
-const mapUrl = 'https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png';
+const mapUrl = 'http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}';
+const mapOptions = { maxZoom: 20, subdomains: ['mt0', 'mt1', 'mt2', 'mt3'] };
+// const mapUrl = 'https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png';
+// const mapUrl = 'https://tile-{s}.openstreetmap.fr/hot/{z}/{x}/{y}.png';
 
 let map: L.Map;
 
@@ -13,14 +16,12 @@ export async function updateRadar(lat: number, lon: number) {
   if (!map) {
     map = new L.Map(div, {
       center: new L.LatLng(lat, lon),
-      zoom: 8,
+      zoom: 9,
       zoomControl: false,
       attributionControl: false,
     });
-    const layer = L.tileLayer(mapUrl, {});
-    // layer.addEventListener('loading', () => log('map layer loading'));
+    const layer = L.tileLayer(mapUrl, mapOptions);
     layer.addTo(map);
-    // L.tileLayer('https://tile-{s}.openstreetmap.fr/hot/{z}/{x}/{y}.png', {}).addTo(map);
     // @ts-ignore property does not exist
     L.control.radar = () => new Radar({});
     // @ts-ignore property does not exist
