@@ -10,7 +10,7 @@
     { "src": "assets/icons/dash-64.png", "sizes": "64x64", "type": "image/png" }
     ],
   "start_url": "/",
-  "scope": "/",
+  "scope": "/weather/public",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#000000"
