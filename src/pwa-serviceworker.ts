@@ -11,7 +11,7 @@ const stats = { hit: 0, miss: 0 };
 const log = (...msg) => {
   const dt = new Date();
   const ts = `${dt.getHours().toString().padStart(2, '0')}:${dt.getMinutes().toString().padStart(2, '0')}:${dt.getSeconds().toString().padStart(2, '0')}.${dt.getMilliseconds().toString().padStart(3, '0')}`;
-  console.log(ts, 'PWA', ...msg); // eslint-disable-line no-console
+  console.log(ts, 'pwa', ...msg); // eslint-disable-line no-console
 };
 
 async function updateCached(req) {
@@ -78,7 +78,8 @@ if (!listening) {
     const uri = new URL(evt.request.url);
     // if (uri.pathname === '/') { log('cache skip /', evt.request); return; } // skip root access requests
     if (evt.request.cache === 'only-if-cached' && evt.request.mode !== 'same-origin') return; // required due to chrome bug
-    if (uri.origin !== window.location.origin) return; // skip non-local requests
+    // eslint-disable-next-line no-restricted-globals
+    if (uri.origin !== location.origin) return; // skip non-local requests
     if (evt.request.method !== 'GET') return; // only cache get requests
     if (evt.request.url.includes('/api/')) return; // don't cache api requests, failures are handled at the time of call
 
@@ -93,7 +94,8 @@ if (!listening) {
     log(`PWA: ${evt.type}`);
     if (refreshed) return;
     refreshed = true;
-    window.location.reload();
+    // eslint-disable-next-line no-restricted-globals
+    location.reload();
   });
 
   listening = true;
