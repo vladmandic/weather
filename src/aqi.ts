@@ -16,13 +16,20 @@ export async function updateAQI(lat: number, lon: number, apiKey) {
     return `<span style="background: #009966; padding: 2px">${v} - Good</span>`;
   };
 
-  let text = `<span style="font-size: 1.4rem; color: beige">Air Quality Index ${code(aqi.data.aqi)}</span><br>`;
-  for (const data of Object.entries(aqi.data.iaqi)) {
-    if (data[0] === 'p') continue;
-    // @ts-ignore
-    text += ` | ${data[0]} <span style="color: beige">${data[1].v}</span>`.toUpperCase();
+  let title = aqi.data.attributions?.[0].name || '';
+  title += '\n' + (aqi.data?.city?.name || '');
+  let text = `<span style="font-size: 1.4rem; color: beige" title="${title}">Air Quality Index ${code(aqi.data.aqi)}</span><br>`;
+
+  text += '<span style="margin-right: 20px">';
+  for (const [key, val] of Object.entries(aqi.data.iaqi)) {
+    if (key === 'co') text += `<span title="Carbon Monoxide" style="margin-right: 20px">${key} <span style="color: beige">${(val as { v: number }).v}</span></span>`;
+    if (key === 'no2') text += `<span title="Nitrogen Dioxide" style="margin-right: 20px">${key} <span style="color: beige">${(val as { v: number }).v}</span></span>`;
+    if (key === 'so2') text += `<span title="Sulfur Dioxide" style="margin-right: 20px">${key} <span style="color: beige">${(val as { v: number }).v}</span></span>`;
+    if (key === 'o3') text += `<span title="Ground-level Ozone" style="margin-right: 20px">${key} <span style="color: beige">${(val as { v: number }).v}</span></span>`;
+    if (key === 'pm10') text += `<span title="Particulates <10 microns" style="margin-right: 20px">${key} <span style="color: beige">${(val as { v: number }).v}</span></span>`;
+    if (key === 'pm25') text += `<span title="Particulates <25 microns" style="margin-right: 20px">${key} <span style="color: beige">${(val as { v: number }).v}</span></span>`;
   }
-  text += ' |';
+  text += '</span>';
   div.innerHTML = text;
 }
 

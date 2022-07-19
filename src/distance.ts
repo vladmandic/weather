@@ -1,7 +1,9 @@
 import { DateTime } from 'luxon';
 import { log } from './log';
 
-export function updateDistance(lat, lon, distance) {
+export function updateDistance(lat, lon, flags) {
+  log('updateDistance', { lat, lon, flags });
+  const distance = flags?.['nearest-station'] || Number.POSITIVE_INFINITY;
   const collection = document.getElementsByTagName('component-distance');
   for (let i = 0; i < collection.length; i++) {
     collection[i].setAttribute('loc', `${lat},${lon},${distance}`);
@@ -14,7 +16,6 @@ class ComponentDistance extends HTMLElement { // watch for attributes
   attributeChangedCallback(name, _oldValue, newValue) { // triggered on attribute change
     if (name !== 'loc') return;
     const [lat, lon, distance] = newValue.split(',');
-    log('updateLocation', { lat, lon, distance });
     this.innerHTML = `
       <div style="margin: 20px 0 0 0; color: beige; font-size: 1.2rem">
         ${DateTime.now().toLocaleString(DateTime.DATETIME_HUGE)}<br>

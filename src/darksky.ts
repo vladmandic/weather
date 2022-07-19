@@ -21,21 +21,35 @@ async function hashChange(evt) {
 }
 
 const update = async (loc) => {
+  // trigger update for items that dont need forecast data
   updateAstronomy(loc.lat, loc.lon);
   updateAddress(loc.name);
   updateDistance(loc.lat, loc.lon, Number.POSITIVE_INFINITY);
   updateAQI(loc.lat, loc.lon, keys.aqicn);
+  updateRadar(loc.lat, loc.lon);
+  updateWindy(loc.lat, loc.lon);
 
-  const data = await cors(`https://api.darksky.net/forecast/${keys.darksky}/${loc.lat},${loc.lon}`);
+  const data = await cors(`https://api.darksky.net/forecast/${keys.darksky}/${loc.lat},${loc.lon}`); // get actual forecast
   log('weatherData', data);
-  updateDistance(loc.lat, loc.lon, data.flags['nearest-station']);
+  // trigger update for items using forecast data
+  updateDistance(loc.lat, loc.lon, data.flags);
   updateToday(data);
   updateForecast(data);
   updateLegend(data);
   updateChart(data);
   updateAlerts(data);
-  updateRadar(loc.lat, loc.lon);
-  updateWindy(loc.lat, loc.lon);
+
+  // fade in all icons
+  for (const image of Array.from(document.getElementsByTagName('img'))) {
+    let opacity = 0;
+    image.style.visibility = 'visible';
+    const increaseOpacity = (img: HTMLImageElement) => {
+      opacity += 0.01;
+      img.style.opacity = opacity.toString();
+      if (opacity < 1) setTimeout(() => increaseOpacity(img), 20);
+    };
+    increaseOpacity(image);
+  }
 };
 
 async function main() {
@@ -45,17 +59,13 @@ async function main() {
   let loc = { lat: 0, lon: 0, name: '' };
   PullToRefresh.init({ mainElement: 'body', onRefresh() { window.location.reload(); } });
 
-  // init based on string
-  loc = await findLocation('Brickell', keys.google);
-  updateAddress(loc.name);
-  updateAstronomy(loc.lat, loc.lon);
-  updateDistance(loc.lat, loc.lon, Number.POSITIVE_INFINITY);
-
   // lookup based on gps
   const locGPS = await getLocation();
   if (locGPS.lat !== 0) {
     loc = locGPS;
     loc.name = await findAddress(loc.lat, loc.lon, keys.google);
+  } else {
+    loc = await findLocation('Brickell', keys.google);
   }
 
   // lookup based on input
@@ -63,8 +73,10 @@ async function main() {
   input.onchange = async () => {
     log('inputAddress', input.value);
     const adr = input.value.trim();
-    loc = await findLocation(adr, keys.google);
-    update(loc);
+    if (adr.length > 2) {
+      loc = await findLocation(adr, keys.google);
+      update(loc);
+    }
   };
 
   // @ts-ignore

@@ -11,6 +11,8 @@ export async function updateToday(data) {
   const imgCurrent = document.getElementById('icon-current') as HTMLImageElement;
   imgCurrent.src = `${imgPath}/${data.currently.icon}.webp`;
   imgCurrent.alt = data.currently.icon;
+  imgCurrent.title = JSON.stringify(data.currently, null, 2).replace(/"|{|}|,/g, '');
+
   (card.querySelector('.temp-current') as HTMLDivElement).textContent = `${Math.round(10 * data.currently.temperature) / 10}°`;
   (card.querySelector('.temp-feel') as HTMLDivElement).innerHTML = `Feels like <b>${Math.round(data.currently.apparentTemperature)}</b>°`;
   (card.querySelector('.temp-minmax') as HTMLDivElement).innerHTML = `Range <b>${Math.round(data.daily.data[0].temperatureLow)}° - ${Math.round(data.daily.data[0].temperatureHigh)}°</b>`;

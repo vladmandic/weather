@@ -39,6 +39,7 @@
     "no-mixed-operators":"off",
     "no-nested-ternary":"off",
     "no-plusplus":"off",
+    "no-param-reassign":"off",
     "no-restricted-syntax": "off",
     "object-curly-newline":"off",
     "prefer-template":"off",

@@ -2,7 +2,7 @@ import { DateTime } from 'luxon';
 import * as SunCalc from 'suncalc';
 import { log } from './log';
 
-const hhmm = (dt) => DateTime.fromJSDate(dt).toFormat('HH:mm');
+const hhmm = (dt: Date) => (Number.isNaN(dt.getTime()) ? '' : DateTime.fromJSDate(dt).toFormat('HH:mm'));
 
 export function updateAstronomy(lat, lon) {
   const collection = document.getElementsByTagName('component-astronomy');

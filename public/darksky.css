@@ -1,6 +1,8 @@
 @font-face { font-family: 'CenturyGothic'; font-display: swap; font-style: normal; font-weight: 400; src: local('CenturyGothic'), url('/assets/century-gothic.ttf') format('truetype'); }
 html { font-size: 18px; text-align: -webkit-center; }
 body { font-size: 1rem; font-family: "CenturyGothic", "Segoe UI", sans-serif; font-variant: small-caps; width: max-content; height: 100%; background: black; color: white; overflow-x: hidden; margin: 0; text-align: -webkit-center;}
+img { visibility: hidden; }
+img:hover { transform: scale(1.5); }
 .header { display: block; background: black; }
 .nav { display: block; background: black; }
 .main { display: block; width: max-content; background: black; }
@@ -8,4 +10,3 @@ body { font-size: 1rem; font-family: "CenturyGothic", "Segoe UI", sans-serif; fo
 .aside { display: block; background: black; }
 .install { padding: 8px; width: max-content; background: maroon; display: none; }
 input[type=text] { width: 700px; padding: 10px; background: none; border: none; outline: none; font-family: CenturyGothic; font-variant: small-caps; font-size: 2rem; margin: 20px; border-bottom: 4px solid #555555; color: white; }
-input[type=text]:focus { background-color: #555555; border: none; outline: none; }

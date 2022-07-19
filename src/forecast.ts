@@ -15,6 +15,7 @@ export async function updateForecast(data) {
     const img = document.getElementById(`icon-${i + 1}`) as HTMLImageElement;
     img.src = `${imgPath}/${forecast.icon}.webp`;
     img.alt = forecast.icon;
+    img.title = JSON.stringify(forecast, null, 2).replace(/"|{|}|,/g, '');
     (day.querySelector('.forecast-date') as HTMLDivElement).textContent = DateTime.fromSeconds(forecast.time).setZone(data.timezone).toFormat('ccc');
     (day.querySelector('.daily-temp-high') as HTMLDivElement).textContent = ` ${Math.round(forecast.temperatureHigh)}° `;
     (day.querySelector('.daily-temp-low') as HTMLDivElement).textContent = ` ${Math.round(forecast.temperatureLow)}° `;
