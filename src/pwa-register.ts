@@ -12,14 +12,12 @@ export async function registerPWA(path) {
         if (reg.scope.startsWith(window.location.origin)) found = reg;
       }
       if (!found) {
-        const reg = await navigator.serviceWorker.register(path, { scope: '/' });
+        const reg = await navigator.serviceWorker.register(path, { scope: '/weather/public' });
         found = reg;
         log('pwa registered:', reg.scope);
       }
     } catch (err) {
-      // @ts-ignore
-      if (err.name === 'SecurityError') log('pwa error: ssl certificate is untrusted');
-      else log('pwa error:', err);
+      log('pwa error:', err);
     }
     if (navigator.serviceWorker.controller) {
       navigator.serviceWorker.controller.postMessage({});
