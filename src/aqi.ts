@@ -8,12 +8,12 @@ export async function updateAQI(lat: number, lon: number, apiKey) {
   log('updateAQI', { lat, lon, aqi });
 
   const code = (v) => {
-    if (v > 300) return `<span style="background: #7e0023; padding: 2px">${v} - Hazardous</span>`;
-    if (v > 200) return `<span style="background: #660099; padding: 2px">${v} - Very Unhealthy</span>`;
-    if (v > 150) return `<span style="background: #cc0033; padding: 2px">${v} - Unhealthy</span>`;
-    if (v > 100) return `<span style="background: #ff9933; padding: 2px">${v} - Moderatly Unhealthy</span>`;
-    if (v > 50) return `<span style="background: #ffde33; padding: 2px">${v} - Moderate</span>`;
-    return `<span style="background: #009966; padding: 2px">${v} - Good</span>`;
+    if (v > 300) return `<span style="background: purple; padding: 2px">${v} - Hazardous</span>`;
+    if (v > 200) return `<span style="background: maroon; padding: 2px">${v} - Very Unhealthy</span>`;
+    if (v > 150) return `<span style="background: darkred; padding: 2px">${v} - Unhealthy</span>`;
+    if (v > 100) return `<span style="background: coral; padding: 2px">${v} - Moderatly Unhealthy</span>`;
+    if (v > 50) return `<span style="background: yellowgreen; padding: 2px">${v} - Moderate</span>`;
+    return `<span style="background: darkgreen; padding: 0px 8px 1px 8px">${v} - Good</span>`;
   };
 
   let title = aqi.data.attributions?.[0].name || '';

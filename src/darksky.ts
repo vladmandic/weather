@@ -15,6 +15,7 @@ import { updateRadar } from './radar';
 import { updateAQI } from './aqi';
 import { updateAlerts } from './alerts';
 import { updateWindy } from './windy';
+import { createSakura } from './sakura';
 
 async function hashChange(evt) {
   log('hash change:', evt.newURL);
@@ -54,6 +55,7 @@ const update = async (loc) => {
 
 async function main() {
   log('weather app');
+  createSakura();
   window.addEventListener('beforeinstallprompt', (evt) => installable(evt));
   await registerPWA('pwa-serviceworker.js');
   let loc = { lat: 0, lon: 0, name: '' };

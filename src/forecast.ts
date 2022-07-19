@@ -15,7 +15,12 @@ export async function updateForecast(data) {
     const img = document.getElementById(`icon-${i + 1}`) as HTMLImageElement;
     img.src = `${imgPath}/${forecast.icon}.webp`;
     img.alt = forecast.icon;
-    img.title = JSON.stringify(forecast, null, 2).replace(/"|{|}|,/g, '');
+    let title = '';
+    for (const entry of Object.entries(forecast)) {
+      if (entry[0].toLowerCase().endsWith('time')) entry[1] = DateTime.fromSeconds(entry[1] as number).toFormat('HH:mm');
+      title += `${entry[0]}: ${entry[1]}\n`;
+    }
+    img.title = title;
     (day.querySelector('.forecast-date') as HTMLDivElement).textContent = DateTime.fromSeconds(forecast.time).setZone(data.timezone).toFormat('ccc');
     (day.querySelector('.daily-temp-high') as HTMLDivElement).textContent = ` ${Math.round(forecast.temperatureHigh)}° `;
     (day.querySelector('.daily-temp-low') as HTMLDivElement).textContent = ` ${Math.round(forecast.temperatureLow)}° `;
@@ -43,12 +48,13 @@ export async function updateForecast(data) {
     }
     (day.querySelector('.daily-rain') as HTMLDivElement).innerHTML = precip;
   });
+  card.style.visibility = 'visible';
 }
 
 class ComponentForecast extends HTMLElement { // watch for attributes
   connectedCallback() { // triggered on insert
     this.innerHTML = `
-      <div id="weather-forecast" style="margin: 20px 0 0 0">
+      <div id="weather-forecast" style="margin: 20px 0 0 0; visibility: hidden">
         <div class="future" style="display: flex; text-align: center; line-height: 1.4rem; justify-content: center">
           <div class="oneday" style="padding: 20px"><div class="forecast-date" id="day-1" style="font-size: 1.4rem"></div>
               <div class="icon"><img id="icon-1" width="80" height="80"></img></div>
