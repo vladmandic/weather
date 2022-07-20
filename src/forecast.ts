@@ -54,7 +54,7 @@ export async function updateForecast(data) {
 class ComponentForecast extends HTMLElement { // watch for attributes
   connectedCallback() { // triggered on insert
     this.innerHTML = `
-      <div id="weather-forecast" style="margin: 20px 0 0 0; visibility: hidden">
+      <div id="weather-forecast" style="margin: 40px 0 0 0; visibility: hidden">
         <div class="future" style="display: flex; text-align: center; line-height: 1.4rem; justify-content: center">
           <div class="oneday" style="padding: 20px"><div class="forecast-date" id="day-1" style="font-size: 1.4rem"></div>
               <div class="icon"><img id="icon-1" width="80" height="80"></img></div>

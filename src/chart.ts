@@ -3,12 +3,10 @@ import { DateTime } from 'luxon';
 import { log } from './log';
 
 const chartOptions: ChartOptions = {
-  animation: { duration: 1000, easing: 'linear' },
+  animation: { duration: 2000, easing: 'linear', loop: false },
   responsive: true,
   maintainAspectRatio: false,
-  layout: {
-    autoPadding: true,
-  },
+  layout: { autoPadding: true },
   plugins: {
     title: { display: false },
     legend: {
@@ -17,10 +15,7 @@ const chartOptions: ChartOptions = {
       labels: {
         padding: 14,
         color: 'rgb(200, 200, 200)',
-        font: {
-          family: 'CenturyGothic',
-          size: 12,
-        },
+        font: { family: 'CenturyGothic', size: 12 },
       },
     },
   },
@@ -31,10 +26,7 @@ const chartOptions: ChartOptions = {
       ticks: {
         color: 'rgb(255, 255, 255)',
         font: {
-          family: 'CenturyGothic',
-          size: 12,
-          lineHeight: 1.6,
-        },
+          family: 'CenturyGothic', size: 12, lineHeight: 1.6 },
         autoSkip: true,
         maxRotation: 0,
         minRotation: 0,
@@ -46,8 +38,6 @@ const chartOptions: ChartOptions = {
       min: 0,
       max: 120,
       grid: { color: '#222222' },
-      // gridLines: { zeroLineWidth: 3, zeroLineColor: '#aaaaaa', color: '#888888' },
-      // ticks: { beginAtZero: true, suggestedMax: 120, stepSize: 10 },
     },
   },
 };
@@ -122,7 +112,7 @@ export async function updateChart(data) {
 class ComponentChart extends HTMLElement { // watch for attributes
   connectedCallback() { // triggered on insert
     this.innerHTML = `
-      <div id="weather-chart" style="margin: 20px 0 40px 0; max-width: 800px">
+      <div id="weather-chart" style="margin: 40px 0 40px 0; max-width: 800px">
         <canvas id="weather-canvas" height=500 width=800></canvas>
       </div>
     `;

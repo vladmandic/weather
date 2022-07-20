@@ -51,7 +51,7 @@ export async function updateToday(data) {
 class ComponentToday extends HTMLElement { // watch for attributes
   connectedCallback() { // triggered on insert
     this.innerHTML = `
-      <div id="weather-today" style="margin: 20px 0 0 0; font-size: 1.2rem">
+      <div id="weather-today" style="margin: 40px 0 0 0; font-size: 1.2rem">
         <div class="current" id="day-0" style="display: flex; justify-content: center">
           <div class="icon" style="margin-right: 20px"><img id="icon-current" width="200" height="200"></img></div>
           <div class="temperature" style="display: block; margin-right: 20px">

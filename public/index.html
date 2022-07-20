@@ -24,20 +24,18 @@
 <body>
   <noscript><h1>javascript is required</h1></noscript>
   <nav>
-    <div id="nav" class="nav">
-      <input type="text" id="input-address" name="input-address" size="10">
-    </div>
+    <div id="nav" class="nav"></div>
   </nav>
   <header>
-    <div id="header" class="header">
-      <component-address></component-address>
-      <component-info></component-info>
-    </div>
+    <div id="header" class="header"></div>
     <div id="loader-container" class="loader-container"><div id="loader" class="loader"></div></div>
   </header>
   <main>
     <canvas id="sakura" class="sakura"></canvas>
     <div id="main" class="main">
+      <input type="text" id="input-address" name="input-address" size="10">
+      <component-address></component-address>
+      <component-info></component-info>
       <component-today></component-today>
       <component-forecast></component-forecast>
       <component-aqi></component-aqi>

@@ -23,12 +23,11 @@ const update = async (loc: Location) => {
   updateAstronomy(loc.lat, loc.lon);
   updateAddress(loc.name);
   updateAQI(loc.lat, loc.lon, keys.aqicn);
-  updateRadar(loc.lat, loc.lon);
-  updateWindy(loc.lat, loc.lon);
 
+  // trigger update for items using forecast data
   const data = await cors(`https://api.darksky.net/forecast/${keys.darksky}/${loc.lat},${loc.lon}`); // get actual forecast
   log('weatherData', data);
-  // trigger update for items using forecast data
+  (document.getElementById('main') as HTMLDivElement).style.display = 'block';
   updateStationInfo(data.flags);
   updateToday(data);
   updateForecast(data);
@@ -36,9 +35,12 @@ const update = async (loc: Location) => {
   updateChart(data);
   updateAlerts(data);
 
+  // last update tiled items
+  updateRadar(loc.lat, loc.lon);
+  updateWindy(loc.lat, loc.lon);
+
   // hide loader
   (document.getElementById('loader-container') as HTMLDivElement).style.display = 'none';
-  (document.getElementById('main') as HTMLDivElement).style.display = 'block';
   // fade in all icons
   for (const image of Array.from(document.getElementsByTagName('img'))) {
     let opacity = 0;
