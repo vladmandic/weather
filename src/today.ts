@@ -1,3 +1,4 @@
+import { DateTime } from 'luxon';
 import { log } from './log';
 
 const imgPath = '../assets/weather';
@@ -11,7 +12,12 @@ export async function updateToday(data) {
   const imgCurrent = document.getElementById('icon-current') as HTMLImageElement;
   imgCurrent.src = `${imgPath}/${data.currently.icon}.webp`;
   imgCurrent.alt = data.currently.icon;
-  imgCurrent.title = JSON.stringify(data.currently, null, 2).replace(/"|{|}|,/g, '');
+  let title = '';
+  for (const entry of Object.entries(data.currently)) {
+    if (entry[0].toLowerCase().endsWith('time')) entry[1] = DateTime.fromSeconds(entry[1] as number).toFormat('HH:mm');
+    title += `${entry[0]}: ${entry[1]}\n`;
+  }
+  imgCurrent.title = title;
 
   (card.querySelector('.temp-current') as HTMLDivElement).textContent = `${Math.round(10 * data.currently.temperature) / 10}°`;
   (card.querySelector('.temp-feel') as HTMLDivElement).innerHTML = `Feels like <b>${Math.round(data.currently.apparentTemperature)}</b>°`;

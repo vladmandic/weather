@@ -1,12 +1,12 @@
 import PullToRefresh from 'pulltorefreshjs';
 import { log } from './log';
-import { getLocation, findLocation, findAddress, updateAddress } from './location';
+import { getGPSLocation, findByLocation, findByAddress, updateAddress, getIPLocation } from './location';
 import * as keys from '../secrets.json';
 import { installable } from './install';
 import { registerPWA } from './pwa-register';
 import { cors } from './cors';
 import { updateAstronomy } from './astronomy';
-import { updateDistance } from './distance';
+import { updateGPSInfo, updateIPInfo, updateSearchInfo, updateStationInfo } from './info';
 import { updateLegend } from './legend';
 import { updateToday } from './today';
 import { updateForecast } from './forecast';
@@ -16,16 +16,12 @@ import { updateAQI } from './aqi';
 import { updateAlerts } from './alerts';
 import { updateWindy } from './windy';
 import { createSakura } from './sakura';
+import type { Location } from './location';
 
-async function hashChange(evt) {
-  log('hash change:', evt.newURL);
-}
-
-const update = async (loc) => {
+const update = async (loc: Location) => {
   // trigger update for items that dont need forecast data
   updateAstronomy(loc.lat, loc.lon);
   updateAddress(loc.name);
-  updateDistance(loc.lat, loc.lon, Number.POSITIVE_INFINITY);
   updateAQI(loc.lat, loc.lon, keys.aqicn);
   updateRadar(loc.lat, loc.lon);
   updateWindy(loc.lat, loc.lon);
@@ -33,13 +29,16 @@ const update = async (loc) => {
   const data = await cors(`https://api.darksky.net/forecast/${keys.darksky}/${loc.lat},${loc.lon}`); // get actual forecast
   log('weatherData', data);
   // trigger update for items using forecast data
-  updateDistance(loc.lat, loc.lon, data.flags);
+  updateStationInfo(data.flags);
   updateToday(data);
   updateForecast(data);
   updateLegend(data);
   updateChart(data);
   updateAlerts(data);
 
+  // hide loader
+  (document.getElementById('loader-container') as HTMLDivElement).style.display = 'none';
+  (document.getElementById('main') as HTMLDivElement).style.display = 'block';
   // fade in all icons
   for (const image of Array.from(document.getElementsByTagName('img'))) {
     let opacity = 0;
@@ -53,37 +52,67 @@ const update = async (loc) => {
   }
 };
 
-async function main() {
-  log('weather app');
-  createSakura();
-  window.addEventListener('beforeinstallprompt', (evt) => installable(evt));
-  await registerPWA('pwa-serviceworker.js');
-  let loc = { lat: 0, lon: 0, name: '' };
-  PullToRefresh.init({ mainElement: 'body', onRefresh() { window.location.reload(); } });
+async function initInitial() {
+  // show loader
+  (document.getElementById('main') as HTMLDivElement).style.display = 'none';
+  (document.getElementById('loader-container') as HTMLDivElement).style.display = 'block';
 
-  // lookup based on gps
-  const locGPS = await getLocation();
-  if (locGPS.lat !== 0) {
-    loc = locGPS;
-    loc.name = await findAddress(loc.lat, loc.lon, keys.google);
-  } else {
-    loc = await findLocation('Brickell', keys.google);
+  // first lookup by ip location
+  const locIP = await getIPLocation(keys.google);
+  if (locIP.lat !== 0) {
+    locIP.name = await findByLocation(locIP.lat, locIP.lon, keys.google);
+    updateIPInfo(locIP);
   }
 
-  // lookup based on input
-  const input = (document.getElementById('input-address') as HTMLInputElement);
+  // second lookup by gps location
+  const locGPS = await getGPSLocation();
+  if (locGPS.lat !== 0) {
+    locGPS.name = await findByLocation(locGPS.lat, locGPS.lon, keys.google);
+    updateGPSInfo(locGPS);
+  }
+
+  // decide which to use
+  if (locGPS.lat !== 0) update(locGPS);
+  else if (locIP.lat !== 0) update(locIP);
+  else {
+    const locDefault = await findByAddress('Brickell', keys.google);
+    update(locDefault);
+  }
+}
+
+async function initEvents() {
+  PullToRefresh.init({ // register pull down events
+    mainElement: 'body',
+    onRefresh() {
+      log('pullRefresh');
+      initInitial();
+    },
+  });
+
+  const input = document.getElementById('input-address') as HTMLInputElement; // register search input
   input.onchange = async () => {
     log('inputAddress', input.value);
     const adr = input.value.trim();
     if (adr.length > 2) {
-      loc = await findLocation(adr, keys.google);
+      const loc: Location = await findByAddress(adr, keys.google);
+      updateSearchInfo(loc);
       update(loc);
     }
   };
 
-  // @ts-ignore
-  update(loc); // eslint-disable-line no-use-before-define
+  const info = document.getElementById('weather-info') as HTMLDivElement; // register refresh on click
+  info.onclick = async () => initInitial();
 }
 
-window.onhashchange = (evt) => hashChange(evt);
+async function main() {
+  log('weather app');
+
+  createSakura(); // create background
+  window.addEventListener('beforeinstallprompt', (evt) => installable(evt)); // capture installable events
+  await registerPWA('pwa-serviceworker.js'); // register pwa
+
+  initInitial(); // do initial weather update
+  initEvents(); // do weather update on demand when search is used
+}
+
 window.onload = main;
