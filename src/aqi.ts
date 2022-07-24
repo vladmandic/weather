@@ -26,8 +26,8 @@ export async function updateAQI(lat: number, lon: number, apiKey) {
     if (key === 'no2') text += `<span title="Nitrogen Dioxide" style="margin-right: 20px">${key} <span style="color: beige">${(val as { v: number }).v}</span></span>`;
     if (key === 'so2') text += `<span title="Sulfur Dioxide" style="margin-right: 20px">${key} <span style="color: beige">${(val as { v: number }).v}</span></span>`;
     if (key === 'o3') text += `<span title="Ground-level Ozone" style="margin-right: 20px">${key} <span style="color: beige">${(val as { v: number }).v}</span></span>`;
-    if (key === 'pm10') text += `<span title="Particulates <10 microns" style="margin-right: 20px">${key} <span style="color: beige">${(val as { v: number }).v}</span></span>`;
-    if (key === 'pm25') text += `<span title="Particulates <25 microns" style="margin-right: 20px">${key} <span style="color: beige">${(val as { v: number }).v}</span></span>`;
+    if (key === 'pm10') text += `<span title="Particulates < 10 microns" style="margin-right: 20px">${key} <span style="color: beige">${(val as { v: number }).v}</span></span>`;
+    if (key === 'pm25') text += `<span title="Particulates < 2.5 microns" style="margin-right: 20px">${key} <span style="color: beige">${(val as { v: number }).v}</span></span>`;
   }
   text += '</span>';
   div.innerHTML = text;

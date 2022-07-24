@@ -2,7 +2,7 @@ import * as L from 'leaflet';
 import { Radar } from './leaflet-radar.js';
 import { log } from './log';
 
-const mapUrl = 'http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}';
+const mapUrl = 'https://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}';
 const mapOptions = { maxZoom: 20, subdomains: ['mt0', 'mt1', 'mt2', 'mt3'] };
 // const mapUrl = 'https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png';
 // const mapUrl = 'https://tile-{s}.openstreetmap.fr/hot/{z}/{x}/{y}.png';

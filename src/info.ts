@@ -24,15 +24,38 @@ export function updateSearchInfo(loc: Location) {
   (document.getElementById('weather-info-ip') as HTMLDivElement).innerHTML = '';
 }
 
+let forecastAgeTimer: number;
+export function updateForecastAge(time: number) {
+  log('updateForecastAge', { time });
+  const age = () => Math.max(0, Math.round((new Date().getSeconds() - new Date(1000 * time).getSeconds()) / 60));
+  if (time) (document.getElementById('weather-info-age') as HTMLDivElement).innerHTML = `forecast data age ${age()} min`;
+  if (forecastAgeTimer) return;
+  forecastAgeTimer = setInterval(() => {
+    if (time) (document.getElementById('weather-info-age') as HTMLDivElement).innerHTML = `forecast data age ${age()} min`;
+  }, 5000);
+}
+
+export function updateCurrentTime() {
+  setInterval(() => {
+    const div = document.getElementById('weather-info-time') as HTMLDivElement;
+    if (div) div.innerHTML = `${DateTime.now().toLocaleString(DateTime.DATETIME_HUGE)}`;
+  }, 1000);
+}
+
 class ComponentInfo extends HTMLElement { // watch for attributes
   connectedCallback() { // triggered on insert
     this.innerHTML = `
       <div id="weather-info" style="margin: 20px 0 0 0; color: beige; font-size: 1.2rem">
-        ${DateTime.now().toLocaleString(DateTime.DATETIME_HUGE)}<br><br>
+        <div id="weather-info-time"></div>
+        <br>
         <div id="weather-info-gps"></div>
         <div id="weather-info-ip"></div>
-        <div id="weather-info-station"></div>
+        <div style="display: flex; justify-content: center">
+          <div id="weather-info-station"></div>&nbsp
+          <div id="weather-info-age"></div>
+        </div>
       </div>`;
+    updateCurrentTime();
   }
 }
 

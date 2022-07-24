@@ -6,7 +6,7 @@ import { installable } from './install';
 import { registerPWA } from './pwa-register';
 import { cors } from './cors';
 import { updateAstronomy } from './astronomy';
-import { updateGPSInfo, updateIPInfo, updateSearchInfo, updateStationInfo } from './info';
+import { updateGPSInfo, updateIPInfo, updateSearchInfo, updateStationInfo, updateForecastAge } from './info';
 import { updateLegend } from './legend';
 import { updateToday } from './today';
 import { updateForecast } from './forecast';
@@ -16,6 +16,7 @@ import { updateAQI } from './aqi';
 import { updateAlerts } from './alerts';
 import { updateWindy } from './windy';
 import { createSakura } from './sakura';
+import { updateClock } from './clock';
 import type { Location } from './location';
 
 const update = async (loc: Location) => {
@@ -29,6 +30,7 @@ const update = async (loc: Location) => {
   log('weatherData', data);
   (document.getElementById('main') as HTMLDivElement).style.display = 'block';
   updateStationInfo(data.flags);
+  updateForecastAge(data.currently?.time);
   updateToday(data);
   updateForecast(data);
   updateLegend(data);
@@ -110,6 +112,7 @@ async function main() {
   log('weather app');
 
   createSakura(); // create background
+  updateClock(); // start clock
   window.addEventListener('beforeinstallprompt', (evt) => installable(evt)); // capture installable events
   await registerPWA('pwa-serviceworker.js'); // register pwa
 
