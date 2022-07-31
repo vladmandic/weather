@@ -64,8 +64,9 @@ async function main() {
   createSakura(); // create background
   updateClock(); // start clock
   initEvents(); // do weather update on demand
-  await update(); // do initial weather update
-  setTimeout(() => update(), 20 * 60 * 1000); // scroll to new page every 20sec
+  update(); // do initial weather update
+  setTimeout(update, 15 * 60 * 1000); // update every 15min
+  setTimeout(scrollNext, 15 * 1000); // scroll to new page every 15sec
   (document.getElementById('weather-radar') as HTMLDivElement).style.width = `${window.innerWidth - 100}px`;
   (document.getElementById('weather-radar') as HTMLDivElement).style.height = `${window.innerHeight}px`;
   (document.getElementById('weather-chart') as HTMLDivElement).style.maxWidth = `${window.innerWidth}px`;

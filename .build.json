@@ -6,7 +6,8 @@
     "output": ""
   },
   "profiles": {
-    "development": ["serve", "watch", "lint", "compile"]
+    "development": ["serve", "watch", "lint", "compile"],
+    "production": ["serve"]
   },
   "lint": {
     "locations": [ "*.json", "src/**/*.ts" ],
