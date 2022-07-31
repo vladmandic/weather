@@ -17,9 +17,9 @@
   <link rel="icon" sizes="256x256" href="../assets/icons/dash-256.png">
   <link rel="apple-touch-icon" href="../assets/icons/dash-256.png">
   <link rel="apple-touch-startup-image" href="../assets/icons/dash-256.png">
-  <link rel="stylesheet" href="index.css">
+  <link rel="stylesheet" href="nightstand.css">
   <link rel="stylesheet" href="../assets/leaflet.css">
-  <script src="../dist/index.js"></script>
+  <script src="../dist/nightstand.js"></script>
 </head>
 <body>
   <noscript><h1>javascript is required</h1></noscript>
@@ -28,29 +28,30 @@
   </nav>
   <header>
     <div id="header" class="header"></div>
-    <div id="loader-container" class="loader-container"><div id="loader" class="loader"></div></div>
+    <canvas id="sakura" class="sakura"></canvas>
   </header>
   <main>
-    <canvas id="sakura" class="sakura"></canvas>
     <div id="main" class="main">
-      <input type="text" id="input-address" name="input-address" size="10">
-      <component-address></component-address>
-      <!-- <component-clock></component-clock> -->
-      <component-info></component-info>
-      <component-today></component-today>
-      <component-forecast></component-forecast>
-      <component-aqi></component-aqi>
-      <component-alerts></component-alerts>
-      <component-astronomy></component-astronomy>
-      <component-chart></component-chart>
-      <component-radar></component-radar>
-      <component-windy></component-windy>
+      <div id="pg1">
+        <component-clock></component-clock>
+        <component-today></component-today>
+      </div>
+      <div id="pg2">
+        <component-forecast></component-forecast>
+        <component-aqi></component-aqi>
+        <component-alerts></component-alerts>
+      </div>
+      <div id="pg3">
+        <component-astronomy></component-astronomy>
+        <component-chart></component-chart>
+      </div>
+      <div id="pg4">
+        <component-radar></component-radar>
+      </div>
     </div>
   </main>
   <footer>
-    <div id="footer" class="footer">
-      <div id="install" class="install">install web app</div>
-    </div>
+    <div id="footer" class="footer"></div>
   </footer>
   <aside>
     <div id="aside" class="aside"></div>

@@ -1,0 +1,18 @@
+@font-face { font-family: 'CenturyGothic'; font-display: swap; font-style: normal; font-weight: 400; src: local('CenturyGothic'), url('/assets/century-gothic.ttf') format('truetype'); }
+html { font-size: 22px; text-align: -webkit-center; }
+body { font-size: 1rem; font-family: "CenturyGothic", "Segoe UI", sans-serif; font-variant: small-caps; width: -webkit-fill-available; background: black; color: white; overflow: hidden; margin: 0; text-align: -webkit-center; cursor: default; }
+
+.header { display: block; }
+.nav { display: block; }
+.main { display: block; width: max-content; }
+.footer { display: block; }
+.aside { display: block; }
+.sakura { position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.2; width: -webkit-fill-available; height: 100% }
+
+.clock { height: 8.0rem ; color: white; font-size: 6.0rem; font-weight: 800; letter-spacing: 0.8rem; line-height: 8.0rem; display: flex; position: relative; overflow: hidden; min-width: fit-content; justify-content: center; animation: fade ease 1s; }
+.clock::before { content: ''; width: 100vw; height: 2.0rem; background: transparent; position: absolute; top: 7.0rem; z-index: 2; }
+.clock::after { content: ''; width: 100vw; height: 2.0rem; background: transparent; position: absolute; z-index: 2; }
+.clock > div { display: flex; }
+.clock-move { animation: scroll linear 950ms; }
+@keyframes fade { 0% { opacity:0; } 100% { opacity:1; } }
+@keyframes scroll { from { transform: translateY(0vh) } to { transform: translateY(calc(-1 * 9.0rem)) } }

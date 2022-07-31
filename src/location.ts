@@ -39,21 +39,31 @@ export async function findByLocation(lat: number, lon: number, apiKey: string) {
 }
 
 export async function getGPSLocation(): Promise<Location> {
+  const empty = { lat: 0, lon: 0, accuracy: 0, name: '' };
   if (!navigator.geolocation) {
     log('getGPSLocation denied');
-    return { lat: 0, lon: 0, accuracy: 0, name: '' };
+    return empty;
   }
   return new Promise((resolve) => {
-    navigator.geolocation.getCurrentPosition(
-      (position: GeolocationPosition) => { // eslint-disable-line no-undef
-        log('getGPSLocation', position);
-        resolve({ lat: position.coords.latitude, lon: position.coords.longitude, name: '', accuracy: position.coords.accuracy });
-      },
-      (error: GeolocationPositionError) => { // eslint-disable-line no-undef
-        log('getGPSLocation error', error);
-        resolve({ lat: 0, lon: 0, name: '', accuracy: 0 });
-      },
-    );
+    setTimeout(() => {
+      log('getGPSLocation timeout');
+      resolve(empty);
+    }, 3000);
+    try {
+      navigator.geolocation.getCurrentPosition(
+        (position: GeolocationPosition) => { // eslint-disable-line no-undef
+          log('getGPSLocation', position);
+          resolve({ lat: position.coords.latitude, lon: position.coords.longitude, name: '', accuracy: position.coords.accuracy });
+        },
+        (error: GeolocationPositionError) => { // eslint-disable-line no-undef
+          log('getGPSLocation error', error);
+          resolve(empty);
+        },
+      );
+    } catch (err) {
+      log('getGPSLocation exception', err);
+      resolve(empty);
+    }
   });
 }
 

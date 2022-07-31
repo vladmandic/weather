@@ -24,7 +24,7 @@ class ComponentAlerts extends HTMLElement { // watch for attributes
   static get observedAttributes() { return ['loc']; }
 
   connectedCallback() { // triggered on insert
-    this.innerHTML = '<div class=alerts" id="weather-alerts" style="margin-top: 20px; width: 800px"></div>';
+    this.innerHTML = '<div class=alerts" id="weather-alerts" style="width: 800px; line-height: 1.2rem"></div>';
   }
 }
 

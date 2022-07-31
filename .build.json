@@ -15,8 +15,8 @@
   "serve": {
     "sslKey": "node_modules/@vladmandic/build/cert/https.key",
     "sslCrt": "node_modules/@vladmandic/build/cert/https.crt",
-    "httpPort": 10050,
-    "httpsPort": 10051,
+    "httpPort": 10060,
+    "httpsPort": 10061,
     "documentRoot": "",
     "defaultFolder": "public/",
     "defaultFile": "index.html",
@@ -38,14 +38,19 @@
     },
     "targets": [
       {
-        "name": "darksky-application",
-        "input": "src/darksky.ts",
-        "output": "public/darksky.js"
+        "name": "application",
+        "input": "src/index.ts",
+        "output": "dist/index.js"
+      },
+      {
+        "name": "nightstand",
+        "input": "src/nightstand.ts",
+        "output": "dist/nightstand.js"
       },
       {
         "name": "service-worker",
         "input": "src/pwa-serviceworker.ts",
-        "output": "public/pwa-serviceworker.js"
+        "output": "dist/pwa-serviceworker.js"
       }
     ]
   },

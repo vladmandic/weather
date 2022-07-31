@@ -35,7 +35,7 @@ export async function updateToday(data) {
   text += `Dew point <b>${Math.round(data.currently.dewPoint)}°</b><br>`;
   text += `Cloud cover <b>${Math.round(100 * data.currently.cloudCover)}%</b><br>`;
   text += `Pressure <b>${data.currently.pressure} mb</b><br>`;
-  text += `Precipation ${rain}<br>`;
+  text += `Precipation <b>${rain}</b><br>`;
   div1.innerHTML = text;
   const div2 = document.getElementById('weather-today-details2');
   if (!div2) return;
@@ -51,11 +51,11 @@ export async function updateToday(data) {
 class ComponentToday extends HTMLElement { // watch for attributes
   connectedCallback() { // triggered on insert
     this.innerHTML = `
-      <div id="weather-today" style="margin: 40px 0 0 0; font-size: 1.2rem">
+      <div id="weather-today" style="margin: 20px 0 0 0; font-size: 1.2rem">
         <div class="current" id="day-0" style="display: flex; justify-content: center">
           <div class="icon" style="margin-right: 20px"><img id="icon-current" width="200" height="200"></img></div>
           <div class="temperature" style="display: block; margin-right: 20px">
-            <div class="temp-current" style="text-align: center; margin: 30px 0 10px 0; font-size: 2.8rem"></div>
+            <div class="temp-current" style="text-align: center; margin: 20px 0 0 0; font-size: 3.4rem"></div>
             <div class="temp-feel" style="line-height: 2rem"></div>
             <div class="temp-minmax"></div>
           </div>
@@ -64,7 +64,7 @@ class ComponentToday extends HTMLElement { // watch for attributes
           <div id="weather-today-details2" class="weather-details" style="margin: 30px 10px 0 20px; line-height: 1.5rem">
           </div>
         </div>
-        <div class="description" style="font-size: 1.4rem; line-height: 1.8rem; text-align: center">
+        <div class="description" style="font-size: 1.4rem; line-height: 1.8rem; text-align: center; margin-top: 20px">
           <div class="desc-current" style="font-size: 1.8rem; line-height: 2rem"></div> 
           <div class="desc-minute"></div>
           <div class="desc-hour"></div>

@@ -112,8 +112,8 @@ export async function updateChart(data) {
 class ComponentChart extends HTMLElement { // watch for attributes
   connectedCallback() { // triggered on insert
     this.innerHTML = `
-      <div id="weather-chart" style="margin: 40px 0 40px 0; max-width: 800px">
-        <canvas id="weather-canvas" height=500 width=800></canvas>
+      <div id="weather-chart" style="margin: 0 0 40px 0; max-width: 800px">
+        <canvas id="weather-canvas" height=400 width=800></canvas>
       </div>
     `;
   }

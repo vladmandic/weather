@@ -114,7 +114,7 @@ async function main() {
   createSakura(); // create background
   updateClock(); // start clock
   window.addEventListener('beforeinstallprompt', (evt) => installable(evt)); // capture installable events
-  await registerPWA('pwa-serviceworker.js'); // register pwa
+  await registerPWA('../dist/pwa-serviceworker.js'); // register pwa
 
   initInitial(); // do initial weather update
   initEvents(); // do weather update on demand when search is used
