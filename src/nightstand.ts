@@ -11,8 +11,8 @@ import { updateChart } from './chart';
 import { updateRadar } from './radar';
 import { updateAQI } from './aqi';
 import { updateAlerts } from './alerts';
-import { createSakura } from './sakura';
 import { updateClock } from './clock';
+// import { createSakura } from './sakura';
 
 const update = async () => {
   const loc = await getIPLocation(keys.google);
@@ -61,16 +61,14 @@ async function initEvents() {
 
 async function main() {
   log('weather app');
-  createSakura(); // create background
+  // createSakura(); // create background
   updateClock(); // start clock
   initEvents(); // do weather update on demand
   update(); // do initial weather update
-  setTimeout(update, 15 * 60 * 1000); // update every 15min
-  setTimeout(scrollNext, 15 * 1000); // scroll to new page every 15sec
-  (document.getElementById('weather-radar') as HTMLDivElement).style.width = `${window.innerWidth - 100}px`;
+  setInterval(update, 15 * 60 * 1000); // update every 15min
+  setInterval(scrollNext, 15 * 1000); // scroll to new page every 15sec
+  // (document.getElementById('weather-radar') as HTMLDivElement).style.width = `${window.innerWidth - 100}px`;
   (document.getElementById('weather-radar') as HTMLDivElement).style.height = `${window.innerHeight}px`;
-  (document.getElementById('weather-chart') as HTMLDivElement).style.maxWidth = `${window.innerWidth}px`;
-  (document.getElementById('weather-canvas') as HTMLCanvasElement).style.width = `${window.innerWidth - 100}px`;
 }
 
 window.onload = main;

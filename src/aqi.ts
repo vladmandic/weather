@@ -37,7 +37,7 @@ class ComponentAQI extends HTMLElement { // watch for attributes
   connectedCallback() { // triggered on insert
     this.innerHTML = `
       <div style="width: fit-content">
-        <div id="weather-aqi" style="margin: 40px 0 20px 0; text-align: center; line-height: 2rem"></div>
+        <div id="weather-aqi" style="margin: 40px 0 20px 0; text-align: center; line-height: 1.6rem"></div>
       </div>
     `;
   }

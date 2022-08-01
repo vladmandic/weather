@@ -56,13 +56,13 @@ const chartConfig: ChartConfiguration = {
   data: {
     labels: [],
     datasets: [
-      { label: 'temperature', borderColor: '#ff9696', backgroundColor: '#ff9696', ...labelOptions, data: [], borderWidth: 6 },
-      { label: 'humidity', borderColor: '#ffe100', backgroundColor: '#ffe100', ...labelOptions, data: [], borderWidth: 3 },
-      { label: 'cloud', borderColor: '#cccccc', backgroundColor: '#cccccc', ...labelOptions, data: [] },
-      { label: 'rain', borderColor: '#52ff97', backgroundColor: '#52ff97', ...labelOptions, data: [], borderWidth: 6 },
-      { label: 'wind', borderColor: '#00bbff', backgroundColor: '#00bbff', ...labelOptions, data: [] },
-      { label: 'feel', borderColor: '#cca100', backgroundColor: '#cca100', ...labelOptions, data: [] },
-      { label: 'pressure', borderColor: '#515c20', backgroundColor: '#515c20', ...labelOptions, data: [], borderWidth: 3 },
+      { label: 'TEMPERATURE', borderColor: '#ff9696', backgroundColor: '#ff9696', ...labelOptions, data: [], borderWidth: 6 },
+      { label: 'HUMIDITY', borderColor: '#ffe100', backgroundColor: '#ffe100', ...labelOptions, data: [], borderWidth: 3 },
+      { label: 'CLOUD', borderColor: '#cccccc', backgroundColor: '#cccccc', ...labelOptions, data: [] },
+      { label: 'RAIN', borderColor: '#52ff97', backgroundColor: '#52ff97', ...labelOptions, data: [], borderWidth: 6 },
+      { label: 'WIND', borderColor: '#00bbff', backgroundColor: '#00bbff', ...labelOptions, data: [] },
+      { label: 'FEEL', borderColor: '#cca100', backgroundColor: '#cca100', ...labelOptions, data: [] },
+      { label: 'PRESSURE', borderColor: '#515c20', backgroundColor: '#515c20', ...labelOptions, data: [], borderWidth: 3 },
     ],
   },
   options: chartOptions,
@@ -86,13 +86,13 @@ export async function updateChart(data) {
   data.hourly.data.forEach((point) => {
     chartConfig.data.labels?.push([DateTime.fromSeconds(point.time).toFormat('ccc').toUpperCase(), DateTime.fromSeconds(point.time).toFormat('HH:mm')]);
     chartConfig.data.datasets.forEach((dataset) => {
-      if (dataset.label === 'temperature') dataset.data.push(point.temperature);
-      if (dataset.label === 'feel') dataset.data.push(point.apparentTemperature);
-      if (dataset.label === 'rain') dataset.data.push(Math.min((5 * 100 * point.precipIntensity), 100));
-      if (dataset.label === 'wind') dataset.data.push(point.windSpeed);
-      if (dataset.label === 'cloud') dataset.data.push(100 * point.cloudCover);
-      if (dataset.label === 'humidity') dataset.data.push(100 * point.humidity);
-      if (dataset.label === 'pressure') dataset.data.push(point.pressure / 10);
+      if (dataset.label?.toUpperCase() === 'TEMPERATURE') dataset.data.push(point.temperature);
+      if (dataset.label?.toUpperCase() === 'FEEL') dataset.data.push(point.apparentTemperature);
+      if (dataset.label?.toUpperCase() === 'RAIN') dataset.data.push(Math.min((5 * 100 * point.precipIntensity), 100));
+      if (dataset.label?.toUpperCase() === 'WIND') dataset.data.push(point.windSpeed);
+      if (dataset.label?.toUpperCase() === 'CLOUD') dataset.data.push(100 * point.cloudCover);
+      if (dataset.label?.toUpperCase() === 'HUMIDITY') dataset.data.push(100 * point.humidity);
+      if (dataset.label?.toUpperCase() === 'PRESSURE') dataset.data.push(point.pressure / 10);
     });
   });
   chart.update();
@@ -112,8 +112,8 @@ export async function updateChart(data) {
 class ComponentChart extends HTMLElement { // watch for attributes
   connectedCallback() { // triggered on insert
     this.innerHTML = `
-      <div id="weather-chart" style="margin: 0 0 40px 0; max-width: 800px">
-        <canvas id="weather-canvas" height=400 width=800></canvas>
+      <div id="weather-chart" style="margin: 0 0 40px 0; max-width: 1000px">
+        <canvas id="weather-canvas" height=400 width=1000px></canvas>
       </div>
     `;
   }

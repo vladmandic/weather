@@ -26,6 +26,8 @@ export async function updateRadar(lat: number, lon: number) {
     L.control.radar = () => new Radar({});
     // @ts-ignore property does not exist
     L.control.radar({}).addTo(map);
+    // const icon = L.icon({ iconUrl: 'assets/marker.png', iconSize: [64, 64] });
+    // new L.Marker([lat, lon], { icon }).addTo(map);
   } else {
     map.setView(new L.LatLng(lat, lon));
   }
@@ -34,7 +36,7 @@ export async function updateRadar(lat: number, lon: number) {
 class ComponentRadar extends HTMLElement { // watch for attributes
   connectedCallback() { // triggered on insert
     this.innerHTML = `
-      <div id="weather-radar" style="width: 800px; height: 800px; margin: 40px 0 40px 0"></div>
+      <div id="weather-radar" style="width: 1000px; height: 1000px; margin: 40px 0 40px 0"></div>
     `;
   }
 }

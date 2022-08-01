@@ -55,33 +55,33 @@ class ComponentForecast extends HTMLElement { // watch for attributes
   connectedCallback() { // triggered on insert
     this.innerHTML = `
       <div id="weather-forecast" style="margin: 40px 0 0 0; visibility: hidden">
-        <div class="future" style="display: flex; text-align: center; line-height: 1.4rem; justify-content: center">
+        <div class="future" style="display: flex; text-align: center; line-height: 1.4rem; justify-content: center; font-size: 1.1rem">
           <div class="oneday" style="padding: 20px"><div class="forecast-date" id="day-1" style="font-size: 1.4rem"></div>
-              <div class="icon"><img id="icon-1" width="80" height="80"></img></div>
+              <div class="icon"><img id="icon-1" width="100" height="100"></img></div>
               <div class="day-details"><span class="daily-temp-low"></span> - <span class="daily-temp-high"></span><br><span class="daily-rain"</span></div>
           </div>
           <div class="oneday" style="padding: 20px"><div class="forecast-date" id="day-2" style="font-size: 1.4rem"></div>
-              <div class="icon"><img id="icon-2" width="80" height="80"></img></div>
+              <div class="icon"><img id="icon-2" width="100" height="100"></img></div>
               <div class="day-details"><span class="daily-temp-low"></span> - <span class="daily-temp-high"></span><br><span class="daily-rain"</span></div>
           </div>
           <div class="oneday" style="padding: 20px"><div class="forecast-date" id="day-3" style="font-size: 1.4rem"></div>
-              <div class="icon"><img id="icon-3" width="80" height="80"></img></div>
+              <div class="icon"><img id="icon-3" width="100" height="100"></img></div>
               <div class="day-details"><span class="daily-temp-low"></span> - <span class="daily-temp-high"></span><br><span class="daily-rain"</span></div>
           </div>
           <div class="oneday" style="padding: 20px"><div class="forecast-date" id="day-4" style="font-size: 1.4rem"></div>
-              <div class="icon"><img id="icon-4" width="80" height="80"></img></div>
+              <div class="icon"><img id="icon-4" width="100" height="100"></img></div>
               <div class="day-details"><span class="daily-temp-low"></span> - <span class="daily-temp-high"></span><br><span class="daily-rain"</span></div>
           </div>
           <div class="oneday" style="padding: 20px"><div class="forecast-date" id="day-5" style="font-size: 1.4rem"></div>
-              <div class="icon"><img id="icon-5" width="80" height="80"></img></div>
+              <div class="icon"><img id="icon-5" width="100" height="100"></img></div>
               <div class="day-details"><span class="daily-temp-low"></span> - <span class="daily-temp-high"></span><br><span class="daily-rain"</span></div>
           </div>
           <div class="oneday" style="padding: 20px"><div class="forecast-date" id="day-6" style="font-size: 1.4rem"></div>
-              <div class="icon"><img id="icon-6" width="80" height="80"></img></div>
+              <div class="icon"><img id="icon-6" width="100" height="100"></img></div>
               <div class="day-details"><span class="daily-temp-low"></span> - <span class="daily-temp-high"></span><br><span class="daily-rain"</span></div>
           </div>
           <div class="oneday" style="padding: 20px"><div class="forecast-date" id="day-7" style="font-size: 1.4rem"></div>
-              <div class="icon"><img id="icon-7" width="80" height="80"></img></div>
+              <div class="icon"><img id="icon-7" width="100" height="100"></img></div>
               <div class="day-details"><span class="daily-temp-low"></span> - <span class="daily-temp-high"></span><br><span class="daily-rain"</span></div>
           </div>
         </div>
