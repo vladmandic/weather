@@ -9,10 +9,23 @@ body { font-size: 1rem; font-family: "CenturyGothic", "Segoe UI", sans-serif; fo
 .aside { display: block; }
 .sakura { position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.2; width: -webkit-fill-available; height: 100% }
 
-.clock { height: 8.0rem ; color: white; font-size: 6.0rem; font-weight: 800; letter-spacing: 0.8rem; line-height: 8.0rem; display: flex; position: relative; overflow: hidden; min-width: fit-content; justify-content: center; animation: fade ease 1s; }
-.clock::before { content: ''; width: 100vw; height: 2.0rem; background: transparent; position: absolute; top: 7.0rem; z-index: 2; }
-.clock::after { content: ''; width: 100vw; height: 2.0rem; background: transparent; position: absolute; z-index: 2; }
-.clock > div { display: flex; }
-.clock-move { animation: scroll linear 950ms; }
-@keyframes fade { 0% { opacity:0; } 100% { opacity:1; } }
-@keyframes scroll { from { transform: translateY(0vh) } to { transform: translateY(calc(-1 * 9.0rem)) } }
+.component-clock { height: 8.0rem ; font-size: 6.0rem; font-weight: 800; letter-spacing: 0.8rem; line-height: 8.0rem; display: flex; position: relative; overflow: hidden; min-width: fit-content; justify-content: center; animation: component-clock-fade ease 1s; }
+.component-clock::before { content: ''; width: 100vw; height: 2.0rem; background: transparent; position: absolute; top: 7.0rem; z-index: 2; }
+.component-clock::after { content: ''; width: 100vw; height: 2.0rem; background: transparent; position: absolute; z-index: 2; }
+.component-clock > div { display: flex; }
+.component-clock-move { animation: component-clock-scroll linear 950ms; }
+@keyframes component-clock-fade { 0% { opacity:0; } 100% { opacity:1; } }
+@keyframes component-clock-scroll { from { transform: translateY(0vh) } to { transform: translateY(calc(-1 * 9.0rem)) } }
+
+.component-today { margin: 20px 0 0 0; font-size: 1.2rem }
+.component-today-notes { font-size: 1.6rem; line-height: 2.0rem; text-align: center; margin-top: 10px; }
+
+.component-forecast { display: flex; text-align: center; line-height: 1.4rem; justify-content: center; font-size: 1.1rem; }
+.component-forecast-day { padding: 12px; }
+.component-forecast-date { font-size: 1.4rem; letter-spacing: 0.1rem }
+
+.component-aqi { margin: 40px 0 20px 0; text-align: center; line-height: 1.6rem; color: beige }
+
+.component-alerts { width: 800px; line-height: 1.2rem; min-height: 170px }
+
+.component-astronomy { margin: 10px 0 20px 0; font-size: 1.2rem }

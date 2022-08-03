@@ -3,7 +3,7 @@ import { log } from './log';
 
 export function updateAlerts(data) {
   log('updateAlerts', { alerts: data.alerts });
-  const divAlerts = document.getElementById('weather-alerts');
+  const divAlerts = document.getElementById('component-alerts');
   if (!divAlerts) return;
   let text = '';
   if (data.alerts) {
@@ -24,7 +24,7 @@ class ComponentAlerts extends HTMLElement { // watch for attributes
   static get observedAttributes() { return ['loc']; }
 
   connectedCallback() { // triggered on insert
-    this.innerHTML = '<div class=alerts" id="weather-alerts" style="width: 800px; line-height: 1.2rem"></div>';
+    this.innerHTML = '<div class="component-alerts" id="component-alerts"></div>';
   }
 }
 

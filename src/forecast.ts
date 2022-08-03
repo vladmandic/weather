@@ -6,11 +6,10 @@ const imgPath = '../assets/weather';
 export async function updateForecast(data) {
   log('updateForecast', { daily: data.daily });
   if (!data || !data.currently || !data.daily) return;
-  const card = document.getElementById('weather-forecast');
+  const card = document.getElementById('component-forecast');
   if (!card) return;
-  const week = card.querySelectorAll('.future .oneday');
-  week.forEach((weekday, i) => {
-    const day = weekday;
+  const week = card.querySelectorAll('.component-forecast-day');
+  week.forEach((day, i) => {
     const forecast = data.daily.data[i + 1];
     const img = document.getElementById(`icon-${i + 1}`) as HTMLImageElement;
     img.src = `${imgPath}/${forecast.icon}.webp`;
@@ -21,9 +20,9 @@ export async function updateForecast(data) {
       title += `${entry[0]}: ${entry[1]}\n`;
     }
     img.title = title;
-    (day.querySelector('.forecast-date') as HTMLDivElement).textContent = DateTime.fromSeconds(forecast.time).setZone(data.timezone).toFormat('ccc');
-    (day.querySelector('.daily-temp-high') as HTMLDivElement).textContent = ` ${Math.round(forecast.temperatureHigh)}° `;
-    (day.querySelector('.daily-temp-low') as HTMLDivElement).textContent = ` ${Math.round(forecast.temperatureLow)}° `;
+    (day.querySelector('.component-forecast-date') as HTMLDivElement).textContent = DateTime.fromSeconds(forecast.time).setZone(data.timezone).toFormat('ccc');
+    (day.querySelector('.component-forecast-temp-high') as HTMLDivElement).textContent = ` ${Math.round(forecast.temperatureHigh)}° `;
+    (day.querySelector('.component-forecast-temp-low') as HTMLDivElement).textContent = ` ${Math.round(forecast.temperatureLow)}° `;
     let precip = '';
     if (forecast.precipProbability > 0.05 && Math.round(100 * forecast.precipIntensityMax) > 0) {
       precip += `
@@ -54,36 +53,34 @@ export async function updateForecast(data) {
 class ComponentForecast extends HTMLElement { // watch for attributes
   connectedCallback() { // triggered on insert
     this.innerHTML = `
-      <div id="weather-forecast" style="margin: 40px 0 0 0; visibility: hidden">
-        <div class="future" style="display: flex; text-align: center; line-height: 1.4rem; justify-content: center; font-size: 1.1rem">
-          <div class="oneday" style="padding: 20px"><div class="forecast-date" id="day-1" style="font-size: 1.4rem"></div>
-              <div class="icon"><img id="icon-1" width="100" height="100"></img></div>
-              <div class="day-details"><span class="daily-temp-low"></span> - <span class="daily-temp-high"></span><br><span class="daily-rain"</span></div>
-          </div>
-          <div class="oneday" style="padding: 20px"><div class="forecast-date" id="day-2" style="font-size: 1.4rem"></div>
-              <div class="icon"><img id="icon-2" width="100" height="100"></img></div>
-              <div class="day-details"><span class="daily-temp-low"></span> - <span class="daily-temp-high"></span><br><span class="daily-rain"</span></div>
-          </div>
-          <div class="oneday" style="padding: 20px"><div class="forecast-date" id="day-3" style="font-size: 1.4rem"></div>
-              <div class="icon"><img id="icon-3" width="100" height="100"></img></div>
-              <div class="day-details"><span class="daily-temp-low"></span> - <span class="daily-temp-high"></span><br><span class="daily-rain"</span></div>
-          </div>
-          <div class="oneday" style="padding: 20px"><div class="forecast-date" id="day-4" style="font-size: 1.4rem"></div>
-              <div class="icon"><img id="icon-4" width="100" height="100"></img></div>
-              <div class="day-details"><span class="daily-temp-low"></span> - <span class="daily-temp-high"></span><br><span class="daily-rain"</span></div>
-          </div>
-          <div class="oneday" style="padding: 20px"><div class="forecast-date" id="day-5" style="font-size: 1.4rem"></div>
-              <div class="icon"><img id="icon-5" width="100" height="100"></img></div>
-              <div class="day-details"><span class="daily-temp-low"></span> - <span class="daily-temp-high"></span><br><span class="daily-rain"</span></div>
-          </div>
-          <div class="oneday" style="padding: 20px"><div class="forecast-date" id="day-6" style="font-size: 1.4rem"></div>
-              <div class="icon"><img id="icon-6" width="100" height="100"></img></div>
-              <div class="day-details"><span class="daily-temp-low"></span> - <span class="daily-temp-high"></span><br><span class="daily-rain"</span></div>
-          </div>
-          <div class="oneday" style="padding: 20px"><div class="forecast-date" id="day-7" style="font-size: 1.4rem"></div>
-              <div class="icon"><img id="icon-7" width="100" height="100"></img></div>
-              <div class="day-details"><span class="daily-temp-low"></span> - <span class="daily-temp-high"></span><br><span class="daily-rain"</span></div>
-          </div>
+      <div id="component-forecast" class="component-forecast" style="visibility: hidden">
+        <div class="component-forecast-day"><div class="component-forecast-date" id="day-1"></div>
+          <div class="icon"><img id="icon-1" width="120" height="120"></img></div>
+          <div class="day-details"><span class="component-forecast-temp-low"></span> - <span class="component-forecast-temp-high"></span><br><span class="daily-rain"</span></div>
+        </div>
+        <div class="component-forecast-day"><div class="component-forecast-date" id="day-2"></div>
+          <div class="icon"><img id="icon-2" width="120" height="120"></img></div>
+          <div class="day-details"><span class="component-forecast-temp-low"></span> - <span class="component-forecast-temp-high"></span><br><span class="daily-rain"</span></div>
+        </div>
+        <div class="component-forecast-day"><div class="component-forecast-date" id="day-3"></div>
+          <div class="icon"><img id="icon-3" width="120" height="120"></img></div>
+          <div class="day-details"><span class="component-forecast-temp-low"></span> - <span class="component-forecast-temp-high"></span><br><span class="daily-rain"</span></div>
+        </div>
+        <div class="component-forecast-day"><div class="component-forecast-date" id="day-4"></div>
+          <div class="icon"><img id="icon-4" width="120" height="120"></img></div>
+          <div class="day-details"><span class="component-forecast-temp-low"></span> - <span class="component-forecast-temp-high"></span><br><span class="daily-rain"</span></div>
+        </div>
+        <div class="component-forecast-day"><div class="component-forecast-date" id="day-5"></div>
+          <div class="icon"><img id="icon-5" width="120" height="120"></img></div>
+          <div class="day-details"><span class="component-forecast-temp-low"></span> - <span class="component-forecast-temp-high"></span><br><span class="daily-rain"</span></div>
+        </div>
+        <div class="component-forecast-day"><div class="component-forecast-date" id="day-6"></div>
+          <div class="icon"><img id="icon-6" width="120" height="120"></img></div>
+          <div class="day-details"><span class="component-forecast-temp-low"></span> - <span class="component-forecast-temp-high"></span><br><span class="daily-rain"</span></div>
+        </div>
+        <div class="component-forecast-day"><div class="component-forecast-date" id="day-7"></div>
+          <div class="icon"><img id="icon-7" width="120" height="120"></img></div>
+          <div class="day-details"><span class="component-forecast-temp-low"></span> - <span class="component-forecast-temp-high"></span><br><span class="daily-rain"</span></div>
         </div>
       </div>
     `;

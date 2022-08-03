@@ -14,17 +14,30 @@ input[type=text] { width: 700px; padding: 10px; background: none; border: none; 
 .install { padding: 8px; background: beige; color: black; display: none; width: 800px; }
 .sakura { position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.2; width: -webkit-fill-available; height: 100% }
 
-.clock { height: 4.0rem ; color: white; font-size: 3.0rem; line-height: 4.0rem; display: flex; position: relative; overflow: hidden; min-width: fit-content; justify-content: center; animation: fade ease 1s; }
-.clock::before { content: ''; width: 100vw; height: 1.5rem; position: absolute; top: 4.0rem; z-index: 2; }
-.clock::after { content: ''; width: 100vw; height: 1.5rem; position: absolute; z-index: 2; }
-.clock > div { display: flex; }
-.clock-move { animation: scroll linear 950ms; }
-@keyframes fade { 0% { opacity:0; } 100% { opacity:1; } }
-@keyframes scroll { from { transform: translateY(0vh) } to { transform: translateY(calc(-1 * 4.5rem)) } }
-
 .loader-container { top: 400px; justify-content: center; position: fixed; width: 100%; }
 .loader { width: 300px; height: 300px; border: 3px solid transparent; border-radius: 50%; border-top: 4px solid #f15e41; animation: spin 4s linear infinite; position: relative; }
 .loader::before, .loader::after { content: ""; position: absolute; top: 6px; bottom: 6px; left: 6px; right: 6px; border-radius: 50%; border: 4px solid transparent; }
 .loader::before { border-top-color: #bad375; animation: 3s spin linear infinite; }
 .loader::after { border-top-color: #26a9e0; animation: spin 1.5s linear infinite; }
 @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+.component-clock { height: 8.0rem ; font-size: 6.0rem; font-weight: 800; letter-spacing: 0.8rem; line-height: 8.0rem; display: flex; position: relative; overflow: hidden; min-width: fit-content; justify-content: center; animation: component-clock-fade ease 1s; }
+.component-clock::before { content: ''; width: 100vw; height: 2.0rem; background: transparent; position: absolute; top: 7.0rem; z-index: 2; }
+.component-clock::after { content: ''; width: 100vw; height: 2.0rem; background: transparent; position: absolute; z-index: 2; }
+.component-clock > div { display: flex; }
+.component-clock-move { animation: component-clock-scroll linear 950ms; }
+@keyframes component-clock-fade { 0% { opacity:0; } 100% { opacity:1; } }
+@keyframes component-clock-scroll { from { transform: translateY(0vh) } to { transform: translateY(calc(-1 * 9.0rem)) } }
+
+.component-today { margin: 20px 0 0 0; font-size: 1.2rem }
+.component-today-notes { font-size: 1.6rem; line-height: 2.0rem; text-align: center; }
+
+.component-forecast { display: flex; text-align: center; line-height: 1.4rem; justify-content: center; font-size: 1.1rem; margin-top: 30px; }
+.component-forecast-day { padding: 12px; }
+.component-forecast-date { font-size: 1.4rem; letter-spacing: 0.1rem }
+
+.component-aqi { margin: 40px 0 20px 0; text-align: center; line-height: 1.6rem; color: beige }
+
+.component-alerts { width: 800px; line-height: 1.2rem; }
+
+.component-astronomy { margin: 10px 0 20px 0; font-size: 1.2rem }

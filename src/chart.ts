@@ -1,4 +1,5 @@
 import { Chart, ChartConfiguration, ChartOptions, registerables } from 'chart.js';
+import * as SunCalc from 'suncalc';
 import { DateTime } from 'luxon';
 import { log } from './log';
 
@@ -14,7 +15,7 @@ const chartOptions: ChartOptions = {
       fullSize: true,
       labels: {
         padding: 14,
-        color: 'rgb(200, 200, 200)',
+        color: 'rgb(255, 255, 255)',
         font: { family: 'CenturyGothic', size: 12 },
       },
     },
@@ -36,8 +37,16 @@ const chartOptions: ChartOptions = {
       display: true,
       stacked: false,
       min: 0,
-      max: 120,
+      // max: 120,
       grid: { color: '#222222' },
+      ticks: {
+        color: 'rgb(255, 255, 255)',
+        font: {
+          family: 'CenturyGothic', size: 12, lineHeight: 1.6 },
+        autoSkip: true,
+        maxRotation: 0,
+        minRotation: 0,
+      },
     },
   },
 };
@@ -49,6 +58,7 @@ const labelOptions = {
   pointRadius: 0,
   cubicInterpolationMode: 'monotone',
   tension: 0.4,
+  stepped: false,
 };
 
 const chartConfig: ChartConfiguration = {
@@ -61,8 +71,10 @@ const chartConfig: ChartConfiguration = {
       { label: 'CLOUD', borderColor: '#cccccc', backgroundColor: '#cccccc', ...labelOptions, data: [] },
       { label: 'RAIN', borderColor: '#52ff97', backgroundColor: '#52ff97', ...labelOptions, data: [], borderWidth: 6 },
       { label: 'WIND', borderColor: '#00bbff', backgroundColor: '#00bbff', ...labelOptions, data: [] },
-      { label: 'FEEL', borderColor: '#cca100', backgroundColor: '#cca100', ...labelOptions, data: [] },
-      { label: 'PRESSURE', borderColor: '#515c20', backgroundColor: '#515c20', ...labelOptions, data: [], borderWidth: 3 },
+      { label: 'FEEL', borderColor: '#b70053', backgroundColor: '#b70053', ...labelOptions, data: [] },
+      { label: 'SUN', borderColor: '#fec88220', backgroundColor: '#fec88220', ...labelOptions, tension: 0.9, fill: true, borderWidth: 0, data: [] },
+      { label: 'MOON', borderColor: '#0081a715', backgroundColor: '#0081a715', ...labelOptions, tension: 0.9, fill: true, borderWidth: 0, data: [] },
+      // { label: 'PRESSURE', borderColor: '#515c20', backgroundColor: '#515c20', ...labelOptions, data: [], borderWidth: 3 },
     ],
   },
   options: chartOptions,
@@ -71,7 +83,7 @@ const chartConfig: ChartConfiguration = {
 let chart: Chart;
 
 async function initChart() {
-  const canvas = document.getElementById('weather-canvas') as HTMLCanvasElement;
+  const canvas = document.getElementById('component-chart') as HTMLCanvasElement;
   if (!canvas) return;
   Chart.register(...registerables);
   chart = new Chart(canvas, chartConfig);
@@ -85,14 +97,18 @@ export async function updateChart(data) {
   for (const dataSet of chartConfig.data.datasets) dataSet.data.length = 0;
   data.hourly.data.forEach((point) => {
     chartConfig.data.labels?.push([DateTime.fromSeconds(point.time).toFormat('ccc').toUpperCase(), DateTime.fromSeconds(point.time).toFormat('HH:mm')]);
+    const sunPos = SunCalc.getPosition(DateTime.fromSeconds(point.time).toJSDate(), data.latitude, data.longitude);
+    const moonPos = SunCalc.getMoonPosition(DateTime.fromSeconds(point.time).toJSDate(), data.latitude, data.longitude);
     chartConfig.data.datasets.forEach((dataset) => {
+      if (dataset.label?.toUpperCase() === 'SUN') dataset.data.push(100 * Math.sin(sunPos.altitude));
+      if (dataset.label?.toUpperCase() === 'MOON') dataset.data.push(100 * Math.sin(moonPos.altitude));
       if (dataset.label?.toUpperCase() === 'TEMPERATURE') dataset.data.push(point.temperature);
       if (dataset.label?.toUpperCase() === 'FEEL') dataset.data.push(point.apparentTemperature);
       if (dataset.label?.toUpperCase() === 'RAIN') dataset.data.push(Math.min((5 * 100 * point.precipIntensity), 100));
       if (dataset.label?.toUpperCase() === 'WIND') dataset.data.push(point.windSpeed);
       if (dataset.label?.toUpperCase() === 'CLOUD') dataset.data.push(100 * point.cloudCover);
       if (dataset.label?.toUpperCase() === 'HUMIDITY') dataset.data.push(100 * point.humidity);
-      if (dataset.label?.toUpperCase() === 'PRESSURE') dataset.data.push(point.pressure / 10);
+      // if (dataset.label?.toUpperCase() === 'PRESSURE') dataset.data.push(point.pressure / 10);
     });
   });
   chart.update();
@@ -105,6 +121,7 @@ export async function updateChart(data) {
     gradients[d.label as string].addColorStop(max / 120, d.backgroundColor as string);
     const current = chartConfig.data.datasets.find((c) => c.label === d.label);
     if (current) current.borderColor = gradients[d.label as string];
+    // if (current) current.backgroundColor = gradients[d.label as string];
   }
   chart.update();
 }
@@ -112,9 +129,7 @@ export async function updateChart(data) {
 class ComponentChart extends HTMLElement { // watch for attributes
   connectedCallback() { // triggered on insert
     this.innerHTML = `
-      <div id="weather-chart" style="margin: 0 0 40px 0; max-width: 1000px">
-        <canvas id="weather-canvas" height=400 width=1000px></canvas>
-      </div>
+      <canvas id="component-chart" height=400 width=1000px></canvas>
     `;
   }
 }
