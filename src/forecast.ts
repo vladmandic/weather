@@ -20,7 +20,7 @@ export async function updateForecast(data) {
       title += `${entry[0]}: ${entry[1]}\n`;
     }
     img.title = title;
-    (day.querySelector('.component-forecast-date') as HTMLDivElement).textContent = DateTime.fromSeconds(forecast.time).setZone(data.timezone).toFormat('ccc');
+    (day.querySelector('.component-forecast-date') as HTMLDivElement).textContent = DateTime.fromSeconds(forecast.time).setZone(data.timezone).toFormat('ccc').toLowerCase();
     (day.querySelector('.component-forecast-temp-high') as HTMLDivElement).textContent = ` ${Math.round(forecast.temperatureHigh)}° `;
     (day.querySelector('.component-forecast-temp-low') as HTMLDivElement).textContent = ` ${Math.round(forecast.temperatureLow)}° `;
     let precip = '';

@@ -20,31 +20,32 @@ export async function updateToday(data) {
   imgCurrent.title = title;
 
   (card.querySelector('.temp-current') as HTMLDivElement).textContent = `${Math.round(10 * data.currently.temperature) / 10}°`;
-  (card.querySelector('.temp-feel') as HTMLDivElement).innerHTML = `Feels like <b>${Math.round(data.currently.apparentTemperature)}</b>°`;
-  (card.querySelector('.temp-minmax') as HTMLDivElement).innerHTML = `Range <b>${Math.round(data.daily.data[0].temperatureLow)}° - ${Math.round(data.daily.data[0].temperatureHigh)}°</b>`;
-  if (data.currently?.summary) (card.querySelector('.desc-current') as HTMLDivElement).textContent = data.currently.summary.replace('.', '');
-  if (data.minutely?.summary) (card.querySelector('.desc-minute') as HTMLDivElement).textContent = data.minutely.summary.replace('.', '');
-  if (data.hourly?.summary) (card.querySelector('.desc-hour') as HTMLDivElement).textContent = data.hourly.summary.replace('.', '');
-  if (data.daily?.summary) (card.querySelector('.desc-daily') as HTMLDivElement).textContent = data.daily.summary.replace('.', '');
+  (card.querySelector('.temp-feel') as HTMLDivElement).innerHTML = `feels like <b>${Math.round(data.currently.apparentTemperature)}</b>°`;
+  (card.querySelector('.temp-minmax') as HTMLDivElement).innerHTML = `range <b>${Math.round(data.daily.data[0].temperatureLow)}° - ${Math.round(data.daily.data[0].temperatureHigh)}°</b>`;
+  if (data.currently?.summary) (card.querySelector('.desc-current') as HTMLDivElement).textContent = data.currently.summary.replace('.', '').toLowerCase();
+  if (data.minutely?.summary) (card.querySelector('.desc-minute') as HTMLDivElement).textContent = data.minutely.summary.replace('.', '').toLowerCase();
+  if (data.hourly?.summary) (card.querySelector('.desc-hour') as HTMLDivElement).textContent = data.hourly.summary.replace('.', '').toLowerCase();
+  if (data.daily?.summary) (card.querySelector('.desc-daily') as HTMLDivElement).textContent = data.daily.summary.replace('.', '').toLowerCase();
 
   const div1 = document.getElementById('component-today-column2');
   if (!div1) return;
   let text = '';
   const rain = data.currently.precipProbability < 0.02 ? 'none' : `<b>${Math.round(100 * data.currently.precipProbability)}% for ${Math.round(100 * data.currently.precipIntensity) / 100} in</b>`;
-  text += `Humidity <b>${Math.round(100 * data.currently.humidity)}%</b><br>`;
-  text += `Dew point <b>${Math.round(data.currently.dewPoint)}°</b><br>`;
-  text += `Cloud cover <b>${Math.round(100 * data.currently.cloudCover)}%</b><br>`;
-  text += `Pressure <b>${data.currently.pressure} mb</b><br>`;
-  text += `Precipation <b>${rain}</b><br>`;
+  text += `humidity <b>${Math.round(100 * data.currently.humidity)}%</b><br>`;
+  text += `dew point <b>${Math.round(data.currently.dewPoint)}°</b><br>`;
+  text += `cloud cover <b>${Math.round(100 * data.currently.cloudCover)}%</b><br>`;
+  text += `pressure <b>${data.currently.pressure} mb</b><br>`;
+  text += `precipation <b>${rain}</b><br>`;
   div1.innerHTML = text;
   const div2 = document.getElementById('component-today-column3');
   if (!div2) return;
   text = '';
   const storm = data.currently.nearestStormDistance ? `<b>${data.currently.nearestStormDistance} mi &nbsp<span style="display:inline-block;transform:rotate(${data.currently.nearestStormBearing}deg);"> ↑ </span></b>` : 'none';
-  text += `UV index <span style="background-color: rgba(${15 * data.currently.uvIndex}, ${15 * (15 - data.currently.uvIndex)}, ${0}, 1)"><b>&nbsp${data.currently.uvIndex}&nbsp</b></span><br>`;
-  text += `Visibility <b>${data.currently.visibility} mi</b><br>`;
-  text += `Wind <b>${Math.round(data.currently.windSpeed)} to ${Math.round(data.currently.windGust)} mph &nbsp&nbsp<span style="display:inline-block;transform:rotate(${data.currently.windBearing}deg);"> ↑ </span></b><br>`;
-  text += `Nearest storm ${storm}<br>`;
+  text += `uv index <span style="background-color: rgba(${15 * data.currently.uvIndex}, ${15 * (15 - data.currently.uvIndex)}, ${0}, 1)"><b>&nbsp${data.currently.uvIndex}&nbsp</b></span><br>`;
+  text += `visibility <b>${data.currently.visibility} mi</b><br>`;
+  text += `wind <b>${Math.round(data.currently.windSpeed)} to ${Math.round(data.currently.windGust)} mph &nbsp&nbsp<span style="display:inline-block;transform:rotate(${data.currently.windBearing}deg);"> ↑ </span></b><br>`;
+  text += `nearest storm ${storm}<br>`;
+  text += `last update ${DateTime.fromSeconds(data.currently.time as number).toFormat('HH:mm')}<br>`;
   div2.innerHTML = text;
 }
 
@@ -61,7 +62,7 @@ class ComponentToday extends HTMLElement { // watch for attributes
           </div>
           <div id="component-today-column2" style="margin: 12px 25px 0 25px; line-height: 1.4rem">
           </div>
-          <div id="component-today-column3" style="margin: 12px 25px 0 25px; line-height: 1.5rem">
+          <div id="component-today-column3" style="margin: 12px 25px 0 25px; line-height: 1.4rem">
           </div>
         </div>
         <div class="component-today-notes">

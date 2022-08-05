@@ -22,7 +22,7 @@ body { font-size: 1rem; font-family: "CenturyGothic", "Segoe UI", sans-serif; fo
 
 .component-forecast { display: flex; text-align: center; line-height: 1.4rem; justify-content: center; font-size: 1.1rem; }
 .component-forecast-day { padding: 12px; }
-.component-forecast-date { font-size: 1.4rem; letter-spacing: 0.1rem }
+.component-forecast-date { font-size: 1.4rem; letter-spacing: 0.15rem; font-weight: 600; }
 
 .component-aqi { margin: 40px 0 20px 0; text-align: center; line-height: 1.6rem; color: beige }
 

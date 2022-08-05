@@ -47,7 +47,7 @@ class ComponentAstronomy extends HTMLElement { // watch for attributes
             <img src="../assets/phases/sun.webp" width="100px" height="100px" alt="sunrise" title="${title}"></img>
           </td>
           <td>
-            Predawn<br>Dawn<br>Sunrise<br>Noon<br>Azimuth
+            predawn<br>dawn<br>sunrise<br>noon<br>azimuth
           <td>
           <td>
             ${hhmm(sunTimes.nauticalDawn)}<br>${hhmm(sunTimes.dawn)}<br>${hhmm(sunTimes.sunrise)} - ${hhmm(sunTimes.sunriseEnd)}<br>${hhmm(sunTimes.solarNoon)}<br>
@@ -57,7 +57,7 @@ class ComponentAstronomy extends HTMLElement { // watch for attributes
             <img src="../assets/phases/moon.webp" width="100px" height="100px" alt="sunset" style="margin-left: 0" title="${title}"></img>
           </td>
           <td style="padding-right: 10px">
-            Golden<br>Sunset<br>Dusk<br>Night<br>Altitude
+            golden<br>sunset<br>dusk<br>night<br>altitude
           <td>
           <td>
             ${hhmm(sunTimes.goldenHour)}<br>${hhmm(sunTimes.sunsetStart)} - ${hhmm(sunTimes.sunset)}<br>${hhmm(sunTimes.dusk)} - ${hhmm(sunTimes.nauticalDusk)}<br>${hhmm(sunTimes.night)}<br>
@@ -67,7 +67,7 @@ class ComponentAstronomy extends HTMLElement { // watch for attributes
             <img src="${img}" width="50px" height="50px" alt="moonrise" style="margin-left: 30px" title="${title}"></img>
           </td>
           <td>
-            Rise<br>Set<br>Phase<br>Azimuth<br>Altitude
+            rise<br>set<br>phase<br>azimuth<br>altitude
           <td>
           <td>
             ${moonTimes.rise ? hhmm(moonTimes.rise) : ''}<br>${moonTimes.set ? hhmm(moonTimes.set) : ''}<br>${Math.round(100 * (1 - 2 * Math.abs(0.5 - moonIllumination.phase)))}% ${phase}<br>

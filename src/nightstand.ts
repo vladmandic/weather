@@ -66,8 +66,7 @@ async function main() {
   initEvents(); // do weather update on demand
   update(); // do initial weather update
   setInterval(update, 15 * 60 * 1000); // update every 15min
-  // setInterval(scrollNext, 15 * 1000); // scroll to new page every 15sec
-  // (document.getElementById('weather-radar') as HTMLDivElement).style.width = `${window.innerWidth - 100}px`;
+  setInterval(scrollNext, 15 * 1000); // scroll to new page every 15sec
   (document.getElementById('weather-radar') as HTMLDivElement).style.height = `${window.innerHeight}px`;
 }
 
