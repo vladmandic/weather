@@ -10,9 +10,13 @@ export function updateAlerts(data) {
     text += '<span style="font-size: 1.8rem">Alerts</span><br>';
     for (const alert of data.alerts) {
       text += `
-      <div style="text-align: left">
-        <span style="color: beige">▪ ${DateTime.fromSeconds(alert.time).toFormat('ccc LLL d T')} to ${DateTime.fromSeconds(alert.expires).toFormat('ccc LLL d T')} ${alert.severity} for ${alert.regions.join(', ')}</span><br>
-        <span style="margin-left: 10px; -webkit-box-decoration-break: clone">${alert.title} - ${alert.description}</span>
+      <div style="text-align: left" title="${JSON.stringify(alert, null, 2).replace(/{|}|"|,/g, '').replace('  ', ' ')}">
+        <a href="${alert.uri}">
+          <span style="color: bisque; -webkit-box-decoration-break: clone">▪ ${DateTime.fromSeconds(alert.time).toFormat('ccc LLL d T')} to ${DateTime.fromSeconds(alert.expires).toFormat('ccc LLL d T')} ${alert.severity}</span><br>
+          <span style="color: beige; -webkit-box-decoration-break: clone; margin-left: 10px">for ${alert.regions.join(', ')}</span><br>
+          <span style="margin-left: 10px; -webkit-box-decoration-break: clone; font-weight: bold">${alert.title}</span><br>
+          <span style="margin-left: 10px; -webkit-box-decoration-break: clone">${alert.description.toLowerCase()}</span>
+        </a>
       </div>
     `;
     }

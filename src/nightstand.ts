@@ -67,6 +67,7 @@ async function main() {
   update(); // do initial weather update
   setInterval(update, 15 * 60 * 1000); // update every 15min
   setInterval(scrollNext, 15 * 1000); // scroll to new page every 15sec
+  for (const page of Array.from(document.getElementsByClassName('page'))) (page as HTMLDivElement).style.minHeight = `${window.innerHeight}px`;
   (document.getElementById('weather-radar') as HTMLDivElement).style.height = `${window.innerHeight}px`;
 }
 

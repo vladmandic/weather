@@ -16,9 +16,8 @@ export async function updateAQI(lat: number, lon: number, apiKey) {
     return `<span style="color: white; background: darkgreen; padding: 0px 8px 1px 8px">${v} - good</span>`;
   };
 
-  let title = aqi.data.attributions?.[0].name || '';
-  title += '\n' + (aqi.data?.city?.name || '');
-  let text = `<span style="font-size: 1.4rem; title="${title}">air quality index ${code(aqi.data.aqi)}</span><br>`;
+  const title = `${aqi.data.attributions?.[0].name || ''}\n${(aqi.data?.city?.name || '')}`;
+  let text = `<span style="font-size: 1.4rem" title="${title}"><a href="https://en.wikipedia.org/wiki/Air_quality_index">air quality index</a> ${code(aqi.data.aqi)}</span><br>`;
 
   text += '<span style="margin-right: 20px">';
   for (const [key, val] of Object.entries(aqi.data.iaqi)) {
