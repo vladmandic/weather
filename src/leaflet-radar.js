@@ -1,7 +1,11 @@
+/**
+ * Based on: https://github.com/rwev/leaflet-radar
+ */
+
 import * as L from 'leaflet';
 import { log } from './log';
 
-export const Radar = L.Control.extend({
+export const RadarNexRad = L.Control.extend({
   NEXRAD_URL: 'https://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0q.cgi',
   NEXRAD_LAYER: 'nexrad-n0q-900913', // base reflectivity radar
   isPaused: false,
@@ -21,7 +25,7 @@ export const Radar = L.Control.extend({
   },
 
   onAdd(map) {
-    log('addLayer', { url: this.NEXRAD_URL, layer: this.NEXRAD_LAYER });
+    log('addRadarLayer NexRad');
     this.map = map;
     this.container = L.DomUtil.create('div', 'leaflet-radar');
     this.container.style.background = 'transparent';

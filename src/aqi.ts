@@ -4,7 +4,7 @@ import { cors } from './cors';
 export async function updateAQI(lat: number, lon: number, apiKey) {
   const div = document.getElementById('component-aqi');
   if (!div) return;
-  const aqi = await cors(`https://api.waqi.info/feed/geo:${lat};${lon}/?token=${apiKey}`);
+  const aqi = await cors(`https://api.waqi.info/feed/geo:${lat};${lon}/?token=${apiKey}`, false);
   log('updateAQI', { lat, lon, aqi });
 
   const code = (v) => {

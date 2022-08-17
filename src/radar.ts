@@ -1,36 +1,53 @@
 import * as L from 'leaflet';
-import { Radar } from './leaflet-radar.js';
+import { addRadarLayer } from './leaflet-rainviewer.js';
 import { log } from './log';
 
 const mapUrl = 'https://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}';
 const mapOptions = { maxZoom: 20, subdomains: ['mt0', 'mt1', 'mt2', 'mt3'] };
-// const mapUrl = 'https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png';
-// const mapUrl = 'https://tile-{s}.openstreetmap.fr/hot/{z}/{x}/{y}.png';
 
 let map: L.Map;
+let marker: L.Marker;
 
 export async function updateRadar(lat: number, lon: number) {
-  log('updateMap', { lat, lon, mapUrl });
+  log('updateRadar', { lat, lon, mapUrl });
   const div = document.getElementById('weather-radar');
   if (!div) return;
-  if (!map) {
-    map = new L.Map(div, {
-      center: new L.LatLng(lat, lon),
-      zoom: 9,
-      zoomControl: false,
-      attributionControl: false,
-    });
-    const layer = L.tileLayer(mapUrl, mapOptions);
-    layer.addTo(map);
-    // @ts-ignore property does not exist
-    L.control.radar = () => new Radar({});
-    // @ts-ignore property does not exist
-    L.control.radar({}).addTo(map);
-    // const icon = L.icon({ iconUrl: 'assets/marker.png', iconSize: [64, 64] });
-    // new L.Marker([lat, lon], { icon }).addTo(map);
-  } else {
-    map.setView(new L.LatLng(lat, lon));
-  }
+
+  const intersectionObserver = new IntersectionObserver((entries) => {
+    if (entries[0].intersectionRatio <= 0) return; // is radar canvas in viewport
+    intersectionObserver.unobserve(div);
+    if (!map) {
+      log('createRadar', { lat, lon, mapUrl });
+      map = new L.Map(div, {
+        center: new L.LatLng(lat, lon),
+        zoom: 9,
+        zoomControl: false,
+        attributionControl: false,
+      });
+      L.tileLayer(mapUrl, mapOptions).addTo(map); // first layer is map
+      const radarLayer = addRadarLayer(map); // second layer is radar
+      setTimeout(() => radarLayer.play(), 2500); // start animation with delay
+      div.onclick = () => radarLayer.playStop();
+
+      // import { RadarNexRad } from './leaflet-radar.js';
+      // L.control.radar = () => new RadarNexRad({});
+      // L.control.radar = () => new RadarRainViewer({});
+    } else {
+      map.setView(new L.LatLng(lat, lon));
+    }
+    if (!marker) {
+      const icon = L.icon({ iconUrl: 'assets/marker.png', iconSize: [64, 64] });
+      marker = new L.Marker(new L.LatLng(lat, lon), { icon });
+      marker.addTo(map);
+    } else {
+      marker.setLatLng(latlng);
+    }
+  });
+
+  intersectionObserver.observe(div);
+  const latlng = new L.LatLng(lat, lon);
+  if (map) map.setView(latlng);
+  if (marker) marker.setLatLng(latlng);
 }
 
 class ComponentRadar extends HTMLElement { // watch for attributes

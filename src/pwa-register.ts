@@ -12,7 +12,7 @@ export async function registerPWA(path) {
         if (reg.scope.startsWith(window.location.origin)) found = reg;
       }
       if (!found) {
-        const reg = await navigator.serviceWorker.register(path, { scope: '/weather/public/' });
+        const reg = await navigator.serviceWorker.register(path, { scope: location.pathname }); // eslint-disable-line no-restricted-globals
         found = reg;
         log('pwa registered:', reg.scope);
       }

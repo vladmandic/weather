@@ -882,7 +882,14 @@ export function createSakura() {
   timeInfo.start = new Date();
   timeInfo.prev = timeInfo.start;
   animateSakura();
-  canvas.onclick = () => { run = !run; };
+  canvas.onclick = () => {
+    run = !run;
+    log('sakura', { run });
+  };
+  document.body.addEventListener('click', () => {
+    run = !run;
+    log('sakura', { run });
+  });
 }
 
 window.onresize = () => resizeSakura();

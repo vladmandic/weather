@@ -84,6 +84,7 @@ let chart: Chart;
 
 async function initChart() {
   const canvas = document.getElementById('component-chart') as HTMLCanvasElement;
+  log('initChart', canvas);
   if (!canvas) return;
   Chart.register(...registerables);
   chart = new Chart(canvas, chartConfig);

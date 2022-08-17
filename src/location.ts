@@ -1,39 +1,39 @@
 import { log } from './log';
+import * as keys from '../secrets.json';
+import { updateGPSInfo } from './info'; // eslint-disable-line import/no-cycle
+import { update } from './update'; // eslint-disable-line import/no-cycle
+import { cors } from './cors';
 
 export type Location = { lat: number, lon: number, accuracy: number, name: string }
 
 export async function findByAddress(name: string, apiKey: string): Promise<Location> {
   let rec = { name: '', lat: 0, lon: 0, accuracy: 0 };
-  const res = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?key=${apiKey}&address=${name}`);
-  if (res && res.ok) {
-    const json = await res.json();
-    log('findByAddress', json);
-    if (json.results && json.results[0]) {
-      rec = {
-        name: json.results[0].formatted_address,
-        lat: json.results[0].geometry.location.lat,
-        lon: json.results[0].geometry.location.lng,
-        accuracy: 0,
-      };
-    }
+  const json = await cors(`https://maps.googleapis.com/maps/api/geocode/json?key=${apiKey}&address=${name}`, false);
+  log('findByAddress', json);
+  if (json.results && json.results[0]) {
+    rec = {
+      name: json.results[0].formatted_address,
+      lat: json.results[0].geometry.location.lat,
+      lon: json.results[0].geometry.location.lng,
+      accuracy: 0,
+    };
   } else {
-    log('findByAddress', res.status, res.statusText);
+    log('findByAddress failed');
   }
   return rec;
 }
 
 export async function findByLocation(lat: number, lon: number, apiKey: string) {
-  const res = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=${apiKey}`);
+  const json = await cors(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=${apiKey}`, false);
   let address = '';
-  if (res && res.ok) {
-    const json = await res.json();
+  if (json.results) {
     const loc = json.results ? json.results.filter((r) => (r.types.includes('locality') || r.types.includes('neighborhood'))) : [];
     const adr1 = loc[0].address_components.map((r) => r.short_name);
     const adr2 = [...new Set(adr1)];
     address = adr2.join(', ');
     log('findByLocation', json, address);
   } else {
-    log('findByLocation error', res.status, res.statusText);
+    log('findByLocation failed');
   }
   return address;
 }
@@ -48,7 +48,7 @@ export async function getGPSLocation(): Promise<Location> {
     setTimeout(() => {
       log('getGPSLocation timeout');
       resolve(empty);
-    }, 3000);
+    }, 10000);
     try {
       navigator.geolocation.getCurrentPosition(
         (position: GeolocationPosition) => { // eslint-disable-line no-undef
@@ -68,10 +68,9 @@ export async function getGPSLocation(): Promise<Location> {
 }
 
 export async function getIPLocation(apiKey: string): Promise<Location> {
-  let res = await fetch('https://api.ipify.org?format=json');
-  const json = await res.json();
+  const json = await cors('https://api.ipify.org?format=json', false);
   const ip = json.ip;
-  res = await fetch(`https://www.googleapis.com/geolocation/v1/geolocate?key=${apiKey}`, {
+  const res = await fetch(`https://www.googleapis.com/geolocation/v1/geolocate?key=${apiKey}`, {
     method: 'POST',
     body: JSON.stringify({ considerIp: true }),
     headers: { 'Content-Type': 'application/json' },
@@ -100,8 +99,20 @@ class ComponentAddress extends HTMLElement { // watch for attributes
   attributeChangedCallback(name, _oldValue, newValue) { // triggered on attribute change
     if (name !== 'address') return;
     this.innerHTML = `
-      <div style="margin: 20px 0 0 0; font-size: 2rem; color: beige">${newValue}</div>
+      <div id="weather-info-text" title="click to detect gps location" style="margin: 20px 0 0 0; font-size: 2rem; color: beige">${newValue}</div>
     `;
+    const text = document.getElementById('weather-info-text') as HTMLDivElement; // register refresh on click
+    text.onclick = async () => {
+      text.innerHTML = 'detecting gps location';
+      const locGPS = await getGPSLocation();
+      if (locGPS.lat !== 0) {
+        locGPS.name = await findByLocation(locGPS.lat, locGPS.lon, keys.google);
+        updateGPSInfo(locGPS);
+        update(locGPS);
+      } else {
+        text.innerHTML = 'gps location failed';
+      }
+    };
   }
 }
 

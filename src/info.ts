@@ -1,5 +1,6 @@
 import { DateTime } from 'luxon';
 import { log } from './log';
+import { initInitial } from './update'; // eslint-disable-line import/no-cycle
 import type { Location } from './location';
 
 export function updateGPSInfo(loc: Location) {
@@ -45,7 +46,7 @@ export function updateCurrentTime() {
 class ComponentInfo extends HTMLElement { // watch for attributes
   connectedCallback() { // triggered on insert
     this.innerHTML = `
-      <div id="weather-info" style="margin: 20px 0 0 0; color: beige; font-size: 1.2rem">
+      <div id="weather-info" title="click to reinitialize weather" style="margin: 20px 0 0 0; color: beige; font-size: 1.2rem">
         <div id="weather-info-time"></div>
         <br>
         <div id="weather-info-gps"></div>
@@ -56,6 +57,8 @@ class ComponentInfo extends HTMLElement { // watch for attributes
         </div>
       </div>`;
     updateCurrentTime();
+    const info = document.getElementById('weather-info') as HTMLDivElement; // register refresh on click
+    info.onclick = async () => initInitial();
   }
 }
 
