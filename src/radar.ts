@@ -36,10 +36,11 @@ export async function updateRadar(lat: number, lon: number) {
       map.setView(new L.LatLng(lat, lon));
     }
     if (!marker) {
-      const icon = L.icon({ iconUrl: 'assets/marker.png', iconSize: [64, 64] });
+      const icon = L.icon({ iconUrl: '../assets/marker.png', iconSize: [64, 64] });
       marker = new L.Marker(new L.LatLng(lat, lon), { icon });
       marker.addTo(map);
     } else {
+      const latlng = new L.LatLng(lat, lon);
       marker.setLatLng(latlng);
     }
   });

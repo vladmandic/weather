@@ -65,10 +65,15 @@ async function main() {
   updateClock(); // start clock
   initEvents(); // do weather update on demand
   update(); // do initial weather update
-  setInterval(update, 15 * 60 * 1000); // update every 15min
-  setInterval(scrollNext, 15 * 1000); // scroll to new page every 15sec
   for (const page of Array.from(document.getElementsByClassName('page'))) (page as HTMLDivElement).style.minHeight = `${window.innerHeight}px`;
   (document.getElementById('weather-radar') as HTMLDivElement).style.height = `${window.innerHeight}px`;
+
+  setInterval(scrollNext, 15 * 1000); // scroll to new page every 15sec
+
+  setInterval(() => { // reload on every full hour and quarters
+    const t = Math.round((new Date()).getTime() / 1000);
+    if (t % (60 * 15) === 0) window.location.reload();
+  }, 500);
 }
 
 window.onload = main;
