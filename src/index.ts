@@ -35,7 +35,7 @@ async function main() {
   log('weather app');
 
   createSakura(); // create background
-  updateClock(); // start clock
+  updateClock(true); // start clock
   window.addEventListener('beforeinstallprompt', (evt) => installable(evt)); // capture installable events
   await registerPWA('../dist/pwa-serviceworker.js'); // register pwa
 

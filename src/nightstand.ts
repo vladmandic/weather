@@ -62,7 +62,7 @@ async function initEvents() {
 async function main() {
   log('weather app');
   // createSakura(); // create background
-  updateClock(); // start clock
+  updateClock(true); // start clock
   initEvents(); // do weather update on demand
   update(); // do initial weather update
   for (const page of Array.from(document.getElementsByClassName('page'))) (page as HTMLDivElement).style.minHeight = `${window.innerHeight}px`;
