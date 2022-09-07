@@ -20,6 +20,8 @@ a { color: inherit; text-decoration: inherit; }
 @keyframes component-clock-fade { 0% { opacity:0; } 100% { opacity:1; } }
 @keyframes component-clock-scroll { from { transform: translateY(0vh) } to { transform: translateY(calc(-1 * 9.0rem)) } }
 
+.component-clock-overlay { font-size: 3.0rem; letter-spacing: 0.8rem; position: fixed; bottom: 0; right: 0; font-weight: 800; color: beige; opacity: 40%; z-index: 500; }
+
 .component-today { margin: 20px 0 0 0; font-size: 1.2rem }
 .component-today-notes { font-size: 1.6rem; line-height: 2.0rem; text-align: center; margin-top: 10px; }
 

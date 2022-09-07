@@ -12,7 +12,7 @@ import { updateRadar } from './radar';
 import { updateAQI } from './aqi';
 import { updateAlerts } from './alerts';
 import { updateClock } from './clock';
-// import { createSakura } from './sakura';
+import { updateClockOverlay } from './clock-overlay';
 
 const update = async () => {
   const loc = await getIPLocation(keys.google);
@@ -63,6 +63,7 @@ async function main() {
   log('weather app');
   // createSakura(); // create background
   updateClock(true); // start clock
+  updateClockOverlay();
   initEvents(); // do weather update on demand
   update(); // do initial weather update
   for (const page of Array.from(document.getElementsByClassName('page'))) (page as HTMLDivElement).style.minHeight = `${window.innerHeight}px`;
