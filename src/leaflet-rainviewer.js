@@ -6,11 +6,11 @@ import * as L from 'leaflet';
 import { log } from './log';
 
 export function addRadarLayer(map) {
-  const layer = new L.Control.Rainviewer({ 
+  const layer = new L.Control.Rainviewer({
     position: 'topright',
     animationInterval: 200,
-    opacity: 0.75
-  })
+    opacity: 0.75,
+  });
   layer.addTo(map);
   layer.load();
   return layer;
@@ -34,6 +34,8 @@ L.Control.Rainviewer = L.Control.extend({
     this.rainviewerActive = false;
     this._map = map;
     this.container = L.DomUtil.create('div', 'leaflet-control-rainviewer leaflet-bar leaflet-control');
+    this.container.style.border = 'none';
+    this.container.style.background = 'rgba(100, 100, 100, 0.4)';
     return this.container;
   },
 
@@ -42,9 +44,8 @@ L.Control.Rainviewer = L.Control.extend({
     const t = this;
     this.apiRequest = new XMLHttpRequest();
     this.apiRequest.open('GET', 'https://tilecache.rainviewer.com/api/maps.json', true);
-    this.apiRequest.onload = function (e) {
+    this.apiRequest.onload = (e) => {
       t.timestamps = JSON.parse(t.apiRequest.response);
-      console.log(this);
       t.showFrame(-1);
     };
     this.apiRequest.send();
@@ -57,7 +58,6 @@ L.Control.Rainviewer = L.Control.extend({
     this.positionSlider.id = 'rainviewer-positionslider';
     this.positionSlider.min = 0;
     this.positionSlider.max = 11;
-    this.positionSlider.style.width = '200px';
     this.positionSlider.value = this.animationPosition;
     L.DomEvent.on(this.positionSlider, 'input', t.setPosition, this);
     L.DomEvent.disableClickPropagation(this.positionSlider);
@@ -70,7 +70,6 @@ L.Control.Rainviewer = L.Control.extend({
     // log('rainviewer unload');
     L.DomUtil.remove(this.controlContainer);
     L.DomUtil.removeClass(this.container, 'leaflet-control-rainviewer-active');
-    console.log(this.radarLayers);
     const radarLayers = this.radarLayers;
     const map = this._map;
     Object.keys(radarLayers).forEach((key) => {
@@ -122,7 +121,6 @@ L.Control.Rainviewer = L.Control.extend({
 
   setOpacity(e) {
     // log('rainviewer setOpacity');
-    console.log(e.srcElement.value / 100);
     if (this.radarLayers[this.currentTimestamp]) {
       this.radarLayers[this.currentTimestamp].setOpacity(e.srcElement.value / 100);
     }
@@ -181,6 +179,4 @@ L.Control.Rainviewer = L.Control.extend({
   },
 });
 
-L.control.rainviewer = function (opts) {
-  return new L.Control.Rainviewer(opts);
-};
+L.control.rainviewer = (opts) => new L.Control.Rainviewer(opts);

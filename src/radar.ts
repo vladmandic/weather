@@ -2,7 +2,17 @@ import * as L from 'leaflet';
 import { addRadarLayer } from './leaflet-rainviewer.js';
 import { log } from './log';
 
-const mapUrl = 'https://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}';
+/* google lyrs
+  h = roads only
+  m = standard roadmap
+  p = terrain
+  r = somehow altered roadmap
+  s = satellite only
+  t = terrain only
+  y = hybrid
+*/
+
+const mapUrl = 'https://{s}.google.com/vt/lyrs=y,h&x={x}&y={y}&z={z}';
 const mapOptions = { maxZoom: 20, subdomains: ['mt0', 'mt1', 'mt2', 'mt3'] };
 
 let map: L.Map;

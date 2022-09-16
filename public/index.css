@@ -42,3 +42,10 @@ input[type=text] { width: 700px; padding: 10px; background: none; border: none; 
 .component-alerts { width: 800px; line-height: 1.2rem; }
 
 .component-astronomy { margin: 10px 0 20px 0; font-size: 1.2rem }
+
+.leaflet-control-rainviewer { border: none }
+.leaflet-control-rainviewer-timestamp { font-size: 1.1rem; letter-spacing: 2px; font-weight: bold; color: #FFFFA0}
+.leaflet-control-rainviewer-positionslider { width: 250px; height: 26px; appearance: none; margin: 10px 0; background: transparent;}
+.leaflet-control-rainviewer-positionslider:focus { outline: none; }
+.leaflet-control-rainviewer-positionslider::-webkit-slider-runnable-track { width: 100%; height: 14px; cursor: pointer; background: #50555C; border-radius: 4px; }
+.leaflet-control-rainviewer-positionslider::-webkit-slider-thumb { border: 0px solid #000000; height: 20px; width: 40px; border-radius: 4px; background: #FFFFA0; cursor: pointer; appearance: none; margin-top: -3px; }
