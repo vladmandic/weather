@@ -1,5 +1,6 @@
 import { log } from './log';
 import { cors } from './cors';
+import { escape } from './xss';
 
 export async function updateAQI(lat: number, lon: number, apiKey) {
   const div = document.getElementById('component-aqi');
@@ -16,17 +17,18 @@ export async function updateAQI(lat: number, lon: number, apiKey) {
     return `<span style="color: white; background: darkgreen; padding: 0px 8px 1px 8px">${v} - good</span>`;
   };
 
-  const title = `${aqi.data.attributions?.[0].name || ''}\n${(aqi.data?.city?.name || '')}`;
+  const title = escape(`${aqi.data.attributions?.[0].name || ''}\n${(aqi.data?.city?.name || '')}`);
   let html = `<span style="font-size: 1.4rem" title="${title}"><a href="https://en.wikipedia.org/wiki/Air_quality_index">air quality index</a> ${code(aqi.data.aqi)}</span><br>`;
 
   html += '<span style="margin-right: 20px">';
   for (const [key, val] of Object.entries(aqi.data.iaqi)) {
-    if (key === 'co') html += `<span title="Carbon Monoxide" style="margin-right: 20px">CO <span style="color: white">${(val as { v: number }).v}</span></span>`;
-    if (key === 'no2') html += `<span title="Nitrogen Dioxide" style="margin-right: 20px">NO<span style="font-size: 0.5rem">2</span> <span style="color: white">${(val as { v: number }).v}</span></span>`;
-    if (key === 'so2') html += `<span title="Sulfur Dioxide" style="margin-right: 20px">SO<span style="font-size: 0.5rem">2</span> <span style="color: white">${(val as { v: number }).v}</span></span>`;
-    if (key === 'o3') html += `<span title="Ground-level Ozone" style="margin-right: 20px">O<span style="font-size: 0.5rem">3</span> <span style="color: white">${(val as { v: number }).v}</span></span>`;
-    if (key === 'pm10') html += `<span title="Particulates < 10 microns" style="margin-right: 20px">PM<span style="font-size: 0.5rem">10.0</span> <span style="color: white">${(val as { v: number }).v}</span></span>`;
-    if (key === 'pm25') html += `<span title="Particulates < 2.5 microns" style="margin-right: 20px">PM<span style="font-size: 0.5rem">2.5</span> <span style="color: white">${(val as { v: number }).v}</span></span>`;
+    const v = escape((val as { v: number }).v);
+    if (key === 'co') html += `<span title="Carbon Monoxide" style="margin-right: 20px">CO <span style="color: white">${v}</span></span>`;
+    if (key === 'no2') html += `<span title="Nitrogen Dioxide" style="margin-right: 20px">NO<span style="font-size: 0.5rem">2</span> <span style="color: white">${v}</span></span>`;
+    if (key === 'so2') html += `<span title="Sulfur Dioxide" style="margin-right: 20px">SO<span style="font-size: 0.5rem">2</span> <span style="color: white">${v}</span></span>`;
+    if (key === 'o3') html += `<span title="Ground-level Ozone" style="margin-right: 20px">O<span style="font-size: 0.5rem">3</span> <span style="color: white">${v}</span></span>`;
+    if (key === 'pm10') html += `<span title="Particulates < 10 microns" style="margin-right: 20px">PM<span style="font-size: 0.5rem">10.0</span> <span style="color: white">${v}</span></span>`;
+    if (key === 'pm25') html += `<span title="Particulates < 2.5 microns" style="margin-right: 20px">PM<span style="font-size: 0.5rem">2.5</span> <span style="color: white">${v}</span></span>`;
   }
   html += '</span>';
   div.innerHTML = html;

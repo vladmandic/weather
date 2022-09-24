@@ -6,7 +6,7 @@ export function updateAlerts(data) {
   const divAlerts = document.getElementById('component-alerts');
   if (!divAlerts) return;
   let html = '';
-  if (data.alerts) {
+  if (data?.alerts) {
     html += '<span style="font-size: 1.8rem">Alerts</span><br>';
     for (const alert of data.alerts) {
       html += `
