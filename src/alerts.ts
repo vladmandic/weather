@@ -5,11 +5,11 @@ export function updateAlerts(data) {
   log('updateAlerts', { alerts: data.alerts });
   const divAlerts = document.getElementById('component-alerts');
   if (!divAlerts) return;
-  let text = '';
+  let html = '';
   if (data.alerts) {
-    text += '<span style="font-size: 1.8rem">Alerts</span><br>';
+    html += '<span style="font-size: 1.8rem">Alerts</span><br>';
     for (const alert of data.alerts) {
-      text += `
+      html += `
       <div style="text-align: left" title="${JSON.stringify(alert, null, 2).replace(/{|}|"|,/g, '').replace('  ', ' ')}">
         <a href="${alert.uri}">
           <span style="color: bisque; -webkit-box-decoration-break: clone">▪ ${DateTime.fromSeconds(alert.time).toFormat('ccc LLL d T')} to ${DateTime.fromSeconds(alert.expires).toFormat('ccc LLL d T')} ${alert.severity}</span><br>
@@ -21,7 +21,7 @@ export function updateAlerts(data) {
     `;
     }
   }
-  divAlerts.innerHTML = text;
+  divAlerts.innerHTML = html;
 }
 
 class ComponentAlerts extends HTMLElement { // watch for attributes

@@ -57,20 +57,21 @@ function cacheInit() {
 
 if (!listening) {
   self.addEventListener('message', (evt: MessageEvent) => { // eslint-disable-line no-restricted-globals
-    // get messages from main app to update configuration
-    log('event message:', evt.data);
+    log('event message:', { data: evt?.data, origin: evt?.origin }); // get messages from main app to update configuration
   });
 
   self.addEventListener('install', (evt) => { // eslint-disable-line no-restricted-globals
-    log('install');
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, no-restricted-globals
-    (self as any).skipWaiting();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (evt as any).waitUntil(cacheInit);
+    if (!evt?.currentTarget) return;
+    const tgt = evt.currentTarget as ServiceWorkerGlobalScope;
+    log('install', { scope: tgt?.registration?.scope, script: tgt?.serviceWorker?.scriptURL });
+    (self as any).skipWaiting(); // eslint-disable-line @typescript-eslint/no-explicit-any, no-restricted-globals
+    (evt as any).waitUntil(cacheInit); // eslint-disable-line @typescript-eslint/no-explicit-any
   });
 
   self.addEventListener('activate', (evt) => { // eslint-disable-line no-restricted-globals
-    log('activate');
+    if (!evt?.currentTarget) return;
+    const tgt = evt.currentTarget as ServiceWorkerGlobalScope;
+    log('activate', { state: tgt?.serviceWorker?.state });
     (evt as any).waitUntil((self as any).clients.claim()); // eslint-disable-line @typescript-eslint/no-explicit-any, no-restricted-globals
   });
 
@@ -91,7 +92,7 @@ if (!listening) {
   // only trigger controllerchange once
   let refreshed = false;
   self.addEventListener('controllerchange', (evt) => { // eslint-disable-line no-restricted-globals
-    log(`PWA: ${evt.type}`);
+    log(`pwa: ${evt.type}`);
     if (refreshed) return;
     refreshed = true;
     // eslint-disable-next-line no-restricted-globals

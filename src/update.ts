@@ -24,8 +24,8 @@ export const update = async (loc: Location) => {
   const data = await cors(`https://api.darksky.net/forecast/${keys.darksky}/${loc.lat},${loc.lon}`); // get actual forecast
   log('weatherData', data);
   (document.getElementById('main') as HTMLDivElement).style.display = 'block';
-  updateStationInfo(data.flags);
-  updateForecastAge(data.currently?.time);
+  updateStationInfo(data?.flags);
+  updateForecastAge(data?.currently?.time);
   updateToday(data);
   updateForecast(data);
   updateLegend(data);

@@ -17,19 +17,19 @@ export async function updateAQI(lat: number, lon: number, apiKey) {
   };
 
   const title = `${aqi.data.attributions?.[0].name || ''}\n${(aqi.data?.city?.name || '')}`;
-  let text = `<span style="font-size: 1.4rem" title="${title}"><a href="https://en.wikipedia.org/wiki/Air_quality_index">air quality index</a> ${code(aqi.data.aqi)}</span><br>`;
+  let html = `<span style="font-size: 1.4rem" title="${title}"><a href="https://en.wikipedia.org/wiki/Air_quality_index">air quality index</a> ${code(aqi.data.aqi)}</span><br>`;
 
-  text += '<span style="margin-right: 20px">';
+  html += '<span style="margin-right: 20px">';
   for (const [key, val] of Object.entries(aqi.data.iaqi)) {
-    if (key === 'co') text += `<span title="Carbon Monoxide" style="margin-right: 20px">CO <span style="color: white">${(val as { v: number }).v}</span></span>`;
-    if (key === 'no2') text += `<span title="Nitrogen Dioxide" style="margin-right: 20px">NO<span style="font-size: 0.5rem">2</span> <span style="color: white">${(val as { v: number }).v}</span></span>`;
-    if (key === 'so2') text += `<span title="Sulfur Dioxide" style="margin-right: 20px">SO<span style="font-size: 0.5rem">2</span> <span style="color: white">${(val as { v: number }).v}</span></span>`;
-    if (key === 'o3') text += `<span title="Ground-level Ozone" style="margin-right: 20px">O<span style="font-size: 0.5rem">3</span> <span style="color: white">${(val as { v: number }).v}</span></span>`;
-    if (key === 'pm10') text += `<span title="Particulates < 10 microns" style="margin-right: 20px">PM<span style="font-size: 0.5rem">10.0</span> <span style="color: white">${(val as { v: number }).v}</span></span>`;
-    if (key === 'pm25') text += `<span title="Particulates < 2.5 microns" style="margin-right: 20px">PM<span style="font-size: 0.5rem">2.5</span> <span style="color: white">${(val as { v: number }).v}</span></span>`;
+    if (key === 'co') html += `<span title="Carbon Monoxide" style="margin-right: 20px">CO <span style="color: white">${(val as { v: number }).v}</span></span>`;
+    if (key === 'no2') html += `<span title="Nitrogen Dioxide" style="margin-right: 20px">NO<span style="font-size: 0.5rem">2</span> <span style="color: white">${(val as { v: number }).v}</span></span>`;
+    if (key === 'so2') html += `<span title="Sulfur Dioxide" style="margin-right: 20px">SO<span style="font-size: 0.5rem">2</span> <span style="color: white">${(val as { v: number }).v}</span></span>`;
+    if (key === 'o3') html += `<span title="Ground-level Ozone" style="margin-right: 20px">O<span style="font-size: 0.5rem">3</span> <span style="color: white">${(val as { v: number }).v}</span></span>`;
+    if (key === 'pm10') html += `<span title="Particulates < 10 microns" style="margin-right: 20px">PM<span style="font-size: 0.5rem">10.0</span> <span style="color: white">${(val as { v: number }).v}</span></span>`;
+    if (key === 'pm25') html += `<span title="Particulates < 2.5 microns" style="margin-right: 20px">PM<span style="font-size: 0.5rem">2.5</span> <span style="color: white">${(val as { v: number }).v}</span></span>`;
   }
-  text += '</span>';
-  div.innerHTML = text;
+  html += '</span>';
+  div.innerHTML = html;
 }
 
 class ComponentAQI extends HTMLElement { // watch for attributes

@@ -83,11 +83,11 @@ const chartConfig: ChartConfiguration = {
 let chart: Chart;
 
 async function initChart() {
-  const canvas = document.getElementById('component-chart') as HTMLCanvasElement;
-  log('initChart', canvas);
-  if (!canvas) return;
+  const html = document.getElementById('component-chart') as HTMLCanvasElement;
+  log('initChart');
+  if (!html) return;
   Chart.register(...registerables);
-  chart = new Chart(canvas, chartConfig);
+  chart = new Chart(html, chartConfig);
 }
 
 export async function updateChart(data) {
