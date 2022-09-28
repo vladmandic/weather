@@ -44,10 +44,10 @@ async function scrollNext() {
     if (offset === 0 && window.scrollY > 0) {
       window.scroll(0, 0); // scroll back to top
     } else if (window.scrollY < offset) {
-      window.scroll(0, window.scrollY + easing + 1); // scroll to div offset
+      window.scroll(0, window.scrollY + easing + 1); // scroll to div offset with easing
       setTimeout(interval, 10);
     } else {
-      setInterval(scrollNext, 15 * 1000); // scroll to new page every 15sec
+      setTimeout(scrollNext, 15 * 1000); // scroll to new page every 15sec after done scrolling
     }
   };
   interval();
