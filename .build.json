@@ -10,7 +10,7 @@
     "production": ["serve"]
   },
   "lint": {
-    "locations": [ "*.json", "src/**/*.ts" ],
+    "locations": [ "*.json", "src/*" ],
     "rules": { }
   },
   "serve": {

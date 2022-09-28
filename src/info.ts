@@ -16,7 +16,7 @@ export function updateIPInfo(loc: Location) {
 
 export function updateStationInfo(flags) {
   log('updateStationInfo', { flags });
-  const distance = flags?.['nearest-station'] || Number.POSITIVE_INFINITY;
+  const distance = flags?.['nearest-station'] || 'Number.POSITIVE_INFINITY';
   (document.getElementById('weather-info-station') as HTMLDivElement).innerHTML = escape(`nearest station ${distance} mi`);
 }
 

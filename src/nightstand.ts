@@ -1,7 +1,7 @@
 import PullToRefresh from 'pulltorefreshjs';
 import { log } from './log';
 import { getIPLocation, findByLocation } from './location';
-import * as keys from '../secrets.json';
+import { keys } from './secrets';
 import { cors } from './cors';
 import { updateAstronomy } from './astronomy';
 import { updateLegend } from './legend';
@@ -46,6 +46,8 @@ async function scrollNext() {
     } else if (window.scrollY < offset) {
       window.scroll(0, window.scrollY + easing + 1); // scroll to div offset
       setTimeout(interval, 10);
+    } else {
+      setInterval(scrollNext, 15 * 1000); // scroll to new page every 15sec
     }
   };
   interval();
@@ -64,12 +66,13 @@ async function main() {
   // createSakura(); // create background
   updateClock(true); // start clock
   updateClockOverlay();
+  await keys.init();
   initEvents(); // do weather update on demand
   update(); // do initial weather update
   for (const page of Array.from(document.getElementsByClassName('page'))) (page as HTMLDivElement).style.minHeight = `${window.innerHeight}px`;
   (document.getElementById('weather-radar') as HTMLDivElement).style.height = `${window.innerHeight}px`;
 
-  setInterval(scrollNext, 15 * 1000); // scroll to new page every 15sec
+  setTimeout(scrollNext, 15 * 1000); // start scroll to new page every 15sec
 
   setInterval(() => { // reload on every full hour and quarters
     const t = Math.round((new Date()).getTime() / 1000);

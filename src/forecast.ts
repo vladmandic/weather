@@ -5,9 +5,13 @@ const imgPath = '../assets/weather';
 
 export async function updateForecast(data) {
   log('updateForecast', { daily: data.daily });
-  if (!data || !data.currently || !data.daily) return;
   const card = document.getElementById('component-forecast');
   if (!card) return;
+  if (!data || !data.currently || !data.daily) {
+    card.style.display = 'none';
+    return;
+  }
+  card.style.display = 'flex';
   const week = card.querySelectorAll('.component-forecast-day');
   week.forEach((day, i) => {
     const forecast = data.daily.data[i + 1];
@@ -52,34 +56,35 @@ export async function updateForecast(data) {
 
 class ComponentForecast extends HTMLElement { // watch for attributes
   connectedCallback() { // triggered on insert
+    const blank = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
     this.innerHTML = `
       <div id="component-forecast" class="component-forecast" style="visibility: hidden">
         <div class="component-forecast-day"><div class="component-forecast-date" id="day-1"></div>
-          <div class="icon"><img id="icon-1" width="120" height="120"></img></div>
+          <div class="icon"><img id="icon-1" width="120" height="120" src="${blank}"></img></div>
           <div class="day-details"><span class="component-forecast-temp-low"></span> - <span class="component-forecast-temp-high"></span><br><span class="daily-rain"</span></div>
         </div>
         <div class="component-forecast-day"><div class="component-forecast-date" id="day-2"></div>
-          <div class="icon"><img id="icon-2" width="120" height="120"></img></div>
+          <div class="icon"><img id="icon-2" width="120" height="120" src="${blank}"></img></div>
           <div class="day-details"><span class="component-forecast-temp-low"></span> - <span class="component-forecast-temp-high"></span><br><span class="daily-rain"</span></div>
         </div>
         <div class="component-forecast-day"><div class="component-forecast-date" id="day-3"></div>
-          <div class="icon"><img id="icon-3" width="120" height="120"></img></div>
+          <div class="icon"><img id="icon-3" width="120" height="120" src="${blank}"></img></div>
           <div class="day-details"><span class="component-forecast-temp-low"></span> - <span class="component-forecast-temp-high"></span><br><span class="daily-rain"</span></div>
         </div>
         <div class="component-forecast-day"><div class="component-forecast-date" id="day-4"></div>
-          <div class="icon"><img id="icon-4" width="120" height="120"></img></div>
+          <div class="icon"><img id="icon-4" width="120" height="120" src="${blank}"></img></div>
           <div class="day-details"><span class="component-forecast-temp-low"></span> - <span class="component-forecast-temp-high"></span><br><span class="daily-rain"</span></div>
         </div>
         <div class="component-forecast-day"><div class="component-forecast-date" id="day-5"></div>
-          <div class="icon"><img id="icon-5" width="120" height="120"></img></div>
+          <div class="icon"><img id="icon-5" width="120" height="120" src="${blank}"></img></div>
           <div class="day-details"><span class="component-forecast-temp-low"></span> - <span class="component-forecast-temp-high"></span><br><span class="daily-rain"</span></div>
         </div>
         <div class="component-forecast-day"><div class="component-forecast-date" id="day-6"></div>
-          <div class="icon"><img id="icon-6" width="120" height="120"></img></div>
+          <div class="icon"><img id="icon-6" width="120" height="120" src="${blank}"></img></div>
           <div class="day-details"><span class="component-forecast-temp-low"></span> - <span class="component-forecast-temp-high"></span><br><span class="daily-rain"</span></div>
         </div>
         <div class="component-forecast-day"><div class="component-forecast-date" id="day-7"></div>
-          <div class="icon"><img id="icon-7" width="120" height="120"></img></div>
+          <div class="icon"><img id="icon-7" width="120" height="120" src="${blank}"></img></div>
           <div class="day-details"><span class="component-forecast-temp-low"></span> - <span class="component-forecast-temp-high"></span><br><span class="daily-rain"</span></div>
         </div>
       </div>

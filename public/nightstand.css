@@ -3,6 +3,10 @@ html { font-size: 22px; text-align: -webkit-center; }
 body { font-size: 1rem; font-family: "CenturyGothic", "Segoe UI", sans-serif; font-variant: small-caps; width: -webkit-fill-available; background: black; color: white; overflow: hidden; margin: 0; text-align: -webkit-center; cursor: default; }
 a { color: inherit; text-decoration: inherit; }
 
+div::-webkit-scrollbar { width: 20px; }
+div::-webkit-scrollbar-track { background: transparent }
+div::-webkit-scrollbar-thumb { background: beige; border-left: 8px solid rgba(0, 0, 0, 1); }
+
 .header { display: block; }
 .nav { display: block; }
 .main { display: block; width: max-content; }
@@ -31,7 +35,7 @@ a { color: inherit; text-decoration: inherit; }
 
 .component-aqi { margin: 40px 0 20px 0; text-align: center; line-height: 1.6rem; color: beige }
 
-.component-alerts { width: 800px; line-height: 1.2rem; min-height: 170px }
+.component-alerts { width: 980px; line-height: 1.2rem; min-height: 170px }
 
 .component-astronomy { margin: 10px 0 20px 0; font-size: 1.2rem }
 

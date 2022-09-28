@@ -4,7 +4,8 @@
       "browser": true,
       "commonjs": true,
       "node": true,
-      "es2022": true
+      "es2022": true,
+      "serviceworker": true
   },
   "parser": "@typescript-eslint/parser",
   "parserOptions": {

@@ -1,5 +1,5 @@
 import { log } from './log';
-import * as keys from '../secrets.json';
+import { keys } from './secrets';
 import { updateGPSInfo } from './info'; // eslint-disable-line import/no-cycle
 import { update } from './update'; // eslint-disable-line import/no-cycle
 import { cors } from './cors';
@@ -28,9 +28,11 @@ export async function findByLocation(lat: number, lon: number, apiKey: string) {
   let address = '';
   if (json.results) {
     const loc = json.results ? json.results.filter((r) => (r.types.includes('locality') || r.types.includes('neighborhood'))) : [];
-    const adr1 = loc[0].address_components.map((r) => r.short_name);
-    const adr2 = [...new Set(adr1)];
-    address = adr2.join(', ');
+    if (loc.length > 0) {
+      const adr1 = loc[0].address_components.map((r) => r.short_name);
+      const adr2 = [...new Set(adr1)];
+      address = adr2.join(', ');
+    }
     log('findByLocation', json, address);
   } else {
     log('findByLocation failed');
@@ -70,13 +72,16 @@ export async function getGPSLocation(): Promise<Location> {
 export async function getIPLocation(apiKey: string): Promise<Location> {
   const json = await cors('https://api.ipify.org?format=json', false);
   const ip = json.ip;
-  const res = await fetch(`https://www.googleapis.com/geolocation/v1/geolocate?key=${apiKey}`, {
-    method: 'POST',
-    body: JSON.stringify({ considerIp: true }),
-    headers: { 'Content-Type': 'application/json' },
-  });
-  const data = await res.json();
-  const rec = { ip, accuracy: data.accuracy, lat: data.location.lat, lon: data.location.lng, name: '' };
+  let rec = { ip, accuracy: 0, lat: 25.76, lon: -80.19, name: '' }; // default to my neighbourhood
+  if (apiKey && apiKey !== '') {
+    const res = await fetch(`https://www.googleapis.com/geolocation/v1/geolocate?key=${apiKey}`, {
+      method: 'POST',
+      body: JSON.stringify({ considerIp: true }),
+      headers: { 'Content-Type': 'application/json' },
+    });
+    const data = await res.json();
+    rec = { ip, accuracy: data?.accuracy || rec.accuracy, lat: data?.location?.lat || rec.lat, lon: data?.location?.lng || rec.lon, name: '' };
+  }
   log('getIPLocation', rec);
   return rec;
 }

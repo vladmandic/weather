@@ -7,7 +7,7 @@ import { updateSearchInfo } from './info';
 import { createSakura } from './sakura';
 import { updateClock } from './clock';
 import { update, initInitial } from './update'; // eslint-disable-line import/no-cycle
-import * as keys from '../secrets.json';
+import { keys } from './secrets';
 import type { Location } from './location';
 
 async function initEvents() {
@@ -39,6 +39,7 @@ async function main() {
   window.addEventListener('beforeinstallprompt', (evt) => installable(evt)); // capture installable events
   await registerPWA('../dist/pwa-serviceworker.js'); // register pwa
 
+  await keys.init();
   initInitial(); // do initial weather update
   initEvents(); // do weather update on demand when search is used
 }

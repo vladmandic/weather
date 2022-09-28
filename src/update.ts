@@ -1,6 +1,6 @@
 import { log } from './log';
-import { findByLocation, getIPLocation, updateAddress } from './location'; // eslint-disable-line import/no-cycle
-import { updateIPInfo, updateStationInfo, updateForecastAge } from './info'; // eslint-disable-line import/no-cycle
+import { findByLocation, getIPLocation, findByAddress, updateAddress, getGPSLocation } from './location'; // eslint-disable-line import/no-cycle
+import { updateIPInfo, updateStationInfo, updateGPSInfo, updateForecastAge } from './info'; // eslint-disable-line import/no-cycle
 import { updateAstronomy } from './astronomy';
 import { updateLegend } from './legend';
 import { updateToday } from './today';
@@ -10,7 +10,7 @@ import { updateRadar } from './radar';
 import { updateAQI } from './aqi';
 import { updateAlerts } from './alerts';
 import { updateWindy } from './windy';
-import * as keys from '../secrets.json';
+import { keys } from './secrets';
 import { cors } from './cors';
 import type { Location } from './location';
 
@@ -56,28 +56,27 @@ export async function initInitial() {
   (document.getElementById('main') as HTMLDivElement).style.display = 'none';
   (document.getElementById('loader-container') as HTMLDivElement).style.display = 'block';
 
-  // first lookup by ip location
-  const locIP = await getIPLocation(keys.google);
-  if (locIP.lat !== 0) {
-    locIP.name = await findByLocation(locIP.lat, locIP.lon, keys.google);
-    updateIPInfo(locIP);
+  let loc: Location | null = null;
+
+  if (!loc) { // 1. lookup by search params
+    const searchParams = new URLSearchParams(window.location.search);
+    if (searchParams.has('location')) loc = await findByAddress(searchParams.get('location') as string, keys.google);
   }
 
-  // second lookup by gps location
-  /*
-  const locGPS = await getGPSLocation();
-  if (locGPS.lat !== 0) {
-    locGPS.name = await findByLocation(locGPS.lat, locGPS.lon, keys.google);
-    updateGPSInfo(locGPS);
+  if (!loc) { // 2. lookup by ip location
+    loc = await getIPLocation(keys.google);
+    if (loc.lat !== 0) updateIPInfo(loc);
   }
-  if (locGPS.lat !== 0) update(locGPS);
-  */
 
-  // decide which to use
-  if (locIP.lat !== 0) update(locIP);
-  else {
-    (document.getElementById('weather-info-text') as HTMLDivElement).innerHTML = 'cannot automatically determine location'; // register refresh on click
-    // const locDefault = await findByAddress('Brickell', keys.google);
-    // update(locDefault);
+  if (!loc) { // 3. lookup by gps location
+    loc = await getGPSLocation();
+    if (loc.lat !== 0) updateGPSInfo(loc);
   }
+
+  if (loc?.lat !== 0) {
+    loc.name = await findByLocation(loc.lat, loc.lon, keys.google);
+  } else {
+    (document.getElementById('weather-info-ip') as HTMLDivElement).innerHTML = 'cannot automatically determine location'; // register refresh on click
+  }
+  update(loc);
 }

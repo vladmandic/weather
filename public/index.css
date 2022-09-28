@@ -7,6 +7,10 @@ img { visibility: hidden; }
 img:hover { transform: scale(1.5); transition: 1s ease-in-out; }
 input[type=text] { width: 700px; padding: 10px; background: none; border: none; outline: none; font-family: CenturyGothic; font-variant: small-caps; font-size: 2rem; margin: 20px 20px 40px 20px; border-bottom: 4px solid #555555; color: white; }
 
+div::-webkit-scrollbar { width: 20px; }
+div::-webkit-scrollbar-track { background: transparent }
+div::-webkit-scrollbar-thumb { background: beige; border-left: 8px solid rgba(0, 0, 0, 1); }
+
 .header { display: block; }
 .nav { display: block; }
 .main { display: block; width: max-content; }
@@ -39,7 +43,7 @@ input[type=text] { width: 700px; padding: 10px; background: none; border: none; 
 
 .component-aqi { margin: 40px 0 20px 0; text-align: center; line-height: 1.6rem; color: beige }
 
-.component-alerts { width: 800px; line-height: 1.2rem; }
+.component-alerts { width: 980px; line-height: 1.2rem; }
 
 .component-astronomy { margin: 10px 0 20px 0; font-size: 1.2rem }
 

@@ -43,6 +43,16 @@ STATE: Compile: { name: 'service-worker', format: 'esm', platform: 'browser', in
 INFO:  Listening...
 ```
 
+## Run
+
+- Navigate to  
+  <https://localhost:10061>  
+  *Note*: API keys will be auto-loaded from `/secrets.json`  
+- Alternatively, provide API keys as URL parameters  
+  <https://wyse:10061/?google=xxx&darksky=xxx&aqicn=xxx>  
+- Additionally, you can skip auto-location and search for forecast for a specific location given as URL parameter  
+  <https://wyse:10061/?location=miami>  
+
 ## References
 
 - [DarkSky](https://darksky.net/dev/docs)
@@ -54,3 +64,6 @@ INFO:  Listening...
 ## Screenshot
 
 ![screenshot](assets/screenshot.jpg)
+
+
+https://wyse:10061/?google=AIzaSyAzOgb1KMAg18FWTHFq9GumOIWq57AgYUA&darksky=862dc32f1159c63282b1e2aa3c71acda&aqicn=52f660d7150a418e560757663d4ac7d845d062ac&location=mavrinci

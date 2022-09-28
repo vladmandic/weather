@@ -86,6 +86,7 @@ async function initChart() {
   const html = document.getElementById('component-chart') as HTMLCanvasElement;
   log('initChart');
   if (!html) return;
+  html.height = 400;
   Chart.register(...registerables);
   chart = new Chart(html, chartConfig);
 }
@@ -130,7 +131,7 @@ export async function updateChart(data) {
 class ComponentChart extends HTMLElement { // watch for attributes
   connectedCallback() { // triggered on insert
     this.innerHTML = `
-      <canvas id="component-chart" height=400 width=1000px></canvas>
+      <canvas id="component-chart" height="0" width="1000"></canvas>
     `;
   }
 }

@@ -5,9 +5,13 @@ const imgPath = '../assets/weather';
 
 export async function updateToday(data) {
   log('updateToday', { currently: data.currently });
-  if (!data || !data.currently) return;
   const card = document.getElementById('component-today');
   if (!card) return;
+  if (!data || !data.currently) {
+    card.style.display = 'none';
+    return;
+  }
+  card.style.display = 'block';
   card.setAttribute('time', Date.now().toString());
   const imgCurrent = document.getElementById('component-today-icon') as HTMLImageElement;
   imgCurrent.src = `${imgPath}/${data.currently.icon}.webp`;
@@ -51,10 +55,13 @@ export async function updateToday(data) {
 
 class ComponentToday extends HTMLElement { // watch for attributes
   connectedCallback() { // triggered on insert
+    const blank = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
     this.innerHTML = `
       <div id="component-today" class="component-today">
         <div class="current" id="day-0" style="display: flex; justify-content: center">
-          <div class="component-today-icon" style="margin-right: 25px"><img id="component-today-icon" width="200" height="200"></img></div>
+          <div class="component-today-icon" style="margin-right: 25px">
+            <img id="component-today-icon" width="200" height="200" src="${blank}"></img>
+          </div>
           <div id="component-today-column1" style="margin-right: 25px">
             <div class="temp-current" style="text-align: center; font-size: 3.4rem"></div>
             <div class="temp-feel" style="line-height: 2rem"></div>

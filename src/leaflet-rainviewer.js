@@ -3,12 +3,12 @@
  */
 
 import * as L from 'leaflet';
-import { log } from './log';
+// import { log } from './log';
 
 export function addRadarLayer(map) {
   const layer = new L.Control.Rainviewer({
     position: 'topright',
-    animationInterval: 200,
+    animationInterval: 150,
     opacity: 0.75,
   });
   layer.addTo(map);
@@ -27,24 +27,24 @@ L.Control.Rainviewer = L.Control.extend({
     // log('rainview onAdd');
     this.timestamps = [];
     this.radarLayers = [];
-    this.currentTimestamp;
-    this.nextTimestamp;
+    this.currentTimestamp = 0;
+    this.nextTimestamp = 0;
     this.animationPosition = 0;
     this.animationTimer = false;
     this.rainviewerActive = false;
-    this._map = map;
+    this._map = map; // eslint-disable-line no-underscore-dangle
     this.container = L.DomUtil.create('div', 'leaflet-control-rainviewer leaflet-bar leaflet-control');
     this.container.style.border = 'none';
     this.container.style.background = 'rgba(100, 100, 100, 0.4)';
     return this.container;
   },
 
-  load(map) {
+  load() {
     // log('rainviewer load');
-    const t = this;
+    const t = this; // eslint-disable-line @typescript-eslint/no-this-alias
     this.apiRequest = new XMLHttpRequest();
     this.apiRequest.open('GET', 'https://tilecache.rainviewer.com/api/maps.json', true);
-    this.apiRequest.onload = (e) => {
+    this.apiRequest.onload = () => {
       t.timestamps = JSON.parse(t.apiRequest.response);
       t.showFrame(-1);
     };
@@ -66,12 +66,12 @@ L.Control.Rainviewer = L.Control.extend({
     L.DomEvent.disableClickPropagation(this.controlContainer);
   },
 
-  unload(e) {
+  unload() {
     // log('rainviewer unload');
     L.DomUtil.remove(this.controlContainer);
     L.DomUtil.removeClass(this.container, 'leaflet-control-rainviewer-active');
     const radarLayers = this.radarLayers;
-    const map = this._map;
+    const map = this._map; // eslint-disable-line no-underscore-dangle
     Object.keys(radarLayers).forEach((key) => {
       if (map.hasLayer(radarLayers[key])) {
         map.removeLayer(radarLayers[key]);
@@ -81,7 +81,7 @@ L.Control.Rainviewer = L.Control.extend({
 
   addLayer(ts) {
     // log('rainviewer addLayer');
-    const map = this._map;
+    const map = this._map; // eslint-disable-line no-underscore-dangle
     if (!this.radarLayers[ts]) {
       this.radarLayers[ts] = new L.TileLayer('https://tilecache.rainviewer.com/v2/radar/' + ts + '/256/{z}/{x}/{y}/2/1_1.png', {
         tileSize: 256,
@@ -174,7 +174,7 @@ L.Control.Rainviewer = L.Control.extend({
     this.showFrame(this.animationPosition + 1);
   },
 
-  onRemove(map) {
+  onRemove() {
     // Nothing to do here
   },
 });

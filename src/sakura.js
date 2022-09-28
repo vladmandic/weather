@@ -207,19 +207,21 @@ const fx_dirblur_r4_fsh = `
         gl_FragColor = col / 5.0;
       }
 `;
+/*
 const fx_common_fsh = `
       #ifdef GL_ES
         //precision mediump float;
         precision highp float;
       #endif
       uniform sampler2D uSrc;
-      uniform vec2 uDelta;    
+      uniform vec2 uDelta;
       varying vec2 texCoord;
       varying vec2 screenCoord;
       void main(void) {
         gl_FragColor = texture2D(uSrc, texCoord);
       }
 `;
+*/
 const pp_final_vsh = `
       uniform vec3 uResolution;
       attribute vec2 aPosition;
