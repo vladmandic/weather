@@ -2,8 +2,8 @@ import { log } from './log';
 
 const windy = document.createElement('iframe') as HTMLIFrameElement;
 windy.id = 'weather-windy-iframe';
-windy.width = '800';
-windy.height = '800';
+windy.width = '1000';
+windy.height = '1000';
 windy.frameBorder = '0';
 
 export async function updateWindy(lat: number, lon: number) {
@@ -14,7 +14,7 @@ export async function updateWindy(lat: number, lon: number) {
 
 class ComponentWindy extends HTMLElement { // watch for attributes
   connectedCallback() { // triggered on insert
-    this.innerHTML = '<div class=windy" id="weather-windy" style="margin-top: 20px; margin-bottom: 20px; font-size: 1.4rem">more maps</div>';
+    this.innerHTML = '<div class=windy" id="weather-windy" style="margin-top: 20px; margin-bottom: 20px; font-size: 1.4rem; cursor: pointer">windy maps</div>';
     this.addEventListener('click', () => {
       if (this.children.length > 1) {
         log('removeWindy');

@@ -10,6 +10,7 @@ import { updateRadar } from './radar';
 import { updateAQI } from './aqi';
 import { updateAlerts } from './alerts';
 import { updateWindy } from './windy';
+import { updateDarkSky } from './darksky';
 import { keys } from './secrets';
 import { cors } from './cors';
 import type { Location } from './location';
@@ -35,6 +36,7 @@ export const update = async (loc: Location) => {
   // last update tiled items
   updateRadar(loc.lat, loc.lon);
   updateWindy(loc.lat, loc.lon);
+  updateDarkSky(loc.lat, loc.lon);
 
   // hide loader
   (document.getElementById('loader-container') as HTMLDivElement).style.display = 'none';
