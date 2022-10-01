@@ -3,10 +3,12 @@
  */
 
 import * as L from 'leaflet';
-// import { log } from './log';
+import { log } from './log';
+
+let layer;
 
 export function addRadarLayer(map) {
-  const layer = new L.Control.Rainviewer({
+  layer = new L.Control.Rainviewer({
     position: 'topright',
     animationInterval: 150,
     opacity: 0.75,
@@ -14,6 +16,11 @@ export function addRadarLayer(map) {
   layer.addTo(map);
   layer.load();
   return layer;
+}
+
+export function refreshRadarLayer() {
+  log('refreshRadarLayer', layer);
+  if (layer) layer.refresh();
 }
 
 L.Control.Rainviewer = L.Control.extend({
@@ -40,15 +47,7 @@ L.Control.Rainviewer = L.Control.extend({
   },
 
   load() {
-    // log('rainviewer load');
-    const t = this; // eslint-disable-line @typescript-eslint/no-this-alias
-    this.apiRequest = new XMLHttpRequest();
-    this.apiRequest.open('GET', 'https://tilecache.rainviewer.com/api/maps.json', true);
-    this.apiRequest.onload = () => {
-      t.timestamps = JSON.parse(t.apiRequest.response);
-      t.showFrame(-1);
-    };
-    this.apiRequest.send();
+    log('rainviewer load');
     L.DomUtil.addClass(this.container, 'leaflet-control-rainviewer-active');
     this.controlContainer = L.DomUtil.create('div', 'leaflet-control-rainviewer-container', this.container);
     this.positionSliderLabel = L.DomUtil.create('label', 'leaflet-control-rainviewer-label leaflet-bar-part', this.controlContainer);
@@ -59,11 +58,28 @@ L.Control.Rainviewer = L.Control.extend({
     this.positionSlider.min = 0;
     this.positionSlider.max = 11;
     this.positionSlider.value = this.animationPosition;
-    L.DomEvent.on(this.positionSlider, 'input', t.setPosition, this);
+    L.DomEvent.on(this.positionSlider, 'input', this.setPosition, this);
     L.DomEvent.disableClickPropagation(this.positionSlider);
     const html = '<div id="timestamp" class="leaflet-control-rainviewer-timestamp"></div>';
     this.controlContainer.insertAdjacentHTML('beforeend', html);
     L.DomEvent.disableClickPropagation(this.controlContainer);
+  },
+
+  refresh() {
+    const apiRequest = new XMLHttpRequest();
+    apiRequest.timeout = 3000;
+    apiRequest.open('GET', 'https://tilecache.rainviewer.com/api/maps.json', true);
+    apiRequest.onload = () => {
+      const json = JSON.parse(apiRequest.response);
+      log('rainviewer refresh', json);
+      if (json && json.length > 0) {
+        this.timestamps = json;
+        this.showFrame(-1);
+        this.play();
+      }
+    };
+    apiRequest.ontimeout = () => log('rainviewer timeout');
+    apiRequest.send();
   },
 
   unload() {
@@ -143,6 +159,7 @@ L.Control.Rainviewer = L.Control.extend({
 
   play() {
     // log('rainviewer play');
+    if (this.timestamps.length < 1) return;
     this.showFrame(this.animationPosition + 1);
     this.animationTimer = setTimeout(() => { this.play(); }, this.options.animationInterval);
   },
@@ -155,6 +172,7 @@ L.Control.Rainviewer = L.Control.extend({
   },
 
   prev(e) {
+    if (this.timestamps.length < 1) return;
     L.DomEvent.stopPropagation(e);
     L.DomEvent.preventDefault(e);
     this.stop();
@@ -162,12 +180,14 @@ L.Control.Rainviewer = L.Control.extend({
   },
 
   startstop(e) {
+    if (this.timestamps.length < 1) return;
     L.DomEvent.stopPropagation(e);
     L.DomEvent.preventDefault(e);
     this.playStop();
   },
 
   next(e) {
+    if (this.timestamps.length < 1) return;
     L.DomEvent.stopPropagation(e);
     L.DomEvent.preventDefault(e);
     this.stop();

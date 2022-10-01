@@ -1,5 +1,5 @@
 import * as L from 'leaflet';
-import { addRadarLayer } from './leaflet-rainviewer.js';
+import { addRadarLayer, refreshRadarLayer } from './leaflet-rainviewer.js';
 import { log } from './log';
 
 /* google lyrs
@@ -17,9 +17,9 @@ const mapOptions = { maxZoom: 20, subdomains: ['mt0', 'mt1', 'mt2', 'mt3'] };
 
 let map: L.Map;
 let marker: L.Marker;
+let layer;
 
 export async function updateRadar(lat: number, lon: number) {
-  log('updateRadar', { lat, lon, mapUrl });
   const div = document.getElementById('weather-radar');
   if (!div) return;
 
@@ -35,30 +35,24 @@ export async function updateRadar(lat: number, lon: number) {
         attributionControl: false,
       });
       L.tileLayer(mapUrl, mapOptions).addTo(map); // first layer is map
-      const radarLayer = addRadarLayer(map); // second layer is radar
-      setTimeout(() => radarLayer.play(), 2500); // start animation with delay
-      div.onclick = () => radarLayer.playStop();
-
-      // import { RadarNexRad } from './leaflet-radar.js';
-      // L.control.radar = () => new RadarNexRad({});
-      // L.control.radar = () => new RadarRainViewer({});
-    } else {
-      map.setView(new L.LatLng(lat, lon));
+      layer = addRadarLayer(map); // second layer is radar
+      // setTimeout(() => radarLayer.play(), 2500); // start animation with delay
+      div.onclick = () => {
+        layer.playStop();
+      };
     }
     if (!marker) {
       const icon = L.icon({ iconUrl: '../assets/marker.png', iconSize: [64, 64] });
       marker = new L.Marker(new L.LatLng(lat, lon), { icon });
       marker.addTo(map);
-    } else {
-      const latlng = new L.LatLng(lat, lon);
-      marker.setLatLng(latlng);
     }
+    const latlng = new L.LatLng(lat, lon);
+    map.setView(latlng);
+    marker.setLatLng(latlng);
+    refreshRadarLayer();
   });
 
-  intersectionObserver.observe(div);
-  const latlng = new L.LatLng(lat, lon);
-  if (map) map.setView(latlng);
-  if (marker) marker.setLatLng(latlng);
+  intersectionObserver.observe(div); // trigers update first time when element becomes visible instead immediately
 }
 
 class ComponentRadar extends HTMLElement { // watch for attributes

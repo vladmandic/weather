@@ -14,7 +14,7 @@ import { updateAlerts } from './alerts';
 import { updateClock } from './clock';
 import { updateClockOverlay } from './clock-overlay';
 
-const update = async () => {
+const updateAll = async () => {
   const loc = await getIPLocation(keys.google);
   loc.name = await findByLocation(loc.lat, loc.lon, keys.google);
   const data = await cors(`https://api.darksky.net/forecast/${keys.darksky}/${loc.lat},${loc.lon}`); // get actual forecast
@@ -30,7 +30,9 @@ const update = async () => {
   window.scroll(0, 0);
 };
 
+let scrollTime = 0;
 async function scrollNext() {
+  scrollTime = Math.round((new Date()).getTime() / 1000);
   const pages = Array.from((document.getElementById('main') as HTMLDivElement).children) as Array<HTMLDivElement>;
   let page = 0;
   for (let i = 0; i < pages.length; i++) {
@@ -47,7 +49,7 @@ async function scrollNext() {
       window.scroll(0, window.scrollY + easing + 1); // scroll to div offset with easing
       setTimeout(interval, 10);
     } else {
-      setTimeout(scrollNext, 15 * 1000); // scroll to new page every 15sec after done scrolling
+      // setTimeout(scrollNext, 15 * 1000); // scroll to new page every 15sec after done scrolling
     }
   };
   interval();
@@ -56,7 +58,7 @@ async function scrollNext() {
 async function initEvents() {
   PullToRefresh.init({ // register pull down events
     mainElement: 'body',
-    onRefresh() { update(); },
+    onRefresh() { updateAll(); },
   });
   document.body.onclick = () => scrollNext();
 }
@@ -68,16 +70,15 @@ async function main() {
   updateClockOverlay();
   await keys.init();
   initEvents(); // do weather update on demand
-  update(); // do initial weather update
+  updateAll(); // do initial weather update
   for (const page of Array.from(document.getElementsByClassName('page'))) (page as HTMLDivElement).style.minHeight = `${window.innerHeight}px`;
   (document.getElementById('weather-radar') as HTMLDivElement).style.height = `${window.innerHeight}px`;
 
-  setTimeout(scrollNext, 15 * 1000); // start scroll to new page every 15sec
-
-  setInterval(() => { // reload on every full hour and quarters
+  setInterval(() => {
     const t = Math.round((new Date()).getTime() / 1000);
-    if (t % (60 * 15) === 0) window.location.reload();
-  }, 500);
+    if (t >= 15 + scrollTime) scrollNext(); // scroll to next page every 15sec
+    if (t % (60 * 15) === 0) updateAll(); // update all data every 15min on the hour
+  }, 100);
 }
 
 window.onload = main;
