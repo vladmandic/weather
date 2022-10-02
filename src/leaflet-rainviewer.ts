@@ -5,7 +5,7 @@
 import * as L from 'leaflet';
 import { log } from './log';
 
-let layer;
+let layer: L.Control;
 
 const Rainviewer = L.Control.extend({
   timestamps: [],
@@ -70,6 +70,7 @@ const Rainviewer = L.Control.extend({
       log('rainviewer refresh', json);
       if (json && json.length > 0) {
         this.stop();
+        this.map?.invalidateSize();
         this.timestamps = json;
         this.showFrame(-1);
         this.play();
@@ -202,10 +203,12 @@ const Rainviewer = L.Control.extend({
 export function addRadarLayer(map) {
   layer = new Rainviewer();
   layer.addTo(map);
+  // @ts-ignore
   layer.load();
   return layer;
 }
 
 export function refreshRadarLayer() {
+  // @ts-ignore
   if (layer) layer.refresh();
 }
