@@ -14,7 +14,9 @@ import { updateAlerts } from './alerts';
 import { updateClock } from './clock';
 import { updateClockOverlay } from './clock-overlay';
 
+let updateTime = 0;
 const updateAll = async () => {
+  updateTime = new Date().getTime();
   const loc = await getIPLocation(keys.google);
   loc.name = await findByLocation(loc.lat, loc.lon, keys.google);
   const data = await cors(`https://api.darksky.net/forecast/${keys.darksky}/${loc.lat},${loc.lon}`); // get actual forecast
@@ -30,9 +32,9 @@ const updateAll = async () => {
   window.scroll(0, 0);
 };
 
-let scrollTime = 0;
+let scrollTime = new Date().getTime();
 async function scrollNext() {
-  scrollTime = Math.round((new Date()).getTime() / 1000);
+  scrollTime = new Date().getTime();
   const pages = Array.from((document.getElementById('main') as HTMLDivElement).children) as Array<HTMLDivElement>;
   let page = 0;
   for (let i = 0; i < pages.length; i++) {
@@ -40,7 +42,7 @@ async function scrollNext() {
   }
   if (page >= pages.length) page = 0;
   const offset = pages[page].offsetTop;
-  log('scrollNext', { page, offset });
+  // log('scrollNext', { page, offset });
   const interval = () => {
     const easing = Math.round(10 - 10 * Math.abs(Math.cos(Math.PI * window.scrollY / (offset + 1))));
     if (offset === 0 && window.scrollY > 0) {
@@ -48,8 +50,6 @@ async function scrollNext() {
     } else if (window.scrollY < offset) {
       window.scroll(0, window.scrollY + easing + 1); // scroll to div offset with easing
       setTimeout(interval, 10);
-    } else {
-      // setTimeout(scrollNext, 15 * 1000); // scroll to new page every 15sec after done scrolling
     }
   };
   interval();
@@ -65,19 +65,17 @@ async function initEvents() {
 
 async function main() {
   log('weather app');
-  // createSakura(); // create background
   updateClock(true); // start clock
-  updateClockOverlay();
-  await keys.init();
+  updateClockOverlay(); // start clock overlay on secondary pages
+  await keys.init(); // load api keys from secrets or url
   initEvents(); // do weather update on demand
   updateAll(); // do initial weather update
   for (const page of Array.from(document.getElementsByClassName('page'))) (page as HTMLDivElement).style.minHeight = `${window.innerHeight}px`;
-  (document.getElementById('weather-radar') as HTMLDivElement).style.height = `${window.innerHeight}px`;
 
   setInterval(() => {
     const t = Math.round((new Date()).getTime() / 1000);
-    if (t >= 15 + scrollTime) scrollNext(); // scroll to next page every 15sec
-    if (t % (60 * 15) === 0) updateAll(); // update all data every 15min on the hour
+    if (t >= 15 + (scrollTime / 1000)) scrollNext(); // scroll to next page every 15sec
+    if ((t >= 15 + (updateTime / 1000)) && (t % (60 * 15) === 0)) updateAll(); // update all data every 15min on the hour
   }, 100);
 }
 

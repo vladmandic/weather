@@ -7,27 +7,23 @@ import { log } from './log';
 
 let layer;
 
-export function addRadarLayer(map) {
-  layer = new L.Control.Rainviewer({
+const Rainviewer = L.Control.extend({
+  timestamps: [],
+  radarLayers: <L.TileLayer[]> [],
+  currentTimestamp: 0,
+  nextTimestamp: 0,
+  animationPosition: 0,
+  animationTimer: 0,
+  rainviewerActive: false,
+  controlContainer: <HTMLDivElement | undefined> undefined,
+  container: <HTMLDivElement | undefined> undefined,
+  positionSlider: <HTMLInputElement | undefined> undefined,
+  positionSliderLabel: <HTMLLabelElement | undefined> undefined,
+  map: <L.Map | undefined> undefined,
+  options: { // defaults
     position: 'topright',
     animationInterval: 150,
     opacity: 0.75,
-  });
-  layer.addTo(map);
-  layer.load();
-  return layer;
-}
-
-export function refreshRadarLayer() {
-  log('refreshRadarLayer', layer);
-  if (layer) layer.refresh();
-}
-
-L.Control.Rainviewer = L.Control.extend({
-  options: { // defaults
-    position: 'bottomleft',
-    animationInterval: 500,
-    opacity: 0.5,
   },
 
   onAdd(map) {
@@ -37,9 +33,9 @@ L.Control.Rainviewer = L.Control.extend({
     this.currentTimestamp = 0;
     this.nextTimestamp = 0;
     this.animationPosition = 0;
-    this.animationTimer = false;
+    this.animationTimer = 0;
     this.rainviewerActive = false;
-    this._map = map; // eslint-disable-line no-underscore-dangle
+    this.map = map;
     this.container = L.DomUtil.create('div', 'leaflet-control-rainviewer leaflet-bar leaflet-control');
     this.container.style.border = 'none';
     this.container.style.background = 'rgba(100, 100, 100, 0.4)';
@@ -47,17 +43,17 @@ L.Control.Rainviewer = L.Control.extend({
   },
 
   load() {
-    log('rainviewer load');
-    L.DomUtil.addClass(this.container, 'leaflet-control-rainviewer-active');
+    // log('rainviewer load');
+    if (this.container) L.DomUtil.addClass(this.container, 'leaflet-control-rainviewer-active');
     this.controlContainer = L.DomUtil.create('div', 'leaflet-control-rainviewer-container', this.container);
     this.positionSliderLabel = L.DomUtil.create('label', 'leaflet-control-rainviewer-label leaflet-bar-part', this.controlContainer);
-    this.positionSliderLabel.for = 'rainviewer-positionslider';
+    this.positionSliderLabel.htmlFor = 'rainviewer-positionslider';
     this.positionSlider = L.DomUtil.create('input', 'leaflet-control-rainviewer-positionslider leaflet-bar-part', this.controlContainer);
     this.positionSlider.type = 'range';
     this.positionSlider.id = 'rainviewer-positionslider';
-    this.positionSlider.min = 0;
-    this.positionSlider.max = 11;
-    this.positionSlider.value = this.animationPosition;
+    this.positionSlider.min = '0';
+    this.positionSlider.max = '11';
+    this.positionSlider.valueAsNumber = this.animationPosition;
     L.DomEvent.on(this.positionSlider, 'input', this.setPosition, this);
     L.DomEvent.disableClickPropagation(this.positionSlider);
     const html = '<div id="timestamp" class="leaflet-control-rainviewer-timestamp"></div>';
@@ -73,6 +69,7 @@ L.Control.Rainviewer = L.Control.extend({
       const json = JSON.parse(apiRequest.response);
       log('rainviewer refresh', json);
       if (json && json.length > 0) {
+        this.stop();
         this.timestamps = json;
         this.showFrame(-1);
         this.play();
@@ -84,12 +81,12 @@ L.Control.Rainviewer = L.Control.extend({
 
   unload() {
     // log('rainviewer unload');
-    L.DomUtil.remove(this.controlContainer);
-    L.DomUtil.removeClass(this.container, 'leaflet-control-rainviewer-active');
+    if (this.controlContainer) L.DomUtil.remove(this.controlContainer);
+    if (this.container) L.DomUtil.removeClass(this.container, 'leaflet-control-rainviewer-active');
     const radarLayers = this.radarLayers;
-    const map = this._map; // eslint-disable-line no-underscore-dangle
+    const map = this.map;
     Object.keys(radarLayers).forEach((key) => {
-      if (map.hasLayer(radarLayers[key])) {
+      if (map?.hasLayer(radarLayers[key])) {
         map.removeLayer(radarLayers[key]);
       }
     });
@@ -97,17 +94,17 @@ L.Control.Rainviewer = L.Control.extend({
 
   addLayer(ts) {
     // log('rainviewer addLayer');
-    const map = this._map; // eslint-disable-line no-underscore-dangle
+    const map = this.map;
     if (!this.radarLayers[ts]) {
       this.radarLayers[ts] = new L.TileLayer('https://tilecache.rainviewer.com/v2/radar/' + ts + '/256/{z}/{x}/{y}/2/1_1.png', {
         tileSize: 256,
         opacity: 0.001,
-        transparent: true,
+        // transparent: true,
         attribution: '<a href="https://rainviewer.com" target="_blank">rainnviewer.com</a>',
         zIndex: ts,
       });
     }
-    if (!map.hasLayer(this.radarLayers[ts])) {
+    if (map && !map.hasLayer(this.radarLayers[ts])) {
       map.addLayer(this.radarLayers[ts]);
     }
   },
@@ -121,16 +118,17 @@ L.Control.Rainviewer = L.Control.extend({
     this.addLayer(this.nextTimestamp);
     if (preloadOnly) return;
     this.animationPosition = position;
-    this.positionSlider.value = position;
+    if (this.positionSlider) this.positionSlider.valueAsNumber = position;
     if (this.radarLayers[this.currentTimestamp]) this.radarLayers[this.currentTimestamp].setOpacity(0);
     this.radarLayers[this.nextTimestamp].setOpacity(this.options.opacity);
-    document.getElementById('timestamp').innerHTML = (new Date(this.nextTimestamp * 1000)).toLocaleString();
+    const html = document.getElementById('timestamp') as HTMLDivElement;
+    html.innerHTML = (new Date(this.nextTimestamp * 1000)).toLocaleString();
   },
 
   showFrame(nextPosition) {
     // log('rainviewer showFrame');
     const preloadingDirection = nextPosition - this.animationPosition > 0 ? 1 : -1;
-    this.changeRadarPosition(nextPosition);
+    this.changeRadarPosition(nextPosition, false);
     // preload next next frame (typically, +1 frame), if don't do that, the animation will be blinking at the first loop
     this.changeRadarPosition(nextPosition + preloadingDirection, true);
   },
@@ -149,9 +147,9 @@ L.Control.Rainviewer = L.Control.extend({
 
   stop() {
     // log('rainviewer stop');
-    if (this.animationTimer) {
+    if (this.animationTimer > 0) {
       clearTimeout(this.animationTimer);
-      this.animationTimer = false;
+      this.animationTimer = 0;
       return true;
     }
     return false;
@@ -199,4 +197,15 @@ L.Control.Rainviewer = L.Control.extend({
   },
 });
 
-L.control.rainviewer = (opts) => new L.Control.Rainviewer(opts);
+// L.control.rainviewer = (opts) => new L.Control.Rainviewer(opts);
+
+export function addRadarLayer(map) {
+  layer = new Rainviewer();
+  layer.addTo(map);
+  layer.load();
+  return layer;
+}
+
+export function refreshRadarLayer() {
+  if (layer) layer.refresh();
+}

@@ -1,5 +1,5 @@
 import * as L from 'leaflet';
-import { addRadarLayer, refreshRadarLayer } from './leaflet-rainviewer.js';
+import { addRadarLayer, refreshRadarLayer } from './leaflet-rainviewer';
 import { log } from './log';
 
 /* google lyrs
@@ -22,6 +22,7 @@ let layer;
 export async function updateRadar(lat: number, lon: number) {
   const div = document.getElementById('weather-radar');
   if (!div) return;
+  div.style.height = `${window.innerHeight}px`;
 
   const intersectionObserver = new IntersectionObserver((entries) => {
     if (entries[0].intersectionRatio <= 0) return; // is radar canvas in viewport
@@ -36,7 +37,6 @@ export async function updateRadar(lat: number, lon: number) {
       });
       L.tileLayer(mapUrl, mapOptions).addTo(map); // first layer is map
       layer = addRadarLayer(map); // second layer is radar
-      // setTimeout(() => radarLayer.play(), 2500); // start animation with delay
       div.onclick = () => {
         layer.playStop();
       };

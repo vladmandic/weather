@@ -14,7 +14,7 @@ export async function updateDarkSky(lat: number, lon: number) {
 
 class ComponentWindy extends HTMLElement { // watch for attributes
   connectedCallback() { // triggered on insert
-    this.innerHTML = '<div class=darksky" id="weather-darksky" style="margin-top: 20px; margin-bottom: 20px; font-size: 1.4rem; cursor: pointer">darksky maps</div>';
+    this.innerHTML = '<div class=darksky" id="weather-darksky" style="margin-top: 20px; margin-bottom: 20px; font-size: 1.4rem; cursor: pointer; letter-spacing: 3px; background: rgba(50, 0, 50, 0.5); padding: 4px;">darksky maps</div>';
     this.addEventListener('click', () => {
       if (this.children.length > 1) {
         log('removeDarkSky');
