@@ -75,7 +75,8 @@ async function main() {
   setInterval(() => {
     const t = Math.round((new Date()).getTime() / 1000);
     if (t >= 15 + (scrollTime / 1000)) scrollNext(); // scroll to next page every 15sec
-    if ((t >= 15 + (updateTime / 1000)) && (t % (60 * 15) === 0)) updateAll(); // update all data every 15min on the hour
+    if ((t >= 15 + (updateTime / 1000)) && (t % (15 * 60) === 0)) updateAll(); // update all data every 15min on the hour
+    if ((t >= 15 + (updateTime / 1000)) && (t % (24 * 60 * 60) === 0)) window.location.reload(); // reload page at midnight
   }, 100);
 }
 
