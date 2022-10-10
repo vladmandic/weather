@@ -8,6 +8,7 @@ export type Location = { lat: number, lon: number, accuracy: number, name: strin
 
 export async function findByAddress(name: string, apiKey: string): Promise<Location> {
   let rec = { name: '', lat: 0, lon: 0, accuracy: 0 };
+  if (apiKey === '') return rec;
   const json = await cors(`https://maps.googleapis.com/maps/api/geocode/json?key=${apiKey}&address=${name}`, false);
   log('findByAddress', json);
   if (json.results && json.results[0]) {
@@ -24,8 +25,9 @@ export async function findByAddress(name: string, apiKey: string): Promise<Locat
 }
 
 export async function findByLocation(lat: number, lon: number, apiKey: string) {
-  const json = await cors(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=${apiKey}`, false);
   let address = '';
+  if (apiKey === '') return address;
+  const json = await cors(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=${apiKey}`, false);
   if (json.results) {
     const loc = json.results ? json.results.filter((r) => (r.types.includes('locality') || r.types.includes('neighborhood'))) : [];
     if (loc.length > 0) {
@@ -73,15 +75,14 @@ export async function getIPLocation(apiKey: string): Promise<Location> {
   const json = await cors('https://api.ipify.org?format=json', false);
   const ip = json.ip;
   let rec = { ip, accuracy: 0, lat: 25.76, lon: -80.19, name: '' }; // default to my neighbourhood
-  if (apiKey && apiKey !== '') {
-    const res = await fetch(`https://www.googleapis.com/geolocation/v1/geolocate?key=${apiKey}`, {
-      method: 'POST',
-      body: JSON.stringify({ considerIp: true }),
-      headers: { 'Content-Type': 'application/json' },
-    });
-    const data = await res.json();
-    rec = { ip, accuracy: data?.accuracy || rec.accuracy, lat: data?.location?.lat || rec.lat, lon: data?.location?.lng || rec.lon, name: '' };
-  }
+  if (apiKey === '') return rec;
+  const res = await fetch(`https://www.googleapis.com/geolocation/v1/geolocate?key=${apiKey}`, {
+    method: 'POST',
+    body: JSON.stringify({ considerIp: true }),
+    headers: { 'Content-Type': 'application/json' },
+  });
+  const data = await res.json();
+  rec = { ip, accuracy: data?.accuracy || rec.accuracy, lat: data?.location?.lat || rec.lat, lon: data?.location?.lng || rec.lon, name: '' };
   log('getIPLocation', rec);
   return rec;
 }

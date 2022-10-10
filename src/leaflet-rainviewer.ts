@@ -5,16 +5,13 @@
 import * as L from 'leaflet';
 import { log } from './log';
 
-let layer: L.Control;
-
-const Rainviewer = L.Control.extend({
+export const RainViewer = L.Control.extend({
   timestamps: [],
   radarLayers: <L.TileLayer[]> [],
   currentTimestamp: 0,
   nextTimestamp: 0,
   animationPosition: 0,
   animationTimer: 0,
-  rainviewerActive: false,
   controlContainer: <HTMLDivElement | undefined> undefined,
   container: <HTMLDivElement | undefined> undefined,
   positionSlider: <HTMLInputElement | undefined> undefined,
@@ -27,23 +24,21 @@ const Rainviewer = L.Control.extend({
   },
 
   onAdd(map) {
-    // log('rainview onAdd');
     this.timestamps = [];
     this.radarLayers = [];
     this.currentTimestamp = 0;
     this.nextTimestamp = 0;
     this.animationPosition = 0;
     this.animationTimer = 0;
-    this.rainviewerActive = false;
     this.map = map;
-    this.container = L.DomUtil.create('div', 'leaflet-control-rainviewer leaflet-bar leaflet-control');
+    this.container = (L.DomUtil.get('leaflet-control-rainviewer leaflet-bar leaflet-control') || L.DomUtil.create('div', 'leaflet-control-rainviewer leaflet-bar leaflet-control')) as HTMLDivElement;
     this.container.style.border = 'none';
     this.container.style.background = 'rgba(100, 100, 100, 0.4)';
+    this.load();
     return this.container;
   },
 
   load() {
-    // log('rainviewer load');
     if (this.container) L.DomUtil.addClass(this.container, 'leaflet-control-rainviewer-active');
     this.controlContainer = L.DomUtil.create('div', 'leaflet-control-rainviewer-container', this.container);
     this.positionSliderLabel = L.DomUtil.create('label', 'leaflet-control-rainviewer-label leaflet-bar-part', this.controlContainer);
@@ -59,6 +54,8 @@ const Rainviewer = L.Control.extend({
     const html = '<div id="timestamp" class="leaflet-control-rainviewer-timestamp"></div>';
     this.controlContainer.insertAdjacentHTML('beforeend', html);
     L.DomEvent.disableClickPropagation(this.controlContainer);
+    this.refresh();
+    if (!this.stop()) this.play();
   },
 
   refresh() {
@@ -81,37 +78,29 @@ const Rainviewer = L.Control.extend({
   },
 
   unload() {
-    // log('rainviewer unload');
     if (this.controlContainer) L.DomUtil.remove(this.controlContainer);
+    this.controlContainer = undefined;
     if (this.container) L.DomUtil.removeClass(this.container, 'leaflet-control-rainviewer-active');
-    const radarLayers = this.radarLayers;
-    const map = this.map;
-    Object.keys(radarLayers).forEach((key) => {
-      if (map?.hasLayer(radarLayers[key])) {
-        map.removeLayer(radarLayers[key]);
-      }
+    this.container = undefined;
+    Object.keys(this.radarLayers).forEach((key) => {
+      if (this.map?.hasLayer(this.radarLayers[key])) this.map.removeLayer(this.radarLayers[key]);
     });
   },
 
   addLayer(ts) {
-    // log('rainviewer addLayer');
     const map = this.map;
     if (!this.radarLayers[ts]) {
       this.radarLayers[ts] = new L.TileLayer('https://tilecache.rainviewer.com/v2/radar/' + ts + '/256/{z}/{x}/{y}/2/1_1.png', {
         tileSize: 256,
         opacity: 0.001,
-        // transparent: true,
         attribution: '<a href="https://rainviewer.com" target="_blank">rainnviewer.com</a>',
         zIndex: ts,
       });
     }
-    if (map && !map.hasLayer(this.radarLayers[ts])) {
-      map.addLayer(this.radarLayers[ts]);
-    }
+    if (map && !map.hasLayer(this.radarLayers[ts])) map.addLayer(this.radarLayers[ts]);
   },
 
   changeRadarPosition(position, preloadOnly) {
-    // log('rainviewer changeRadarPosition');
     while (position >= this.timestamps.length) position -= this.timestamps.length;
     while (position < 0) position += this.timestamps.length;
     this.currentTimestamp = this.timestamps[this.animationPosition];
@@ -127,27 +116,22 @@ const Rainviewer = L.Control.extend({
   },
 
   showFrame(nextPosition) {
-    // log('rainviewer showFrame');
     const preloadingDirection = nextPosition - this.animationPosition > 0 ? 1 : -1;
     this.changeRadarPosition(nextPosition, false);
-    // preload next next frame (typically, +1 frame), if don't do that, the animation will be blinking at the first loop
-    this.changeRadarPosition(nextPosition + preloadingDirection, true);
+    this.changeRadarPosition(nextPosition + preloadingDirection, true); // preload next next frame
   },
 
   setOpacity(e) {
-    // log('rainviewer setOpacity');
     if (this.radarLayers[this.currentTimestamp]) {
       this.radarLayers[this.currentTimestamp].setOpacity(e.srcElement.value / 100);
     }
   },
 
   setPosition(e) {
-    // log('rainviewer setPosition');
     this.showFrame(e.srcElement.value);
   },
 
   stop() {
-    // log('rainviewer stop');
     if (this.animationTimer > 0) {
       clearTimeout(this.animationTimer);
       this.animationTimer = 0;
@@ -157,17 +141,13 @@ const Rainviewer = L.Control.extend({
   },
 
   play() {
-    // log('rainviewer play');
     if (this.timestamps.length < 1) return;
     this.showFrame(this.animationPosition + 1);
     this.animationTimer = setTimeout(() => { this.play(); }, this.options.animationInterval);
   },
 
   playStop() {
-    // log('rainviewer playStop');
-    if (!this.stop()) {
-      this.play();
-    }
+    if (!this.stop()) this.play();
   },
 
   prev(e) {
@@ -194,21 +174,7 @@ const Rainviewer = L.Control.extend({
   },
 
   onRemove() {
-    // Nothing to do here
+    this.stop();
+    this.unload();
   },
 });
-
-// L.control.rainviewer = (opts) => new L.Control.Rainviewer(opts);
-
-export function addRadarLayer(map) {
-  layer = new Rainviewer();
-  layer.addTo(map);
-  // @ts-ignore
-  layer.load();
-  return layer;
-}
-
-export function refreshRadarLayer() {
-  // @ts-ignore
-  if (layer) layer.refresh();
-}

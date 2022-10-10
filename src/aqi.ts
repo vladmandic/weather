@@ -5,6 +5,7 @@ import { escape } from './xss';
 export async function updateAQI(lat: number, lon: number, apiKey) {
   const div = document.getElementById('component-aqi');
   if (!div) return;
+  if (apiKey === '') return;
   const aqi = await cors(`https://api.waqi.info/feed/geo:${lat};${lon}/?token=${apiKey}`, false);
   log('updateAQI', { lat, lon, aqi });
   if (!aqi.data?.city) return;

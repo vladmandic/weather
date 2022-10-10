@@ -22,6 +22,7 @@ export const update = async (loc: Location) => {
   updateAQI(loc.lat, loc.lon, keys.aqicn);
 
   // trigger update for items using forecast data
+  if (keys.darksky === '') return;
   const data = await cors(`https://api.darksky.net/forecast/${keys.darksky}/${loc.lat},${loc.lon}`); // get actual forecast
   log('weatherData', data);
   (document.getElementById('main') as HTMLDivElement).style.display = 'block';

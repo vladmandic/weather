@@ -64,6 +64,3 @@ INFO:  Listening...
 ## Screenshot
 
 ![screenshot](assets/screenshot.jpg)
-
-
-https://wyse:10061/?google=AIzaSyAzOgb1KMAg18FWTHFq9GumOIWq57AgYUA&darksky=862dc32f1159c63282b1e2aa3c71acda&aqicn=52f660d7150a418e560757663d4ac7d845d062ac&location=mavrinci

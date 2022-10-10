@@ -19,6 +19,7 @@ const updateAll = async () => {
   updateTime = new Date().getTime();
   const loc = await getIPLocation(keys.google);
   loc.name = await findByLocation(loc.lat, loc.lon, keys.google);
+  if (keys.darksky === '') return;
   const data = await cors(`https://api.darksky.net/forecast/${keys.darksky}/${loc.lat},${loc.lon}`); // get actual forecast
   log('weatherData', data);
   await updateToday(data);
@@ -76,7 +77,7 @@ async function main() {
     const t = Math.round((new Date()).getTime() / 1000);
     if (t >= 15 + (scrollTime / 1000)) scrollNext(); // scroll to next page every 15sec
     if ((t >= 15 + (updateTime / 1000)) && (t % (15 * 60) === 0)) updateAll(); // update all data every 15min on the hour
-    if ((t >= 15 + (updateTime / 1000)) && (t % (24 * 60 * 60) === 0)) window.location.reload(); // reload page at midnight
+    // if ((t >= 15 + (updateTime / 1000)) && (t % (24 * 60 * 60) === 0)) window.location.reload(); // reload page at midnight
   }, 100);
 }
 
