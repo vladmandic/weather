@@ -71,7 +71,7 @@ export const RainViewer = L.Control.extend({
           this.positionSlider.max = `${json.length - 1}`;
           this.positionSlider.valueAsNumber = 0;
           const values = json.map((v) => Math.trunc((json[json.length - 1] - v) / -60));
-          this.positionSlider.setAttribute('values', values.join('   '));
+          this.positionSlider.setAttribute('values', ' ' + values.join('   ') + ' ');
         }
         this.map?.invalidateSize();
         this.timestamps = json;
@@ -143,31 +143,6 @@ export const RainViewer = L.Control.extend({
   playStop() {
     if (!this.stop()) this.play();
   },
-
-  /*
-  prev(e) {
-    if (this.timestamps.length < 1) return;
-    L.DomEvent.stopPropagation(e);
-    L.DomEvent.preventDefault(e);
-    this.stop();
-    this.showFrame(this.animationPosition - 1);
-  },
-
-  startstop(e) {
-    if (this.timestamps.length < 1) return;
-    L.DomEvent.stopPropagation(e);
-    L.DomEvent.preventDefault(e);
-    this.playStop();
-  },
-
-  next(e) {
-    if (this.timestamps.length < 1) return;
-    L.DomEvent.stopPropagation(e);
-    L.DomEvent.preventDefault(e);
-    this.stop();
-    this.showFrame(this.animationPosition + 1);
-  },
-  */
 
   onRemove() {
     this.stop();

@@ -37,16 +37,16 @@ export class ComponentClock extends HTMLElement {
     this.css.innerHTML = `
       div { font-size: 130px; }
       #clock {
-        height: 2.5em; font-weight: 800; letter-spacing: 0.3em; line-height: 2.5em; display: flex; position: relative;
+        height: 1.6em; font-weight: 800; letter-spacing: 0.3em; line-height: 1.6em; display: flex; position: relative;
         overflow: hidden; min-width: fit-content; justify-content: center;
         animation: fade-in ease 1s; text-shadow: beige 0.025em 0.025em 0.1em; mix-blend-mode: hard-light;
       }
-      #clock::before { content: ''; width: 100vw; height: 0.8em; position: absolute; top: 1.7em; z-index: 2; background: linear-gradient(180deg, transparent 50%, black 100%) }
+      #clock::before { content: ''; width: 100vw; height: 0.8em; position: absolute; top: 0.8em; z-index: 2; background: linear-gradient(180deg, transparent 50%, black 100%) }
       #clock::after { content: ''; width: 100vw; height: 0.8em; position: absolute; z-index: 2; background: linear-gradient(0deg, transparent 50%, black 100%) }
       #clock > div { display: flex; }
       .move { animation: scroll-up linear 850ms; }
       @keyframes fade-in { 0% { opacity:0; } 100% { opacity:1; } }
-      @keyframes scroll-up { from { transform: translateY(0vh) } to { transform: translateY(calc(-1 * 2.5em)) } }
+      @keyframes scroll-up { from { transform: translateY(0vh) } to { transform: translateY(calc(-1 * 1.6em)) } }
     `;
     const hs = document.createElement('span');
     hs.innerText = ':';

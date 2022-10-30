@@ -26,7 +26,8 @@ div::-webkit-scrollbar-thumb { background: beige; border-left: 8px solid rgba(0,
 .loader::after { border-top-color: #26a9e0; animation: spin 1.5s linear infinite; }
 @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-.component-today-notes { font-size: 1.6rem; line-height: 2.0rem; text-align: center; }
+.component-today { margin: 20px 0 0 0; font-size: 1.2rem }
+.component-today-notes { font-size: 1.8rem; line-height: 1.8rem; text-align: center; margin-top: 10px; }
 
 .component-forecast { display: flex; text-align: center; line-height: 1.4rem; justify-content: center; font-size: 1.1rem; margin-top: 30px; }
 .component-forecast-day { padding: 12px; }
@@ -38,7 +39,7 @@ div::-webkit-scrollbar-thumb { background: beige; border-left: 8px solid rgba(0,
 
 .component-astronomy { margin: 10px 0 20px 0; font-size: 1.2rem }
 
-.leaflet-control-rainviewer-timestamp { font-size: 1.1rem; letter-spacing: 4px; font-weight: bold; color: hsl(27, 98%, 50%);; padding: 10px }
+.leaflet-control-rainviewer-timestamp { font-size: 1.1rem; letter-spacing: 4px; font-weight: bold; color: hsl(27, 98%, 50%); padding: 10px; cursor: pointer; width: 140px; }
 
 input[type="range"] { appearance: none; width: 700px; background: transparent; position: relative; font-size: 1.1rem; word-spacing: 1.1rem; }   
 input[type="range"]:focus { outline: 0; }
