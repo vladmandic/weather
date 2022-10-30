@@ -16,7 +16,7 @@ const chartOptions: ChartOptions = {
       labels: {
         padding: 14,
         color: 'rgb(255, 255, 255)',
-        font: { family: 'CenturyGothic', size: 12 },
+        font: { family: 'CenturyGothic', size: 18 },
       },
     },
   },
@@ -27,7 +27,7 @@ const chartOptions: ChartOptions = {
       ticks: {
         color: 'rgb(255, 255, 255)',
         font: {
-          family: 'CenturyGothic', size: 12, lineHeight: 1.6 },
+          family: 'CenturyGothic', size: 16, lineHeight: 1.6 },
         autoSkip: true,
         maxRotation: 0,
         minRotation: 0,

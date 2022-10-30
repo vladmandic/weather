@@ -11,7 +11,8 @@ import { updateChart } from './chart';
 import { updateRadar } from './radar';
 import { updateAQI } from './aqi';
 import { updateAlerts } from './alerts';
-import { updateClock } from './clock';
+// import { updateClock } from './clock';
+import './clock';
 import { updateClockOverlay } from './clock-overlay';
 
 let updateTime = 0;
@@ -66,7 +67,6 @@ async function initEvents() {
 
 async function main() {
   log('weather app');
-  updateClock(true); // start clock
   updateClockOverlay(); // start clock overlay on secondary pages
   await keys.init(); // load api keys from secrets or url
   initEvents(); // do weather update on demand

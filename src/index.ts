@@ -5,7 +5,7 @@ import { installable } from './install';
 import { registerPWA } from './pwa-register';
 import { updateSearchInfo } from './info';
 import { createSakura } from './sakura';
-import { updateClock } from './clock';
+import './clock';
 import { update, initInitial } from './update'; // eslint-disable-line import/no-cycle
 import { keys } from './secrets';
 import type { Location } from './location';
@@ -35,7 +35,6 @@ async function main() {
   log('weather app');
 
   createSakura(); // create background
-  updateClock(true); // start clock
   window.addEventListener('beforeinstallprompt', (evt) => installable(evt)); // capture installable events
   await registerPWA('../dist/pwa-serviceworker.js'); // register pwa
 

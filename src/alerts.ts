@@ -16,7 +16,7 @@ export function updateAlerts(data) {
   if (!divAlerts) return;
   let html = '';
   if (data?.alerts) {
-    html += '<span style="font-size: 1.8rem">Alerts</span><br>';
+    html += '<span style="font-size: 1.8rem">Alerts</span><br><br>';
     for (const alert of data.alerts) {
       html += `
       <div style="text-align: justify" title="${JSON.stringify(alert, null, 2).replace(/{|}|"|,/g, '').replace('  ', ' ')}">

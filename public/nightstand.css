@@ -16,15 +16,7 @@ div::-webkit-scrollbar-thumb { background: beige; border-left: 8px solid rgba(0,
 
 .page { min-height: 1000px; }
 
-.component-clock { height: 8.0rem ; font-size: 6.0rem; font-weight: 800; letter-spacing: 0.8rem; line-height: 8.0rem; display: flex; position: relative; overflow: hidden; min-width: fit-content; justify-content: center; animation: component-clock-fade ease 1s; }
-.component-clock::before { content: ''; width: 100vw; height: 2.0rem; background: transparent; position: absolute; top: 7.0rem; z-index: 2; }
-.component-clock::after { content: ''; width: 100vw; height: 2.0rem; background: transparent; position: absolute; z-index: 2; }
-.component-clock > div { display: flex; }
-.component-clock-move { animation: component-clock-scroll linear 950ms; }
-@keyframes component-clock-fade { 0% { opacity:0; } 100% { opacity:1; } }
-@keyframes component-clock-scroll { from { transform: translateY(0vh) } to { transform: translateY(calc(-1 * 9.0rem)) } }
-
-.component-clock-overlay { font-size: 5.0rem; letter-spacing: 1.1rem; position: fixed; bottom: 0; right: 0; font-weight: 800; color: beige; opacity: 45%; z-index: 500; }
+.component-clock-overlay { font-size: 5.0rem; letter-spacing: 1.1rem; position: fixed; bottom: 0; right: 0; font-weight: 800; color: beige; opacity: 45%; z-index: 500; text-shadow: beige 0.025em 0.025em 0.1em; }
 
 .component-today { margin: 20px 0 0 0; font-size: 1.2rem }
 .component-today-notes { font-size: 1.6rem; line-height: 2.0rem; text-align: center; margin-top: 10px; }

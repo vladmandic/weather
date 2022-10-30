@@ -47,7 +47,7 @@ export function updateCurrentTime() {
 class ComponentInfo extends HTMLElement { // watch for attributes
   connectedCallback() { // triggered on insert
     this.innerHTML = `
-      <div id="weather-info" title="click to reinitialize weather" style="margin: 20px 0 0 0; color: beige; font-size: 1.2rem">
+      <div id="weather-info" title="click to reinitialize weather" style="margin: 20px 0 20px 0; color: beige; font-size: 1.2rem">
         <div id="weather-info-time"></div>
         <br>
         <div id="weather-info-gps"></div>

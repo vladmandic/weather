@@ -56,30 +56,38 @@ export async function updateToday(data) {
 class ComponentToday extends HTMLElement { // watch for attributes
   connectedCallback() { // triggered on insert
     const blank = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
-    this.innerHTML = `
-      <div id="component-today" class="component-today">
-        <div class="current" id="day-0" style="display: flex; justify-content: center">
-          <div class="component-today-icon" style="margin-right: 25px">
-            <img id="component-today-icon" width="200" height="200" src="${blank}"></img>
-          </div>
-          <div id="component-today-column1" style="margin-right: 25px">
-            <div class="temp-current" style="text-align: center; font-size: 3.4rem"></div>
-            <div class="temp-feel" style="line-height: 2rem"></div>
-            <div class="temp-minmax"></div>
-          </div>
-          <div id="component-today-column2" style="margin: 12px 25px 0 25px; line-height: 1.4rem">
-          </div>
-          <div id="component-today-column3" style="margin: 12px 25px 0 25px; line-height: 1.4rem">
-          </div>
+    // this.attachShadow({ mode: 'open' });
+    const style = document.createElement('style');
+    style.innerHTML = `
+      #component-today { margin: 20px 0 0 0; font-size: 1.2rem; }
+      .component-today-icon { margin-right: 25px }
+    `;
+    const container = document.createElement('div');
+    this.id = 'component-today';
+    container.innerHTML = `
+      <div class="current" id="day-0" style="display: flex; justify-content: center; font-size: 1.2rem; line-height: 1.3">
+        <div class="component-today-icon">
+          <img id="component-today-icon" width="200" height="200" src="${blank}"></img>
         </div>
-        <div class="component-today-notes">
-          <div class="desc-current"></div> 
-          <div class="desc-minute"></div>
-          <div class="desc-hour"></div>
-          <div class="desc-daily"></div>
+        <div id="component-today-column1" style="margin-right: 25px">
+          <div class="temp-current" style="text-align: center; font-size: 3.4rem"></div>
+          <div class="temp-feel" style="line-height: 2rem"></div>
+          <div class="temp-minmax"></div>
+        </div>
+        <div id="component-today-column2" style="margin: 12px 25px 0 25px">
+        </div>
+        <div id="component-today-column3" style="margin: 12px 25px 0 25px">
         </div>
       </div>
+      <div class="component-today-notes">
+        <div class="desc-current"></div> 
+        <div class="desc-minute"></div>
+        <div class="desc-hour"></div>
+        <div class="desc-daily"></div>
+      </div>
     `;
+    this.appendChild(container);
+    // this.shadowRoot?.append(style, container);
   }
 }
 

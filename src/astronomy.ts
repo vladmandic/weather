@@ -44,7 +44,7 @@ class ComponentAstronomy extends HTMLElement { // watch for attributes
       <table class="component-astronomy">
         <tr>
           <td>
-            <img src="../assets/phases/sun.webp" width="100px" height="100px" alt="sunrise" title="${title}"></img>
+            <img src="../assets/phases/sun.webp" width="130px" height="130px" alt="sunrise" style="margin: -10px" title="${title}"></img>
           </td>
           <td>
             predawn<br>dawn<br>sunrise<br>noon<br>azimuth
@@ -54,7 +54,7 @@ class ComponentAstronomy extends HTMLElement { // watch for attributes
             ${Math.round(180 * sunPos.azimuth / Math.PI)}°<br>
           </td>
           <td>
-            <img src="../assets/phases/moon.webp" width="100px" height="100px" alt="sunset" style="margin-left: 0" title="${title}"></img>
+            <img src="../assets/phases/moon.webp" width="130px" height="130px" alt="sunset" style="margin: -10px" title="${title}"></img>
           </td>
           <td style="padding-right: 10px">
             golden<br>sunset<br>dusk<br>night<br>altitude
@@ -64,7 +64,7 @@ class ComponentAstronomy extends HTMLElement { // watch for attributes
             ${Math.round(180 * sunPos.altitude / Math.PI)}°
           </td>
           <td>
-            <img src="${img}" width="50px" height="50px" alt="moonrise" style="margin-left: 30px" title="${title}"></img>
+            <img src="${img}" width="70px" height="70px" alt="moonrise" style="margin-left: 20px" title="${title}"></img>
           </td>
           <td>
             rise<br>set<br>phase<br>azimuth<br>altitude
