@@ -16,14 +16,15 @@ export const RainViewer = L.Control.extend({
   container: <HTMLDivElement | undefined> undefined,
   positionSlider: <HTMLInputElement | undefined> undefined,
   positionSliderLabel: <HTMLLabelElement | undefined> undefined,
+  timestampLabel: <HTMLDivElement | undefined> undefined,
   map: <L.Map | undefined> undefined,
   options: { // defaults
     position: 'topright',
     animationInterval: 150,
-    opacity: 0.75,
+    opacity: 0.8,
   },
 
-  onAdd(map) {
+  onAdd(map: L.Map) {
     this.timestamps = [];
     this.radarLayers = [];
     this.currentTimestamp = 0;
@@ -33,7 +34,7 @@ export const RainViewer = L.Control.extend({
     this.map = map;
     this.container = (L.DomUtil.get('leaflet-control-rainviewer leaflet-bar leaflet-control') || L.DomUtil.create('div', 'leaflet-control-rainviewer leaflet-bar leaflet-control')) as HTMLDivElement;
     this.container.style.border = 'none';
-    this.container.style.background = 'rgba(100, 100, 100, 0.4)';
+    this.container.style.background = 'transparent';
     this.load();
     return this.container;
   },
@@ -41,19 +42,18 @@ export const RainViewer = L.Control.extend({
   load() {
     if (this.container) L.DomUtil.addClass(this.container, 'leaflet-control-rainviewer-active');
     this.controlContainer = L.DomUtil.create('div', 'leaflet-control-rainviewer-container', this.container);
-    this.positionSliderLabel = L.DomUtil.create('label', 'leaflet-control-rainviewer-label leaflet-bar-part', this.controlContainer);
-    this.positionSliderLabel.htmlFor = 'rainviewer-positionslider';
+    this.controlContainer.style.display = 'flex';
+    this.controlContainer.style.alignItems = 'center';
+    L.DomEvent.disableClickPropagation(this.controlContainer);
     this.positionSlider = L.DomUtil.create('input', 'leaflet-control-rainviewer-positionslider leaflet-bar-part', this.controlContainer);
     this.positionSlider.type = 'range';
     this.positionSlider.id = 'rainviewer-positionslider';
     this.positionSlider.min = '0';
-    this.positionSlider.max = '11';
     this.positionSlider.valueAsNumber = this.animationPosition;
-    L.DomEvent.on(this.positionSlider, 'input', this.setPosition, this);
+    L.DomEvent.on(this.positionSlider, 'input', (e) => this.showFrame((e.srcElement as HTMLInputElement).valueAsNumber), this);
     L.DomEvent.disableClickPropagation(this.positionSlider);
-    const html = '<div id="timestamp" class="leaflet-control-rainviewer-timestamp"></div>';
-    this.controlContainer.insertAdjacentHTML('beforeend', html);
-    L.DomEvent.disableClickPropagation(this.controlContainer);
+    this.timestampLabel = L.DomUtil.create('div', 'leaflet-control-rainviewer-timestamp', this.controlContainer);
+    L.DomEvent.on(this.timestampLabel, 'click', () => window.scroll(0, 0), this);
     this.refresh();
     if (!this.stop()) this.play();
   },
@@ -67,6 +67,12 @@ export const RainViewer = L.Control.extend({
       log('rainviewer refresh', json);
       if (json && json.length > 0) {
         this.stop();
+        if (this.positionSlider) {
+          this.positionSlider.max = `${json.length - 1}`;
+          this.positionSlider.valueAsNumber = 0;
+          const values = json.map((v) => Math.trunc((json[json.length - 1] - v) / -60));
+          this.positionSlider.setAttribute('values', values.join('   '));
+        }
         this.map?.invalidateSize();
         this.timestamps = json;
         this.showFrame(-1);
@@ -87,7 +93,7 @@ export const RainViewer = L.Control.extend({
     });
   },
 
-  addLayer(ts) {
+  addLayer(ts: number) {
     const map = this.map;
     if (!this.radarLayers[ts]) {
       this.radarLayers[ts] = new L.TileLayer('https://tilecache.rainviewer.com/v2/radar/' + ts + '/256/{z}/{x}/{y}/2/1_1.png', {
@@ -100,9 +106,8 @@ export const RainViewer = L.Control.extend({
     if (map && !map.hasLayer(this.radarLayers[ts])) map.addLayer(this.radarLayers[ts]);
   },
 
-  changeRadarPosition(position, preloadOnly) {
-    while (position >= this.timestamps.length) position -= this.timestamps.length;
-    while (position < 0) position += this.timestamps.length;
+  changeRadarPosition(position: number, preloadOnly: boolean) {
+    position %= this.timestamps.length;
     this.currentTimestamp = this.timestamps[this.animationPosition];
     this.nextTimestamp = this.timestamps[position];
     this.addLayer(this.nextTimestamp);
@@ -110,25 +115,14 @@ export const RainViewer = L.Control.extend({
     this.animationPosition = position;
     if (this.positionSlider) this.positionSlider.valueAsNumber = position;
     if (this.radarLayers[this.currentTimestamp]) this.radarLayers[this.currentTimestamp].setOpacity(0);
+    if (this.timestampLabel) this.timestampLabel.innerText = new Date(this.nextTimestamp * 1000).toTimeString().split(' ')[0];
     this.radarLayers[this.nextTimestamp].setOpacity(this.options.opacity);
-    const html = document.getElementById('timestamp') as HTMLDivElement;
-    html.innerHTML = (new Date(this.nextTimestamp * 1000)).toLocaleString();
   },
 
-  showFrame(nextPosition) {
+  showFrame(nextPosition: number) {
     const preloadingDirection = nextPosition - this.animationPosition > 0 ? 1 : -1;
     this.changeRadarPosition(nextPosition, false);
     this.changeRadarPosition(nextPosition + preloadingDirection, true); // preload next next frame
-  },
-
-  setOpacity(e) {
-    if (this.radarLayers[this.currentTimestamp]) {
-      this.radarLayers[this.currentTimestamp].setOpacity(e.srcElement.value / 100);
-    }
-  },
-
-  setPosition(e) {
-    this.showFrame(e.srcElement.value);
   },
 
   stop() {
@@ -150,6 +144,7 @@ export const RainViewer = L.Control.extend({
     if (!this.stop()) this.play();
   },
 
+  /*
   prev(e) {
     if (this.timestamps.length < 1) return;
     L.DomEvent.stopPropagation(e);
@@ -172,6 +167,7 @@ export const RainViewer = L.Control.extend({
     this.stop();
     this.showFrame(this.animationPosition + 1);
   },
+  */
 
   onRemove() {
     this.stop();

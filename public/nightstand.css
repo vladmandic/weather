@@ -39,9 +39,80 @@ div::-webkit-scrollbar-thumb { background: beige; border-left: 8px solid rgba(0,
 
 .component-astronomy { margin: 10px 0 20px 0; font-size: 1.2rem }
 
-.leaflet-control-rainviewer { border: none }
-.leaflet-control-rainviewer-timestamp { font-size: 1.1rem; letter-spacing: 2px; font-weight: bold; color: #FFFFA0}
-.leaflet-control-rainviewer-positionslider { width: 250px; height: 26px; appearance: none; margin: 10px 0; background: transparent;}
-.leaflet-control-rainviewer-positionslider:focus { outline: none; }
-.leaflet-control-rainviewer-positionslider::-webkit-slider-runnable-track { width: 100%; height: 14px; cursor: pointer; background: #50555C; border-radius: 4px; }
-.leaflet-control-rainviewer-positionslider::-webkit-slider-thumb { border: 0px solid #000000; height: 20px; width: 40px; border-radius: 4px; background: #FFFFA0; cursor: pointer; appearance: none; margin-top: -3px; }
+@font-face { font-family: 'CenturyGothic'; font-display: swap; font-style: normal; font-weight: 400; src: local('CenturyGothic'), url('/assets/century-gothic.ttf') format('truetype'); }
+html { font-size: 18px; text-align: -webkit-center; }
+body { font-size: 1rem; font-family: "CenturyGothic", "Segoe UI", sans-serif; font-variant: small-caps; width: -webkit-fill-available; height: 100%; background: black; color: white; overflow-x: hidden; margin: 0; text-align: -webkit-center; cursor: default; }
+a { color: inherit; text-decoration: inherit; }
+
+img { visibility: hidden; }
+img:hover { transform: scale(1.5); transition: 1s ease-in-out; }
+input[type=text] { width: 700px; padding: 10px; background: none; border: none; outline: none; font-family: CenturyGothic; font-variant: small-caps; font-size: 2rem; margin: 20px 20px 40px 20px; border-bottom: 4px solid #555555; color: white; }
+
+div::-webkit-scrollbar { width: 20px; }
+div::-webkit-scrollbar-track { background: transparent }
+div::-webkit-scrollbar-thumb { background: beige; border-left: 8px solid rgba(0, 0, 0, 1); }
+
+.header { display: block; }
+.nav { display: block; }
+.main { display: block; width: max-content; }
+.footer { display: block; }
+.aside { display: block; }
+.install { padding: 8px; background: beige; color: black; display: none; width: 800px; }
+.sakura { position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.2; width: -webkit-fill-available; height: 100% }
+
+.loader-container { top: 400px; justify-content: center; position: fixed; width: 100%; }
+.loader { width: 300px; height: 300px; border: 3px solid transparent; border-radius: 50%; border-top: 4px solid #f15e41; animation: spin 4s linear infinite; position: relative; }
+.loader::before, .loader::after { content: ""; position: absolute; top: 6px; bottom: 6px; left: 6px; right: 6px; border-radius: 50%; border: 4px solid transparent; }
+.loader::before { border-top-color: #bad375; animation: 3s spin linear infinite; }
+.loader::after { border-top-color: #26a9e0; animation: spin 1.5s linear infinite; }
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+.component-clock { height: 8.0rem ; font-size: 6.0rem; font-weight: 800; letter-spacing: 0.8rem; line-height: 8.0rem; display: flex; position: relative; overflow: hidden; min-width: fit-content; justify-content: center; animation: component-clock-fade ease 1s; }
+.component-clock::before { content: ''; width: 100vw; height: 2.0rem; background: transparent; position: absolute; top: 7.0rem; z-index: 2; }
+.component-clock::after { content: ''; width: 100vw; height: 2.0rem; background: transparent; position: absolute; z-index: 2; }
+.component-clock > div { display: flex; }
+.component-clock-move { animation: component-clock-scroll linear 950ms; }
+@keyframes component-clock-fade { 0% { opacity:0; } 100% { opacity:1; } }
+@keyframes component-clock-scroll { from { transform: translateY(0vh) } to { transform: translateY(calc(-1 * 9.0rem)) } }
+
+.component-today { margin: 20px 0 0 0; font-size: 1.2rem }
+.component-today-notes { font-size: 1.6rem; line-height: 2.0rem; text-align: center; }
+
+.component-forecast { display: flex; text-align: center; line-height: 1.4rem; justify-content: center; font-size: 1.1rem; margin-top: 30px; }
+.component-forecast-day { padding: 12px; }
+.component-forecast-date { font-size: 1.4rem; letter-spacing: 0.1rem }
+
+.component-aqi { margin: 40px 0 20px 0; text-align: center; line-height: 1.6rem; color: beige }
+
+.component-alerts { width: 980px; line-height: 1.2rem; }
+
+.component-astronomy { margin: 10px 0 20px 0; font-size: 1.2rem }
+
+.leaflet-control-rainviewer-timestamp { font-size: 1.1rem; letter-spacing: 4px; font-weight: bold; color: hsl(27, 98%, 50%);; padding: 10px }
+
+input[type="range"] { appearance: none; width: 700px; background: transparent; position: relative; font-size: 1.1rem; word-spacing: 1.1rem; }   
+input[type="range"]:focus { outline: 0; }
+input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  width: 2rem;
+  height: 2rem;
+  background: hsl(27, 98%, 50%);
+  border-radius: 100%;
+  box-shadow: inset .8em .8em 5px -8px rgba(255, 255, 255, .4), inset -.4em -.4em 10px -3px rgba(0,0,0,.2), 0.7em 0.5em 7px -0.5em rgba(0,0,0,.4);
+  cursor: pointer;
+}
+input[type="range"]::-webkit-slider-runnable-track {
+  background: transparent;
+  width: 100%;
+  height: 2rem;
+  border-radius: 2rem;
+  box-shadow: inset .6em 1em 10px rgba(0,0,0,.15), inset -.6em -1em 10px rgba(255, 255, 255, .415);
+}
+input[type="range"]::before {
+  content: attr(values);
+  color: #c4c4c4;
+  position: absolute;
+  top: 0.4rem; left: 0;
+  text-shadow: .5px .5px 0.9px rgba(0,0,0, .4);
+  z-index: -1;
+}

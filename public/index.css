@@ -47,9 +47,31 @@ div::-webkit-scrollbar-thumb { background: beige; border-left: 8px solid rgba(0,
 
 .component-astronomy { margin: 10px 0 20px 0; font-size: 1.2rem }
 
-.leaflet-control-rainviewer { border: none }
-.leaflet-control-rainviewer-timestamp { font-size: 1.1rem; letter-spacing: 2px; font-weight: bold; color: #FFFFA0}
-.leaflet-control-rainviewer-positionslider { width: 250px; height: 26px; appearance: none; margin: 10px 0; background: transparent;}
-.leaflet-control-rainviewer-positionslider:focus { outline: none; }
-.leaflet-control-rainviewer-positionslider::-webkit-slider-runnable-track { width: 100%; height: 14px; cursor: pointer; background: #50555C; border-radius: 4px; }
-.leaflet-control-rainviewer-positionslider::-webkit-slider-thumb { border: 0px solid #000000; height: 20px; width: 40px; border-radius: 4px; background: #FFFFA0; cursor: pointer; appearance: none; margin-top: -3px; }
+.leaflet-control-rainviewer-timestamp { font-size: 1.1rem; letter-spacing: 4px; font-weight: bold; color: hsl(27, 98%, 50%);; padding: 10px }
+
+input[type="range"] { appearance: none; width: 700px; background: transparent; position: relative; font-size: 1.1rem; word-spacing: 1.1rem; }   
+input[type="range"]:focus { outline: 0; }
+input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  width: 2rem;
+  height: 2rem;
+  background: hsl(27, 98%, 50%);
+  border-radius: 100%;
+  box-shadow: inset .8em .8em 5px -8px rgba(255, 255, 255, .4), inset -.4em -.4em 10px -3px rgba(0,0,0,.2), 0.7em 0.5em 7px -0.5em rgba(0,0,0,.4);
+  cursor: pointer;
+}
+input[type="range"]::-webkit-slider-runnable-track {
+  background: transparent;
+  width: 100%;
+  height: 2rem;
+  border-radius: 2rem;
+  box-shadow: inset .6em 1em 10px rgba(0,0,0,.15), inset -.6em -1em 10px rgba(255, 255, 255, .415);
+}
+input[type="range"]::before {
+  content: attr(values);
+  color: #c4c4c4;
+  position: absolute;
+  top: 0.4rem; left: 0;
+  text-shadow: .5px .5px 0.9px rgba(0,0,0, .4);
+  z-index: -1;
+}
