@@ -17,9 +17,8 @@
   <link rel="icon" sizes="256x256" href="../assets/icons/dash-256.png">
   <link rel="apple-touch-icon" href="../assets/icons/dash-256.png">
   <link rel="apple-touch-startup-image" href="../assets/icons/dash-256.png">
-  <link rel="stylesheet" href="index.css">
-  <link rel="stylesheet" href="../assets/leaflet.css">
-  <script src="../dist/index.js"></script>
+  <link rel="stylesheet" href="weather.css">
+  <script src="../dist/weather.js"></script>
 </head>
 <body>
   <noscript><h1>javascript is required</h1></noscript>
@@ -28,14 +27,14 @@
   </nav>
   <header>
     <div id="header" class="header"></div>
-    <div id="loader-container" class="loader-container"><div id="loader" class="loader"></div></div>
+    <component-loader></component-loader>
   </header>
   <main>
+    <!-- content -->
     <canvas id="sakura" class="sakura"></canvas>
     <div id="main" class="main">
-      <input type="text" id="input-address" name="input-address" size="10">
+      <component-input></component-input>
       <component-address></component-address>
-      <!-- <component-clock></component-clock> -->
       <component-info></component-info>
       <component-today></component-today>
       <component-forecast></component-forecast>

@@ -1,7 +1,5 @@
 import { log } from './log';
-import { keys } from './secrets';
-import { updateGPSInfo } from './info'; // eslint-disable-line import/no-cycle
-import { update } from './update'; // eslint-disable-line import/no-cycle
+import { initInitial } from './update'; // eslint-disable-line import/no-cycle
 import { cors } from './cors';
 
 export type Location = { lat: number, lon: number, accuracy: number, name: string }
@@ -108,16 +106,10 @@ class ComponentAddress extends HTMLElement { // watch for attributes
       <div id="weather-info-text" title="click to detect gps location" style="margin: 20px 0 0 0; font-size: 2rem; color: beige">${newValue}</div>
     `;
     const text = document.getElementById('weather-info-text') as HTMLDivElement; // register refresh on click
-    text.onclick = async () => {
+    text.onclick = async (evt) => {
+      evt.stopPropagation();
       text.innerHTML = 'detecting gps location';
-      const locGPS = await getGPSLocation();
-      if (locGPS.lat !== 0) {
-        locGPS.name = await findByLocation(locGPS.lat, locGPS.lon, keys.google);
-        updateGPSInfo(locGPS);
-        update(locGPS);
-      } else {
-        text.innerHTML = 'gps location failed';
-      }
+      initInitial(true);
     };
   }
 }

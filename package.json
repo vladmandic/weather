@@ -1,9 +1,9 @@
 {
   "name": "@vladmandic/weather",
-  "version": "0.1.0",
+  "version": "0.9.0",
   "description": "Yet another weather app",
   "sideEffects": false,
-  "main": "public/darksky.js",
+  "main": "public/index.html",
   "author": "Vladimir Mandic <mandic00@live.com>",
   "bugs": {
     "url": "https://github.com/vladmandic/weather/issues"
@@ -23,6 +23,8 @@
   "keywords": [
     "weather",
     "darksky",
+    "radar",
+    "googlemaps",
     "aqi"
   ],
   "devDependencies": {
@@ -32,6 +34,7 @@
     "@typescript-eslint/parser": "^5.41.0",
     "@vladmandic/build": "^0.7.14",
     "chart.js": "^3.9.1",
+    "chartjs-plugin-zoom": "^1.2.1",
     "esbuild": "^0.15.12",
     "eslint": "8.26.0",
     "eslint-config-airbnb-base": "^15.0.0",
@@ -45,5 +48,7 @@
     "suncalc": "^1.9.0",
     "tslib": "^2.4.0",
     "typescript": "4.8.4"
+  },
+  "dependencies": {
   }
 }

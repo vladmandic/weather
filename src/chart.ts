@@ -1,4 +1,5 @@
 import { Chart, ChartConfiguration, ChartOptions, registerables } from 'chart.js';
+import zoomPlugin from 'chartjs-plugin-zoom';
 import * as SunCalc from 'suncalc';
 import { DateTime } from 'luxon';
 import { log } from './log';
@@ -13,11 +14,11 @@ const chartOptions: ChartOptions = {
     legend: {
       position: 'bottom',
       fullSize: true,
-      labels: {
-        padding: 14,
-        color: 'rgb(255, 255, 255)',
-        font: { family: 'CenturyGothic', size: 18 },
-      },
+      labels: { padding: 14, color: 'rgb(255, 255, 255)', font: { family: 'CenturyGothic', size: 18 } },
+    },
+    zoom: {
+      zoom: { wheel: { enabled: true }, pinch: { enabled: true }, mode: 'xy' },
+      pan: { enabled: true, mode: 'xy' },
     },
   },
   scales: {
@@ -26,8 +27,7 @@ const chartOptions: ChartOptions = {
       grid: { color: '#222222' },
       ticks: {
         color: 'rgb(255, 255, 255)',
-        font: {
-          family: 'CenturyGothic', size: 16, lineHeight: 1.6 },
+        font: { family: 'CenturyGothic', size: 16, lineHeight: 1.6 },
         autoSkip: true,
         maxRotation: 0,
         minRotation: 0,
@@ -41,8 +41,7 @@ const chartOptions: ChartOptions = {
       grid: { color: '#222222' },
       ticks: {
         color: 'rgb(255, 255, 255)',
-        font: {
-          family: 'CenturyGothic', size: 12, lineHeight: 1.6 },
+        font: { family: 'CenturyGothic', size: 12, lineHeight: 1.6 },
         autoSkip: true,
         maxRotation: 0,
         minRotation: 0,
@@ -87,7 +86,7 @@ async function initChart() {
   log('initChart');
   if (!html) return;
   html.height = 400;
-  Chart.register(...registerables);
+  Chart.register(...registerables, zoomPlugin);
   chart = new Chart(html, chartConfig);
 }
 

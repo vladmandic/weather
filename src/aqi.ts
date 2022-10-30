@@ -40,7 +40,7 @@ export async function updateAQI(lat: number, lon: number, apiKey) {
 class ComponentAQI extends HTMLElement { // watch for attributes
   connectedCallback() { // triggered on insert
     this.innerHTML = `
-      <div id="component-aqi" class="component-aqi"></div>
+      <div id="component-aqi" style="margin: 40px 0 20px 0; text-align: center; line-height: 1.6rem; color: beige"></div>
     `;
   }
 }

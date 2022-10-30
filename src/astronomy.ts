@@ -41,7 +41,7 @@ class ComponentAstronomy extends HTMLElement { // watch for attributes
     if (moonIllumination.phase <= 0.20) img = '../assets/phases/moon-12.webp';
     if (moonIllumination.phase <= 0.08) img = '../assets/phases/moon-0.webp';
     this.innerHTML = `
-      <table class="component-astronomy">
+      <table class="component-astronomy" style="margin: 10px 0 20px 0; font-size: 1.2rem">
         <tr>
           <td>
             <img src="../assets/phases/sun.webp" width="130px" height="130px" alt="sunrise" style="margin: -10px" title="${title}"></img>

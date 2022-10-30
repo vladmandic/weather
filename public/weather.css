@@ -1,0 +1,26 @@
+/* page settings */
+@font-face { font-family: 'CenturyGothic'; font-display: swap; font-style: normal; font-weight: 400; src: local('CenturyGothic'), url('/assets/century-gothic.ttf') format('truetype'); }
+html { font-size: 22px; text-align: -webkit-center; }
+body { font-size: 1rem; font-family: "CenturyGothic", "Segoe UI", sans-serif; font-variant: small-caps; width: -webkit-fill-available; height: 100%; background: black; color: white; overflow-x: hidden; margin: 0; text-align: -webkit-center; cursor: default; }
+
+/* common tags */
+a { color: inherit; text-decoration: inherit; }
+/* img { visibility: hidden; } */
+img:hover { transform: scale(1.5); transition: 1s ease-in-out; }
+
+/* webkit overrides */
+*::-webkit-scrollbar { width: 20px; }
+*::-webkit-scrollbar-track { background: transparent }
+*::-webkit-scrollbar-thumb { background: beige; }
+
+/* page sections */
+.header { display: block; }
+.nav { display: block; }
+.main { display: block; width: max-content; }
+.footer { display: block; }
+.aside { display: block; }
+
+/* custom classes */
+.page { min-height: 1000px; }
+.install { padding: 8px; background: beige; color: black; display: none; width: 800px; }
+.sakura { position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.2; width: -webkit-fill-available; height: 100% }

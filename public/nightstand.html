@@ -17,9 +17,8 @@
   <link rel="icon" sizes="256x256" href="../assets/icons/dash-256.png">
   <link rel="apple-touch-icon" href="../assets/icons/dash-256.png">
   <link rel="apple-touch-startup-image" href="../assets/icons/dash-256.png">
-  <link rel="stylesheet" href="nightstand.css">
-  <link rel="stylesheet" href="../assets/leaflet.css">
-  <script src="../dist/nightstand.js"></script>
+  <link rel="stylesheet" href="weather.css">
+  <script src="../dist/weather.js"></script>
 </head>
 <body>
   <noscript><h1>javascript is required</h1></noscript>
@@ -28,9 +27,10 @@
   </nav>
   <header>
     <div id="header" class="header"></div>
-    <canvas id="sakura" class="sakura"></canvas>
+    <component-loader></component-loader>
   </header>
   <main>
+    <!-- content -->
     <div id="main" class="main">
       <div id="pg1" class="page">
         <component-clock></component-clock>
@@ -52,7 +52,9 @@
     </div>
   </main>
   <footer>
-    <div id="footer" class="footer"></div>
+    <div id="footer" class="footer">
+      <div id="install" class="install">install web app</div>
+    </div>
   </footer>
   <aside>
     <div id="aside" class="aside"></div>

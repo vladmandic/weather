@@ -53,6 +53,7 @@ export const RainViewer = L.Control.extend({
     L.DomEvent.on(this.positionSlider, 'input', (e) => this.showFrame((e.srcElement as HTMLInputElement).valueAsNumber), this);
     L.DomEvent.disableClickPropagation(this.positionSlider);
     this.timestampLabel = L.DomUtil.create('div', 'leaflet-control-rainviewer-timestamp', this.controlContainer);
+    this.timestampLabel.style.cssText = 'font-size: 1.1rem; letter-spacing: 4px; font-weight: bold; color: hsl(27, 98%, 50%); padding: 10px; cursor: pointer; width: 140px; text-shadow: black 0.025em 0.025em 0.1em;';
     L.DomEvent.on(this.timestampLabel, 'click', () => window.scroll(0, 0), this);
     this.refresh();
     if (!this.stop()) this.play();
@@ -75,7 +76,7 @@ export const RainViewer = L.Control.extend({
         }
         this.map?.invalidateSize();
         this.timestamps = json;
-        this.showFrame(-1);
+        this.showFrame(0);
         this.play();
       }
     };
@@ -94,6 +95,7 @@ export const RainViewer = L.Control.extend({
   },
 
   addLayer(ts: number) {
+    if (!ts) return;
     const map = this.map;
     if (!this.radarLayers[ts]) {
       this.radarLayers[ts] = new L.TileLayer('https://tilecache.rainviewer.com/v2/radar/' + ts + '/256/{z}/{x}/{y}/2/1_1.png', {

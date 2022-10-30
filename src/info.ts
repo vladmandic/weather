@@ -11,13 +11,15 @@ export function updateGPSInfo(loc: Location) {
 
 export function updateIPInfo(loc: Location) {
   log('updateIPInfo', { loc });
-  (document.getElementById('weather-info-ip') as HTMLDivElement).innerHTML = escape(`IP ${loc['ip'] || ''} at ${Math.round(1000 * loc.lat) / 1000}, ${Math.round(1000 * loc.lon) / 1000} ±${Math.round(loc.accuracy)}m`);
+  const ip = document.getElementById('weather-info-ip') as HTMLDivElement;
+  if (ip) ip.innerHTML = escape(`IP ${loc['ip'] || ''} at ${Math.round(1000 * loc.lat) / 1000}, ${Math.round(1000 * loc.lon) / 1000} ±${Math.round(loc.accuracy)}m`);
 }
 
 export function updateStationInfo(flags) {
   log('updateStationInfo', { flags });
   const distance = flags?.['nearest-station'] || 'Number.POSITIVE_INFINITY';
-  (document.getElementById('weather-info-station') as HTMLDivElement).innerHTML = escape(`nearest station ${distance} mi`);
+  const station = document.getElementById('weather-info-station') as HTMLDivElement;
+  if (station) station.innerHTML = escape(`nearest station ${distance} mi`);
 }
 
 export function updateSearchInfo(loc: Location) {
@@ -30,10 +32,11 @@ let forecastAgeTimer: number;
 export function updateForecastAge(time: number) {
   log('updateForecastAge', { time });
   const age = () => Math.max(0, Math.round((new Date().getSeconds() - new Date(1000 * time).getSeconds()) / 60));
-  if (time) (document.getElementById('weather-info-age') as HTMLDivElement).innerHTML = escape(`forecast data age ${age()} min`);
+  const div = document.getElementById('weather-info-age') as HTMLDivElement;
+  if (time && div) div.innerHTML = escape(`forecast data age ${age()} min`);
   if (forecastAgeTimer) return;
   forecastAgeTimer = setInterval(() => {
-    if (time) (document.getElementById('weather-info-age') as HTMLDivElement).innerHTML = escape(`forecast data age ${age()} min`);
+    if (time && div) div.innerHTML = escape(`forecast data age ${age()} min`);
   }, 5000);
 }
 
@@ -59,7 +62,10 @@ class ComponentInfo extends HTMLElement { // watch for attributes
       </div>`;
     updateCurrentTime();
     const html = document.getElementById('weather-info') as HTMLDivElement; // register refresh on click
-    if (html) html.onclick = async () => initInitial();
+    html.onclick = async (evt) => {
+      evt.stopPropagation();
+      initInitial(true);
+    };
   }
 }
 

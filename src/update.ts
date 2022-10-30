@@ -1,6 +1,7 @@
 import { log } from './log';
 import { findByLocation, getIPLocation, findByAddress, updateAddress, getGPSLocation } from './location'; // eslint-disable-line import/no-cycle
 import { updateIPInfo, updateStationInfo, updateGPSInfo, updateForecastAge } from './info'; // eslint-disable-line import/no-cycle
+import { showLoader, hideLoader } from './loader';
 import { updateAstronomy } from './astronomy';
 import { updateLegend } from './legend';
 import { updateToday } from './today';
@@ -32,7 +33,7 @@ export const update = async (loc: Location) => {
   updateForecast(data);
   updateLegend(data);
   updateChart(data);
-  updateAlerts(data);
+  updateAlerts(data.alerts);
 
   // last update tiled items
   updateRadar(loc.lat, loc.lon);
@@ -40,7 +41,7 @@ export const update = async (loc: Location) => {
   updateDarkSky(loc.lat, loc.lon);
 
   // hide loader
-  (document.getElementById('loader-container') as HTMLDivElement).style.display = 'none';
+  hideLoader();
   // fade in all icons
   for (const image of Array.from(document.getElementsByTagName('img'))) {
     let opacity = 0;
@@ -54,10 +55,10 @@ export const update = async (loc: Location) => {
   }
 };
 
-export async function initInitial() {
+export async function initInitial(forceGPS?: boolean) {
   // show loader
   (document.getElementById('main') as HTMLDivElement).style.display = 'none';
-  (document.getElementById('loader-container') as HTMLDivElement).style.display = 'block';
+  showLoader();
 
   let loc: Location | null = null;
 
@@ -71,7 +72,7 @@ export async function initInitial() {
     if (loc.lat !== 0) updateIPInfo(loc);
   }
 
-  if (!loc) { // 3. lookup by gps location
+  if (!loc || forceGPS) { // 3. lookup by gps location
     loc = await getGPSLocation();
     if (loc.lat !== 0) updateGPSInfo(loc);
   }

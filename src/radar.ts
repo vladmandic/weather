@@ -14,7 +14,7 @@ import { keys } from './secrets';
 */
 
 const mapOptions = { zoom: 9, zoomControl: false, attributionControl: false };
-const tileUrl = 'https://{s}.google.com/vt/lyrs=y,h&x={x}&y={y}&z={z}';
+const tileUrl = 'https://{s}.google.com/vt/lyrs=s,h,traffic&x={x}&y={y}&z={z}';
 const tileOptions = { maxZoom: 20, subdomains: ['mt0', 'mt1', 'mt2', 'mt3'] };
 const iconUrl = '../assets/marker.png';
 
@@ -63,22 +63,37 @@ async function onHidden() {
 }
 
 export async function updateRadar(lat: number, lon: number) {
-  div = document.getElementById('weather-radar') as HTMLDivElement;
   if (!div) return;
-  if (!intersectionObserver) {
-    intersectionObserver = new IntersectionObserver((entries) => {
-      if (entries[0].intersectionRatio <= 0) onHidden();
-      if (entries[0].intersectionRatio > 0) onVisible(lat, lon);
-    });
-    intersectionObserver.observe(div); // trigers update first time when element becomes visible instead immediately
-  }
+  if (intersectionObserver) intersectionObserver.disconnect();
+  intersectionObserver = new IntersectionObserver((entries) => {
+    if (entries[0].intersectionRatio <= 0) onHidden();
+    if (entries[0].intersectionRatio > 0) onVisible(lat, lon);
+  });
+  intersectionObserver.observe(div); // trigers update first time when element becomes visible instead immediately
 }
 
 class ComponentRadar extends HTMLElement { // watch for attributes
+  css: HTMLStyleElement = document.createElement('style');
+  container: HTMLDivElement = document.createElement('div');
+  leaflet: HTMLLinkElement = document.createElement('link');
+
   connectedCallback() { // triggered on insert
-    this.innerHTML = `
-      <div id="weather-radar" style="width: 1000px; height: 1000px; margin: 40px 0 40px 0"></div>
+    this.attachShadow({ mode: 'open' });
+    this.leaflet.rel = 'StyleSheet';
+    this.leaflet.href = '../assets/leaflet.css';
+    this.css.innerHTML = `
+      input[type="range"] { appearance: none; width: 700px; background: transparent; position: relative; font-size: 1.0rem; word-spacing: 0.7rem; }   
+      input[type="range"]:focus { outline: 0; }
+      input[type="range"]::-webkit-slider-thumb { appearance: none; width: 2rem; height: 2rem; background: hsl(27, 98%, 50%); border-radius: 100%; cursor: pointer;
+        box-shadow: inset .8em .8em 5px -8px rgba(255, 255, 255, .4), inset -.4em -.4em 10px -3px rgba(0,0,0,.2), 0.7em 0.5em 7px -0.5em rgba(0,0,0,.4); }
+      input[type="range"]::-webkit-slider-runnable-track { background: transparent; width: 100%; height: 2rem; border-radius: 2rem;
+        box-shadow: inset .6em 1em 10px rgba(0,0,0,.15), inset -.6em -1em 10px rgba(255, 255, 255, .415); }
+      input[type="range"]::before { content: attr(values); color: #c4c4c4; position: absolute; top: 0.4rem; left: 0; text-shadow: .5px .5px 0.9px rgba(0,0,0, .4); z-index: -1; }
     `;
+    this.container.id = 'weather-radar';
+    this.container.style.cssText = 'height: 1000px; margin: 40px 0 40px 0';
+    this.shadowRoot?.append(this.css, this.leaflet, this.container);
+    div = this.container;
   }
 }
 

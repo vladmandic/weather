@@ -1,10 +1,12 @@
-# Weather
+# Weather: Yet another weather app
 
-Yet another weather app
+## Notes
 
-## Platforms
+Fully rendered in browser, no external dependencies  
+Written in `TypeScript`, transpiled to `JavaScript` **ECMAScript2020**, no frameworks  
+Can self host without any server-side components needed  
 
-Fully rendered in browser, no server-side components required
+## Variations
 
 Two layouts:
 - As full PWA: `public/index.html`
@@ -27,20 +29,20 @@ Two layouts:
 2. Run `npm dev`
 
 ```js
-INFO:  @vladmandic/weather version 0.1.0
+INFO:  @vladmandic/weather version 0.9.0
 INFO:  User: vlado Platform: linux Arch: x64 Node: v18.7.0
-INFO:  Application: { name: '@vladmandic/weather', version: '0.1.0' }
+INFO:  Application: { name: '@vladmandic/weather', version: '0.9.0' }
 INFO:  Environment: { profile: 'development', config: '.build.json', package: 'package.json', tsconfig: true, eslintrc: true, git: true }
-INFO:  Toolchain: { build: '0.7.8', esbuild: '0.14.51', typescript: '4.7.4', typedoc: '0.23.9', eslint: '8.20.0' }
+INFO:  Toolchain: { build: '0.7.14', esbuild: '0.15.12', typescript: '4.8.4', typedoc: '0.23.19', eslint: '8.26.0' }
 INFO:  Build: { profile: 'development', steps: [ 'serve', 'watch', 'lint', 'compile' ] }
 STATE: WebServer: { ssl: false, port: 10060, root: '' }
 STATE: WebServer: { ssl: true, port: 10061, root: '', sslKey: 'node_modules/@vladmandic/build/cert/https.key', sslCrt: 'node_modules/@vladmandic/build/cert/https.crt' }
 STATE: Watch: { locations: [ 'src/**/*' ] }
-STATE: Lint: { locations: [ '*.json', 'src/**/*.ts' ], files: 26, errors: 0, warnings: 0 }
-STATE: Compile: { name: 'darksky', format: 'esm', platform: 'browser', input: 'src/darksky.ts', output: 'public/darksky.js', files: 21, inputBytes: 77870, outputBytes: 465595 }
-STATE: Compile: { name: 'nightstand', format: 'esm', platform: 'browser', input: 'src/nightstand.ts', output: 'public/nightstand.js', files: 17, inputBytes: 70703, outputBytes: 460132 }
-STATE: Compile: { name: 'service-worker', format: 'esm', platform: 'browser', input: 'src/pwa-serviceworker.ts', output: 'public/pwa-serviceworker.js', files: 1, inputBytes: 3828, outputBytes: 1476 }
+STATE: Lint: { locations: [ '*.json', 'src/*' ], files: 34, errors: 0, warnings: 0 }
+STATE: Compile: { name: 'application', format: 'esm', platform: 'browser', input: 'src/index.ts', output: 'dist/weather.js', files: 27, inputBytes: 99244, outputBytes: 516761 }
+STATE: Compile: { name: 'service-worker', format: 'esm', platform: 'browser', input: 'src/pwa-serviceworker.ts', output: 'dist/pwa-serviceworker.js', files: 1, inputBytes: 4152, outputBytes: 1699 }
 INFO:  Listening...
+
 ```
 
 ## Run

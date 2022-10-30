@@ -20,21 +20,17 @@
     <link rel="apple-touch-icon" href="../assets/icons/dash-256.png">
     <link rel="apple-touch-startup-image" href="../assets/icons/dash-256.png">
     <style>
-      @font-face { font-family: 'Lato'; font-display: swap; font-style: normal; font-weight: 400; src: local('Lato'), url('../assets/lato.ttf') format('truetype'); }
-      body { font-family: "Lato", "Segoe UI", "Roboto", sans-serif; font-size: 18px; background: black; color: #ebebeb; }
-      h1 { font-size: 2rem; margin-top: 1.2rem; font-weight: bold; }
-      a { color: white; }
-      a:link { color: lightblue; }
-      a:hover { color: lightskyblue; text-decoration: none; }
-      .row { width: 300px; margin: auto; margin-top: 100px; }
+      @font-face { font-family: 'CenturyGothic'; font-display: swap; font-style: normal; font-weight: 400; src: local('CenturyGothic'), url('/assets/century-gothic.ttf') format('truetype'); }
+      html { font-size: 22px }
+      body { font-size: 1rem; font-family: "CenturyGothic", "Segoe UI", sans-serif; font-variant: small-caps; width: -webkit-fill-available; background: black; color: white; overflow: hidden; margin: 50px; text-align: -webkit-center; }
+      a { font-size: 2rem; margin-top: 1.2rem; font-weight: bold; color: inherit; text-decoration: inherit; }
+      img:hover { transform: scale(1.5); transition: 1s ease-in-out; }
     </style>
 </head>
 <body>
-  <div class="row text-center">
-    <h1>
-      <a href="/">Weather: Offline</a><br>
-      <img alt="icon" src="../assets/icons/dash-256.png">
-    </h1>
-  </div>
+  <a href="/">
+    <span>weather: offline</span><br><br>
+    <img alt="icon" src="../assets/icons/dash-256.png">
+  </a><br>
 </body>
 </html>

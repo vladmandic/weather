@@ -63,6 +63,7 @@ class ComponentToday extends HTMLElement { // watch for attributes
       .component-today-icon { margin-right: 25px }
     `;
     const container = document.createElement('div');
+    container.style.cssText = 'margin: 20px 0 0 0; font-size: 1.2rem';
     this.id = 'component-today';
     container.innerHTML = `
       <div class="current" id="day-0" style="display: flex; justify-content: center; font-size: 1.2rem; line-height: 1.3">
@@ -79,7 +80,7 @@ class ComponentToday extends HTMLElement { // watch for attributes
         <div id="component-today-column3" style="margin: 12px 25px 0 25px">
         </div>
       </div>
-      <div class="component-today-notes">
+      <div style="font-size: 1.8rem; line-height: 1.8rem; text-align: center">
         <div class="desc-current"></div> 
         <div class="desc-minute"></div>
         <div class="desc-hour"></div>

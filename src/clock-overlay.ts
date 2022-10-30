@@ -7,7 +7,7 @@ export function updateClockOverlay() {
 class ComponentClockOverlay extends HTMLElement { // watch for attributes
   connectedCallback() { // triggered on insert
     this.innerHTML = `
-      <div id="component-clock-overlay" class="component-clock-overlay">
+      <div id="component-clock-overlay" style="font-size: 5.0rem; letter-spacing: 1.1rem; position: fixed; bottom: 0; right: 0; font-weight: 800; color: beige; opacity: 45%; z-index: 500; text-shadow: beige 0.025em 0.025em 0.1em">
       </div>`;
     setInterval(() => updateClockOverlay(), 1000); // start component-clock
   }
