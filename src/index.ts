@@ -10,8 +10,8 @@ import { updateRadar } from './radar';
 import { updateClockOverlay } from './clock-overlay';
 import { findByAddress, Location } from './location';
 import { update, initInitial } from './update'; // eslint-disable-line import/no-cycle
+import { loaderCallback } from './loader';
 import './clock';
-import './loader';
 
 let updateTime = 0;
 let pages: HTMLDivElement[] = [];
@@ -55,6 +55,7 @@ async function main() {
   initInitial(); // do initial weather update
   initEvents(); // do weather update on demand
   pages = Array.from(document.getElementsByClassName('page')) as HTMLDivElement[];
+  loaderCallback(initInitial);
 
   // nightstand mode
   if (pages.length > 0) {

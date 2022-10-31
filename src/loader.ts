@@ -1,5 +1,19 @@
+import { log } from './log';
+
 export const showLoader = () => Array.from(document.getElementsByTagName('component-loader')).forEach((loader) => { (loader as HTMLDivElement).style.display = 'block'; });
 export const hideLoader = () => Array.from(document.getElementsByTagName('component-loader')).forEach((loader) => { (loader as HTMLDivElement).style.display = 'none'; });
+
+export const loaderCallback = (callback) => {
+  const divs = Array.from(document.getElementsByTagName('component-loader')) as HTMLDivElement[];
+  for (const div of divs) {
+    if (div && callback) {
+      div.onclick = () => {
+        log('loaderCallback');
+        callback();
+      };
+    }
+  }
+};
 
 class ComponentLoader extends HTMLElement { // watch for attributes
   css: HTMLStyleElement = document.createElement('style');
@@ -9,7 +23,7 @@ class ComponentLoader extends HTMLElement { // watch for attributes
   connectedCallback() { // triggered on insert
     this.attachShadow({ mode: 'open' });
     this.css.innerHTML = `
-      .loader-container { top: 400px; justify-content: center; position: fixed; width: 100%; }
+      .loader-container { top: 300px; justify-content: center; position: fixed; width: 100%; }
       .loader { width: 300px; height: 300px; border: 3px solid transparent; border-radius: 50%; border-top: 4px solid #f15e41; animation: spin 4s linear infinite; position: relative; }
       .loader::before, .loader::after { content: ""; position: absolute; top: 6px; bottom: 6px; left: 6px; right: 6px; border-radius: 50%; border: 4px solid transparent; }
       .loader::before { border-top-color: #bad375; animation: 3s spin linear infinite; }
