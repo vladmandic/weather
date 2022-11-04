@@ -1,7 +1,9 @@
 /* page settings */
-@font-face { font-family: 'CenturyGothic'; font-display: swap; font-style: normal; font-weight: 400; src: local('CenturyGothic'), url('/assets/century-gothic.ttf') format('truetype'); }
+@font-face { font-family: 'CenturyGothic'; font-display: swap; font-style: normal; font-weight: 400;
+  src: local('CenturyGothic'), url('/assets/century-gothic.ttf') format('truetype'); }
 html { font-size: 22px; text-align: -webkit-center; }
-body { font-size: 1rem; font-family: "CenturyGothic", "Segoe UI", sans-serif; font-variant: small-caps; width: -webkit-fill-available; height: 100%; background: black; color: white; overflow-x: hidden; margin: 0; text-align: -webkit-center; cursor: default; }
+body { font-size: 1rem; font-family: "CenturyGothic", "Segoe UI", sans-serif; font-variant: small-caps;
+  width: -webkit-fill-available; height: 100%; background: black; color: white; overflow-x: hidden; overflow-y: visible; margin: 0; text-align: -webkit-center; cursor: default; }
 
 /* common tags */
 a { color: inherit; text-decoration: inherit; }
