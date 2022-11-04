@@ -23,8 +23,12 @@ export const update = async (loc: Location) => {
   updateAQI(loc.lat, loc.lon, keys.aqicn);
 
   // trigger update for items using forecast data
-  if (keys.darksky === '') return;
-  const data = await cors(`https://api.darksky.net/forecast/${keys.darksky}/${loc.lat},${loc.lon}`); // get actual forecast
+  const data = keys.darksky !== '' ? await cors(`https://api.darksky.net/forecast/${keys.darksky}/${loc.lat},${loc.lon}`) : undefined; // get actual forecast
+  if (!data || Object.keys(data).length === 0) {
+    showLoader('<b>no data</b><br>check api keys');
+    return;
+  }
+
   log('weatherData', data);
   (document.getElementById('main') as HTMLDivElement).style.display = 'block';
   updateStationInfo(data?.flags);
@@ -58,7 +62,7 @@ export const update = async (loc: Location) => {
 export async function initInitial(forceGPS?: boolean) {
   // show loader
   (document.getElementById('main') as HTMLDivElement).style.display = 'none';
-  showLoader();
+  showLoader('loading');
 
   let loc: Location | null = null;
 
