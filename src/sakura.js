@@ -888,9 +888,10 @@ export function createSakura() {
     run = !run;
     log('sakura', { run });
   };
-  document.body.addEventListener('click', () => {
+  document.body.addEventListener('click', (evt) => {
+    if (evt.target?.localName !== 'main') return;
     run = !run;
-    log('sakura', { run });
+    log('sakura', { run, evt });
   });
 }
 

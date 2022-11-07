@@ -24,5 +24,8 @@ img:hover { transform: scale(1.5); transition: 1s ease-in-out; }
 
 /* custom classes */
 .page { min-height: 1000px; }
-.install { padding: 8px; background: beige; color: black; display: none; width: 800px; }
-.sakura { position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.2; width: -webkit-fill-available; height: 100% }
+.nav { background: black; color: beige; display: block; width: -webkit-fill-available; height: 2rem; position: fixed; bottom: 0; left: 0; z-index: 100; border: beige; border-top: solid; display: none; } 
+.nav-section { padding: 0 80px; vertical-align: -webkit-baseline-middle; }
+.nav-section:hover { background: lightcoral; font-weight: 800; transition: 1s ease-in-out; }
+.install { padding: 8px; background: beige; color: black; display: none; width: -webkit-fill-available; position: fixed; bottom: 0; left: 0; z-index: 100; }
+.sakura { position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.2; width: -webkit-fill-available; height: 100%; }

@@ -36,7 +36,7 @@ class ComponentLoader extends HTMLElement { // watch for attributes
   connectedCallback() { // triggered on insert
     this.attachShadow({ mode: 'open' });
     this.css.innerHTML = `
-      .loader-container { top: 300px; justify-content: center; position: fixed; width: 100%; }
+      .loader-container { top: 200px; justify-content: center; position: fixed; width: 100%; }
       .loader-message { font-size: 1.5rem; padding: 1rem; }
       .loader { width: 300px; height: 300px; border: 3px solid transparent; border-radius: 50%; border-top: 4px solid #f15e41; animation: spin 4s linear infinite; position: relative; }
       .loader::before, .loader::after { content: ""; position: absolute; top: 6px; bottom: 6px; left: 6px; right: 6px; border-radius: 50%; border: 4px solid transparent; }

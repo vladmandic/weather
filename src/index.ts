@@ -16,6 +16,17 @@ import './clock';
 let updateTime = 0;
 let pages: HTMLDivElement[] = [];
 
+async function scrollTo(offset) {
+  const easing = Math.round(10 - 10 * Math.abs(Math.cos(Math.PI * window.scrollY / (offset + 1))));
+  if (offset === 0 && window.scrollY > 0) {
+    window.scroll(0, 0); // scroll back to top
+  } else if (window.scrollY !== offset) {
+    const direction = window.scrollY < offset ? 1 : -1;
+    window.scroll(0, window.scrollY + direction * (easing + 1)); // scroll to div offset with easing
+    setTimeout(() => scrollTo(offset), 10);
+  }
+}
+
 let scrollTime = new Date().getTime();
 async function scrollNext() {
   if (pages.length === 0) return;
@@ -25,17 +36,7 @@ async function scrollNext() {
     if (Math.round(window.scrollY) >= Math.round(pages[i].offsetTop)) page = i + 1;
   }
   if (page >= pages.length) page = 0;
-  const offset = pages[page].offsetTop;
-  const interval = () => {
-    const easing = Math.round(10 - 10 * Math.abs(Math.cos(Math.PI * window.scrollY / (offset + 1))));
-    if (offset === 0 && window.scrollY > 0) {
-      window.scroll(0, 0); // scroll back to top
-    } else if (window.scrollY < offset) {
-      window.scroll(0, window.scrollY + easing + 1); // scroll to div offset with easing
-      setTimeout(interval, 10);
-    }
-  };
-  interval();
+  scrollTo(pages[page].offsetTop);
 }
 
 async function initEvents() {
@@ -56,6 +57,7 @@ async function main() {
   initEvents(); // do weather update on demand
   pages = Array.from(document.getElementsByClassName('page')) as HTMLDivElement[];
   loaderCallback(initInitial);
+  const navEl = document.getElementById('nav');
 
   // nightstand mode
   if (pages.length > 0) {
@@ -83,6 +85,13 @@ async function main() {
       updateRadar(loc.lat, loc.lon);
       update(loc);
     });
+    const navs = Array.from(navEl?.children || []) as HTMLSpanElement[];
+    if (navEl && navs.length > 0) navEl.style.display = 'block';
+    for (const nav of navs) {
+      const target = document.getElementsByTagName(`component-${nav.getAttribute('target')}`)?.[0] as HTMLDivElement;
+      if (!target) continue;
+      nav.onclick = () => scrollTo(target.offsetTop - 10);
+    }
   }
 }
 

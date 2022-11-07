@@ -27,7 +27,7 @@ let intersectionObserver: IntersectionObserver;
 
 function onVisible(lat: number, lon: number) {
   if (!div) return;
-  div.style.height = `${window.innerHeight}px`;
+  div.style.height = (div.offsetWidth > window.innerHeight) ? `${window.innerHeight}px` : `${div.offsetWidth}px`;
   const latlng = new L.LatLng(lat, lon);
   if (!map || !marker) {
     if (keys.google === '') return;
@@ -82,7 +82,7 @@ class ComponentRadar extends HTMLElement { // watch for attributes
     this.leaflet.rel = 'StyleSheet';
     this.leaflet.href = '../assets/leaflet.css';
     this.css.innerHTML = `
-      input[type="range"] { appearance: none; width: 700px; background: transparent; position: relative; font-size: 1.0rem; word-spacing: 0.7rem; }   
+      input[type="range"] { appearance: none; width: 700px; background: transparent; position: relative; font-size: 1.0rem; word-spacing: 0.7rem; }
       input[type="range"]:focus { outline: 0; }
       input[type="range"]::-webkit-slider-thumb { appearance: none; width: 2rem; height: 2rem; background: hsl(27, 98%, 50%); border-radius: 100%; cursor: pointer;
         box-shadow: inset .8em .8em 5px -8px rgba(255, 255, 255, .4), inset -.4em -.4em 10px -3px rgba(0,0,0,.2), 0.7em 0.5em 7px -0.5em rgba(0,0,0,.4); }
@@ -91,7 +91,7 @@ class ComponentRadar extends HTMLElement { // watch for attributes
       input[type="range"]::before { content: attr(values); color: #c4c4c4; position: absolute; top: 0.4rem; left: 0; text-shadow: .5px .5px 0.9px rgba(0,0,0, .4); z-index: -1; }
     `;
     this.container.id = 'weather-radar';
-    this.container.style.cssText = 'height: 1000px; margin: 40px 0 40px 0';
+    this.container.style.cssText = 'height: 1000px; margin: 40px 0 40px 0; z-index: 0';
     this.shadowRoot?.append(this.css, this.leaflet, this.container);
     div = this.container;
   }

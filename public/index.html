@@ -23,7 +23,12 @@
 <body>
   <noscript><h1>javascript is required</h1></noscript>
   <nav>
-    <div id="nav" class="nav"></div>
+    <div id="nav" class="nav">
+        <span class="nav-section" target="input">home</span>
+        <span class="nav-section" target="today">forecast</span>
+        <span class="nav-section" target="astronomy">charts</span>
+        <span class="nav-section" target="radar">radar</span>
+    </div>
   </nav>
   <header>
     <div id="header" class="header"></div>
@@ -54,6 +59,7 @@
       <div style="height: 20px"></div>
       <component-windy></component-windy>
       <component-darksky></component-darksky>
+      <div style="height: 100px"></div>
     </div>
   </main>
   <footer>
