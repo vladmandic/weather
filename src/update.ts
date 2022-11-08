@@ -13,6 +13,7 @@ import { updateAlerts } from './alerts';
 import { updateWindy } from './windy';
 import { updateDarkSky } from './darksky';
 import { updateNOAA } from './noaa';
+import { updateSeaTemperature } from './seatemperature';
 import { keys } from './secrets';
 import { cors } from './cors';
 import type { Location } from './location';
@@ -23,6 +24,7 @@ export const update = async (loc: Location) => {
   updateAddress(loc.name);
   updateAQI(loc.lat, loc.lon, keys.aqicn);
   updateNOAA(loc.lat, loc.lon);
+  updateSeaTemperature(loc);
 
   // trigger update for items using forecast data
   const data = keys.darksky !== '' ? await cors(`https://api.darksky.net/forecast/${keys.darksky}/${loc.lat},${loc.lon}`) : undefined; // get actual forecast
@@ -84,7 +86,7 @@ export async function initInitial(forceGPS?: boolean) {
   }
 
   if (loc?.lat !== 0) {
-    loc.name = await findByLocation(loc.lat, loc.lon, keys.google);
+    [loc.name, loc.city] = await findByLocation(loc.lat, loc.lon, keys.google);
   } else {
     (document.getElementById('weather-info-ip') as HTMLDivElement).innerHTML = 'cannot automatically determine location'; // register refresh on click
   }

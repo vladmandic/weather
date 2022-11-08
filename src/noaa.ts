@@ -5,7 +5,7 @@ import { log } from './log';
 const map = {
   server: 'https://nowcoast.noaa.gov/arcgis/rest/services/nowcoast',
   services: ['obs_meteocean_insitu_sfc_time', 'obs_meteoceanhydro_insitu_pts_geolinks'], // 'analysis_meteohydro_sfc_rtma_time', 'analysis_ocean_sfc_sst_time', 'guidance_model_coastalocean_estofs_time', 'guidance_model_ocean_grtofs_time'],
-  options: 'MapServer/identify?f=json&tolerance=500&imageDisplay=1000,1000,96&layers=visible:1',
+  options: 'MapServer/identify?f=json&tolerance=1000&imageDisplay=1000,1000,96&layers=visible:1',
   geometry: '',
   mapExtent: '',
 };
@@ -16,6 +16,7 @@ type OceanData = {
   station: string,
   location: [number, number],
   distance: number,
+  seatemp: number,
   attributes: Record<string, unknown>,
 };
 
@@ -86,10 +87,12 @@ export async function updateNOAA(lat: number, lon: number) {
         station: entry?.attributes?.stsn || entry?.attributes?.ID,
         location,
         distance: Math.round(getDistance(lat, lon, location[0], location[1])),
+        seatemp: Number(entry?.attributes?.sst1_f || 0),
         attributes: entry?.attributes,
       });
     }
   }
   data.sort((a, b) => a.distance - b.distance);
-  log('updateNOAA', data);
+  const seaTemp = data?.find((d) => d.seatemp > 0)?.seatemp;
+  log('updateNOAA', { data, seaTemp });
 }

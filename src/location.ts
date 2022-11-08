@@ -2,16 +2,17 @@ import { log } from './log';
 import { initInitial } from './update'; // eslint-disable-line import/no-cycle
 import { cors } from './cors';
 
-export type Location = { lat: number, lon: number, accuracy: number, name: string }
+export type Location = { lat: number, lon: number, accuracy: number, name: string, city: string }
 
 export async function findByAddress(name: string, apiKey: string): Promise<Location> {
-  let rec = { name: '', lat: 0, lon: 0, accuracy: 0 };
+  let rec = { name: '', city: '', lat: 0, lon: 0, accuracy: 0 };
   if (apiKey === '') return rec;
   const json = await cors(`https://maps.googleapis.com/maps/api/geocode/json?key=${apiKey}&address=${name}`, false);
   log('findByAddress', json);
   if (json.results && json.results[0]) {
     rec = {
       name: json.results[0].formatted_address,
+      city: json.results[0].address_components?.find((adr) => adr.types.includes('locality'))?.short_name,
       lat: json.results[0].geometry.location.lat,
       lon: json.results[0].geometry.location.lng,
       accuracy: 0,
@@ -24,6 +25,7 @@ export async function findByAddress(name: string, apiKey: string): Promise<Locat
 
 export async function findByLocation(lat: number, lon: number, apiKey: string) {
   let address = '';
+  let city = '';
   if (apiKey === '') return address;
   const json = await cors(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=${apiKey}`, false);
   if (json.results) {
@@ -33,15 +35,16 @@ export async function findByLocation(lat: number, lon: number, apiKey: string) {
       const adr2 = [...new Set(adr1)];
       address = adr2.join(', ');
     }
+    city = json.results?.[0].address_components?.find((r) => r.types.includes('locality'))?.short_name || '';
     log('findByLocation', json, address);
   } else {
     log('findByLocation failed');
   }
-  return address;
+  return [address, city];
 }
 
 export async function getGPSLocation(): Promise<Location> {
-  const empty = { lat: 0, lon: 0, accuracy: 0, name: '' };
+  const empty = { lat: 0, lon: 0, accuracy: 0, name: '', city: '' };
   if (!navigator.geolocation) {
     log('getGPSLocation denied');
     return empty;
@@ -55,7 +58,7 @@ export async function getGPSLocation(): Promise<Location> {
       navigator.geolocation.getCurrentPosition(
         (position: GeolocationPosition) => { // eslint-disable-line no-undef
           log('getGPSLocation', position);
-          resolve({ lat: position.coords.latitude, lon: position.coords.longitude, name: '', accuracy: position.coords.accuracy });
+          resolve({ lat: position.coords.latitude, lon: position.coords.longitude, name: '', city: '', accuracy: position.coords.accuracy });
         },
         (error: GeolocationPositionError) => { // eslint-disable-line no-undef
           log('getGPSLocation error', error);
@@ -72,7 +75,7 @@ export async function getGPSLocation(): Promise<Location> {
 export async function getIPLocation(apiKey: string): Promise<Location> {
   const json = await cors('https://api.ipify.org?format=json', false);
   const ip = json.ip;
-  let rec = { ip, accuracy: 0, lat: 25.76, lon: -80.19, name: '' }; // default to my neighbourhood
+  let rec = { ip, accuracy: 0, lat: 25.76, lon: -80.19, name: '', city: '' }; // default to my neighbourhood
   if (apiKey === '') return rec;
   const res = await fetch(`https://www.googleapis.com/geolocation/v1/geolocate?key=${apiKey}`, {
     method: 'POST',
@@ -80,7 +83,7 @@ export async function getIPLocation(apiKey: string): Promise<Location> {
     headers: { 'Content-Type': 'application/json' },
   });
   const data = await res.json();
-  rec = { ip, accuracy: data?.accuracy || rec.accuracy, lat: data?.location?.lat || rec.lat, lon: data?.location?.lng || rec.lon, name: '' };
+  rec = { ip, accuracy: data?.accuracy || rec.accuracy, lat: data?.location?.lat || rec.lat, lon: data?.location?.lng || rec.lon, name: '', city: '' };
   log('getIPLocation', rec);
   return rec;
 }
