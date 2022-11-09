@@ -1,7 +1,80 @@
 // https://nowcoast.noaa.gov/help/#!section=rest-usage
+// https://www.ospo.noaa.gov/data/sst/contour/global.cf.gif
 
 import { log } from './log';
+import { getImage } from './cors';
 
+const map = {
+  url: 'https://www.ospo.noaa.gov/data/sst/contour/global.cf.gif',
+  coords: [901, 600, 8099, 4198], // [-180, 90, 180, -90]
+  rangeCoords: [1801, 5190, 7199, 5191],
+  range: [-2, 32.2],
+  average: 10,
+};
+
+async function getCanvas(url: string): Promise<HTMLCanvasElement> {
+  const imageUrl = await getImage(url);
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.addEventListener('load', () => {
+      const canvas = document.createElement('canvas');
+      canvas.height = img.naturalHeight;
+      canvas.width = img.naturalWidth;
+      const ctx = canvas.getContext('2d');
+      if (ctx) ctx.drawImage(img, 0, 0, img.width, img.height);
+      resolve(canvas);
+    });
+    img.src = imageUrl;
+  });
+}
+
+function getAverageRGB(data: Uint8ClampedArray) {
+  const rgb = [0, 0, 0];
+  let pixels = 0;
+  for (let i = 0; i < data.length / 4; i++) {
+    if ((data[4 * i + 0]) === 0 && (data[4 * i + 1]) === 0 && (data[4 * i + 2]) === 0) continue;
+    if ((data[4 * i + 0]) === 255 && (data[4 * i + 1]) === 255 && (data[4 * i + 2]) === 255) continue;
+    pixels++;
+    rgb[0] += data[4 * i + 0];
+    rgb[1] += data[4 * i + 1];
+    rgb[2] += data[4 * i + 2];
+  }
+  return [Math.round(rgb[0] / pixels), Math.round(rgb[1] / pixels), Math.round(rgb[2] / pixels)];
+}
+
+function gpsToXY(lat: number, lon: number): [number, number] {
+  const width = (map.coords[2] - map.coords[0]);
+  const height = (map.coords[3] - map.coords[1]);
+  const xLeft = (lon + 180) / 360;
+  const x = xLeft * width + map.coords[0];
+  const xTop = (90 - lat) / 180;
+  const y = xTop * height + map.coords[1];
+  return [Math.round(x), Math.round(y)];
+}
+
+export async function updateNOAA(lat: number, lon: number): Promise<number | undefined> {
+  log('updateNOAA', { lat, lon });
+  const canvas = await getCanvas(map.url);
+  const [x, y] = gpsToXY(lat, lon);
+  const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+  const imageData = ctx.getImageData(x - map.average / 2, y - map.average / 2, map.average, map.average);
+  const avg = getAverageRGB(imageData.data);
+  const rangeData = ctx.getImageData(map.rangeCoords[0], map.rangeCoords[1], map.rangeCoords[2] - map.rangeCoords[0], map.rangeCoords[3] - map.rangeCoords[1]);
+  let bestError = Number.MAX_SAFE_INTEGER;
+  let bestValue = Number.NaN;
+  for (let i = 0; i < rangeData.width; i++) {
+    const error = Math.abs(rangeData.data[4 * i + 0] - avg[0]) + Math.abs(rangeData.data[4 * i + 1] - avg[1]) + Math.abs(rangeData.data[4 * i + 2] - avg[2]);
+    if (error < bestError) {
+      bestError = error;
+      bestValue = (i / rangeData.width) * (map.range[1] - map.range[0]) + map.range[0];
+    }
+  }
+  const temp = Number.isNaN(bestValue) ? undefined : Math.round(10 * (bestValue * 9 / 5 + 32)) / 10;
+  log('updateNOAA', { lat, lon, temp });
+  return temp;
+}
+
+/*
 const map = {
   server: 'https://nowcoast.noaa.gov/arcgis/rest/services/nowcoast',
   services: ['obs_meteocean_insitu_sfc_time', 'obs_meteoceanhydro_insitu_pts_geolinks'], // 'analysis_meteohydro_sfc_rtma_time', 'analysis_ocean_sfc_sst_time', 'guidance_model_coastalocean_estofs_time', 'guidance_model_ocean_grtofs_time'],
@@ -30,7 +103,8 @@ const gpsToWebMercator = (lat, lon) => {
 
 function getDistance(lat1, lon1, lat2, lon2) { // calculating distance using Vincenty Formula
   const toRad = (value) => value * Math.PI / 180;
-  const a = 6378137; const b = 6356752.314245;
+  const a = 6378137;
+  const b = 6356752.314245;
   const f = 1 / 298.257223563;
   const L = toRad(lon2 - lon1);
   const U1 = Math.atan((1 - f) * Math.tan(toRad(lat1)));
@@ -96,3 +170,4 @@ export async function updateNOAA(lat: number, lon: number) {
   const seaTemp = data?.find((d) => d.seatemp > 0)?.seatemp;
   log('updateNOAA', { data, seaTemp });
 }
+*/

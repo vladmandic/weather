@@ -33,10 +33,10 @@ export function updateForecastAge(time: number) {
   log('updateForecastAge', { time });
   const age = () => Math.max(0, Math.round((new Date().getSeconds() - new Date(1000 * time).getSeconds()) / 60));
   const div = document.getElementById('weather-info-age') as HTMLDivElement;
-  if (time && div) div.innerHTML = escape(`forecast data age ${age()} min`);
+  if (time && div) div.innerHTML = escape(`forecast data age ${age()} min | last update ${DateTime.fromSeconds(time).toFormat('HH:mm')}`);
   if (forecastAgeTimer) return;
   forecastAgeTimer = setInterval(() => {
-    if (time && div) div.innerHTML = escape(`forecast data age ${age()} min`);
+    if (time && div) div.innerHTML = escape(`forecast data age ${age()} min | last update ${DateTime.fromSeconds(time).toFormat('HH:mm')}`);
   }, 5000);
 }
 
@@ -56,7 +56,7 @@ class ComponentInfo extends HTMLElement { // watch for attributes
         <div id="weather-info-gps"></div>
         <div id="weather-info-ip"></div>
         <div style="display: flex; justify-content: center">
-          <div id="weather-info-station"></div>&nbsp
+          <div id="weather-info-station"></div>&nbsp|&nbsp
           <div id="weather-info-age"></div>
         </div>
       </div>`;

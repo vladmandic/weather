@@ -1,9 +1,11 @@
 import { DateTime } from 'luxon';
 import { log } from './log';
+import type { Location } from './location';
+import { updateNOAA } from './noaa';
 
 const imgPath = '../assets/weather';
 
-export async function updateToday(data) {
+export async function updateToday(data, loc: Location) {
   log('updateToday', { currently: data.currently });
   const card = document.getElementById('component-today');
   if (!card) return;
@@ -49,7 +51,8 @@ export async function updateToday(data) {
   html += `visibility <b>${data.currently.visibility} mi</b><br>`;
   html += `wind <b>${Math.round(data.currently.windSpeed)} to ${Math.round(data.currently.windGust)} mph &nbsp&nbsp<span style="display:inline-block;transform:rotate(${data.currently.windBearing}deg);"> ↑ </span></b><br>`;
   html += `nearest storm ${storm}<br>`;
-  html += `last update ${DateTime.fromSeconds(data.currently.time as number).toFormat('HH:mm')}<br>`;
+  const seaTemp = await updateNOAA(loc.lat, loc.lon);
+  if (seaTemp) html += `sea temperature ${seaTemp}°<br>`;
   div2.innerHTML = html;
 }
 
@@ -80,7 +83,7 @@ class ComponentToday extends HTMLElement { // watch for attributes
         <div id="component-today-column3" style="margin: 12px 25px 0 25px">
         </div>
       </div>
-      <div style="font-size: 1.8rem; line-height: 1.8rem; text-align: center">
+      <div class="weather-text" style="font-size: 1.8rem; line-height: 1.8rem; text-align: center">
         <div class="desc-current"></div> 
         <div class="desc-minute"></div>
         <div class="desc-hour"></div>

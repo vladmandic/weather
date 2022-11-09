@@ -12,6 +12,11 @@ Two layouts:
 - As full PWA for both desktop and mobile: `/public/index.html`
 - For nightstand displays (with auto-scroll and auto-refresh): `/public/nightstand.html`
 
+
+## Screenshot
+
+![screenshot](assets/screenshot.jpg)
+
 ## Install
 
 1. Run `npm install`
@@ -55,12 +60,9 @@ INFO:  Listening...
 
 ## References
 
+- [NOAA](https://www.ospo.noaa.gov/)
 - [DarkSky](https://darksky.net/dev/docs)
 - [Tomorrow.io](https://docs.tomorrow.io/reference/welcome)
 - [Leaflet](https://leafletjs.com/reference.html)
 - [Google Maps](https://developers.google.com/maps/documentation/geocoding/requests-geocoding)
 - [AQIcn](https://aqicn.org/json-api/doc/)
-
-## Screenshot
-
-![screenshot](assets/screenshot.jpg)

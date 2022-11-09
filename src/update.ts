@@ -12,7 +12,6 @@ import { updateAQI } from './aqi';
 import { updateAlerts } from './alerts';
 import { updateWindy } from './windy';
 import { updateDarkSky } from './darksky';
-import { updateNOAA } from './noaa';
 import { updateSeaTemperature } from './seatemperature';
 import { keys } from './secrets';
 import { cors } from './cors';
@@ -23,7 +22,6 @@ export const update = async (loc: Location) => {
   updateAstronomy(loc.lat, loc.lon);
   updateAddress(loc.name);
   updateAQI(loc.lat, loc.lon, keys.aqicn);
-  updateNOAA(loc.lat, loc.lon);
   updateSeaTemperature(loc);
 
   // trigger update for items using forecast data
@@ -37,7 +35,7 @@ export const update = async (loc: Location) => {
   (document.getElementById('main') as HTMLDivElement).style.display = 'block';
   updateStationInfo(data?.flags);
   updateForecastAge(data?.currently?.time);
-  updateToday(data);
+  updateToday(data, loc);
   updateForecast(data);
   updateLegend(data);
   updateChart(data);

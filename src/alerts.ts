@@ -23,7 +23,7 @@ export function updateAlerts(alerts) {
       <a href="${alert.uri}" target="_blank">
         <span style="color: bisque; -webkit-box-decoration-break: clone">▪ ${DateTime.fromSeconds(alert.time).toFormat('ccc LLL d T')} to ${DateTime.fromSeconds(alert.expires).toFormat('ccc LLL d T')}</span>
         <span style="padding: 2px; background: ${color(alert.severity)}"> ${alert.severity}</span><br>
-        <span style="color: beige; -webkit-box-decoration-break: clone; margin-left: 10px">for ${alert.regions.join(', ')}</span><br>
+        <div style="color: beige; -webkit-box-decoration-break: clone; margin-left: 10px; margin-bottom: -1rem; height: 1rem; overflow-y: hidden;">for ${alert.regions.join(', ')}</div><br>
         <span style="margin-left: 10px; -webkit-box-decoration-break: clone; font-weight: bold">${alert.title}</span><br>
         <div style="margin-left: 10px; max-height: 3.8rem; overflow-y: auto; -webkit-box-decoration-break: clone">${alert.description.toLowerCase()}</div>
       </a>
