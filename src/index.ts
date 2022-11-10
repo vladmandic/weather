@@ -35,9 +35,10 @@ async function scrollNext() {
   scrollTime = new Date().getTime();
   let page = 0;
   for (let i = 0; i < pages.length; i++) {
-    if (Math.round(window.scrollY) >= Math.round(pages[i].offsetTop)) page = i + 1;
+    if (window.scrollY >= pages[i].offsetTop - 1) page = i + 1;
   }
   if (page >= pages.length) page = 0;
+  log('scrollNext', { page });
   scrollTo(pages[page].offsetTop, 3000);
 }
 
@@ -50,6 +51,13 @@ async function initEvents() {
     },
   });
   document.body.onclick = () => scrollNext();
+  const navEl = document.getElementById('nav');
+  const navs = Array.from(navEl?.children || []) as HTMLSpanElement[];
+  for (const nav of navs) {
+    const target = document.getElementsByTagName(`component-${nav.getAttribute('target')}`)?.[0] as HTMLDivElement;
+    if (!target) continue;
+    nav.onclick = () => scrollTo(target.offsetTop - 50, 1000);
+  }
 }
 
 async function main() {
@@ -86,13 +94,6 @@ async function main() {
       updateRadar(loc.lat, loc.lon);
       update(loc);
     });
-    const navEl = document.getElementById('nav');
-    const navs = Array.from(navEl?.children || []) as HTMLSpanElement[];
-    for (const nav of navs) {
-      const target = document.getElementsByTagName(`component-${nav.getAttribute('target')}`)?.[0] as HTMLDivElement;
-      if (!target) continue;
-      nav.onclick = () => scrollTo(target.offsetTop - 50, 1000);
-    }
   }
 }
 

@@ -852,6 +852,7 @@ function setViewports() {
 }
 
 function resizeSakura() {
+  if (!canvas) return;
   makeCanvasFullScreen();
   setViewports();
   if (sceneStandBy) initScene();
@@ -860,6 +861,7 @@ function resizeSakura() {
 let run = true;
 
 function animateSakura() {
+  if (!canvas) return;
   const curdate = new Date();
   timeInfo.elapsed = (curdate - timeInfo.start) / 1000.0;
   timeInfo.delta = (curdate - timeInfo.prev) / 1000.0;
