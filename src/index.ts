@@ -16,14 +16,16 @@ import './clock';
 let updateTime = 0;
 let pages: HTMLDivElement[] = [];
 
-async function scrollTo(offset, speed) {
-  const easing = Math.round(10 - 10 * Math.abs(Math.cos(Math.PI * window.scrollY / (offset + 1))));
-  if (offset === 0 && window.scrollY > 0) {
-    window.scroll(0, 0); // scroll back to top
-  } else if (window.scrollY !== offset) {
-    const direction = window.scrollY < offset ? 1 : -1;
-    window.scroll(0, window.scrollY + direction * easing + direction); // scroll to div offset with easing
-    setTimeout(() => scrollTo(offset, speed), 1000 / speed);
+async function scrollTo(offset, duration, startTime?, startPos?) {
+  if (!startPos) startPos = window.scrollY;
+  if (!startTime) startTime = new Date().getTime();
+  if (offset === 0) window.scroll(0, 0); // scroll back to top
+  else {
+    const elapsed = new Date().getTime() - startTime;
+    const easeInOutSine = (Math.cos(Math.PI * (elapsed - duration) / duration) + 1) / 2;
+    const target = easeInOutSine * easeInOutSine * (offset - startPos) + startPos; // easeInOutQuad
+    window.scroll(0, target);
+    if (elapsed < duration) setTimeout(() => scrollTo(offset, duration, startTime, startPos), 10);
   }
 }
 
@@ -36,7 +38,7 @@ async function scrollNext() {
     if (Math.round(window.scrollY) >= Math.round(pages[i].offsetTop)) page = i + 1;
   }
   if (page >= pages.length) page = 0;
-  scrollTo(pages[page].offsetTop, 100);
+  scrollTo(pages[page].offsetTop, 3000);
 }
 
 async function initEvents() {
@@ -57,7 +59,6 @@ async function main() {
   initEvents(); // do weather update on demand
   pages = Array.from(document.getElementsByClassName('page')) as HTMLDivElement[];
   loaderCallback(initInitial);
-  const navEl = document.getElementById('nav');
 
   // nightstand mode
   if (pages.length > 0) {
@@ -85,12 +86,12 @@ async function main() {
       updateRadar(loc.lat, loc.lon);
       update(loc);
     });
+    const navEl = document.getElementById('nav');
     const navs = Array.from(navEl?.children || []) as HTMLSpanElement[];
-    if (navEl && navs.length > 0) navEl.style.display = 'flex';
     for (const nav of navs) {
       const target = document.getElementsByTagName(`component-${nav.getAttribute('target')}`)?.[0] as HTMLDivElement;
       if (!target) continue;
-      nav.onclick = () => scrollTo(target.offsetTop - 10, 500);
+      nav.onclick = () => scrollTo(target.offsetTop - 50, 1000);
     }
   }
 }

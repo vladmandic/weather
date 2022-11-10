@@ -53,7 +53,6 @@ function gpsToXY(lat: number, lon: number): [number, number] {
 }
 
 export async function updateNOAA(lat: number, lon: number): Promise<number | undefined> {
-  log('updateNOAA', { lat, lon });
   const canvas = await getCanvas(map.url);
   const [x, y] = gpsToXY(lat, lon);
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;

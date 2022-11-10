@@ -48,6 +48,9 @@ export const update = async (loc: Location) => {
 
   // hide loader
   hideLoader();
+  const navEl = document.getElementById('nav');
+  if (navEl) navEl.style.display = 'flex';
+
   // fade in all icons
   for (const image of Array.from(document.getElementsByTagName('img'))) {
     let opacity = 0;

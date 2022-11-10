@@ -30,13 +30,16 @@ export function updateSearchInfo(loc: Location) {
 
 let forecastAgeTimer: number;
 export function updateForecastAge(time: number) {
-  log('updateForecastAge', { time });
-  const age = () => Math.max(0, Math.round((new Date().getSeconds() - new Date(1000 * time).getSeconds()) / 60));
+  log('updateForecastAge', { time, date: DateTime.fromSeconds(time).toFormat('HH:mm:ss') });
+  const age = () => {
+    const min = Math.round((new Date().getSeconds() - new Date(1000 * time).getSeconds()) / 60);
+    return min > 0 ? `${min} min` : 'current';
+  };
   const div = document.getElementById('weather-info-age') as HTMLDivElement;
-  if (time && div) div.innerHTML = escape(`forecast data age ${age()} min | last update ${DateTime.fromSeconds(time).toFormat('HH:mm')}`);
+  if (div) div.innerHTML = escape(`forecast data age ${age()} | last update ${DateTime.fromSeconds(time).toFormat('HH:mm:ss')}`);
   if (forecastAgeTimer) return;
   forecastAgeTimer = setInterval(() => {
-    if (time && div) div.innerHTML = escape(`forecast data age ${age()} min | last update ${DateTime.fromSeconds(time).toFormat('HH:mm')}`);
+    if (div) div.innerHTML = escape(`forecast data age ${age()} | last update ${DateTime.fromSeconds(time).toFormat('HH:mm:ss')}`);
   }, 5000);
 }
 
