@@ -8,7 +8,6 @@ darksky.frameBorder = '0';
 
 export async function updateDarkSky(lat: number, lon: number) {
   log('updateDarkSky', { lat, lon });
-  // eslint-disable-next-line max-len
   darksky.src = `https://maps.darksky.net/@precipitation_rate,${lat},${lon}`;
 }
 

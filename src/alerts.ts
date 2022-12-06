@@ -12,10 +12,11 @@ function color(severity: string) {
 
 export function updateAlerts(alerts) {
   log('updateAlerts', { alerts });
-  if (!alerts) return;
   const divAlerts = document.getElementById('component-alerts');
   if (!divAlerts) return;
   let html = '';
+  divAlerts.innerHTML = html;
+  if (!alerts) return;
   html += '<span style="font-size: 1.8rem">Alerts</span><br><br>';
   for (const alert of alerts) {
     html += `

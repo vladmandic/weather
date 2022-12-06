@@ -3,6 +3,7 @@
 
 import { log } from './log';
 import { getImage } from './cors';
+import { units } from './units';
 
 const map = {
   url: 'https://www.ospo.noaa.gov/data/sst/contour/global.cf.gif',
@@ -53,6 +54,7 @@ function gpsToXY(lat: number, lon: number): [number, number] {
 }
 
 export async function updateNOAA(lat: number, lon: number): Promise<number | undefined> {
+  const getTemp = (val) => (units.temp === 'c' ? val : val * 9 / 5 + 32);
   const canvas = await getCanvas(map.url);
   const [x, y] = gpsToXY(lat, lon);
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
@@ -68,7 +70,7 @@ export async function updateNOAA(lat: number, lon: number): Promise<number | und
       bestValue = (i / rangeData.width) * (map.range[1] - map.range[0]) + map.range[0];
     }
   }
-  const temp = Number.isNaN(bestValue) ? undefined : Math.round(10 * (bestValue * 9 / 5 + 32)) / 10;
+  const temp = Number.isNaN(bestValue) ? undefined : Math.round(10 * getTemp(bestValue)) / 10;
   log('updateNOAA', { lat, lon, temp });
   return temp;
 }

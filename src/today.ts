@@ -2,6 +2,7 @@ import { DateTime } from 'luxon';
 import { log } from './log';
 import type { Location } from './location';
 import { updateNOAA } from './noaa';
+import { units } from './units';
 
 const imgPath = '../assets/weather';
 
@@ -36,20 +37,20 @@ export async function updateToday(data, loc: Location) {
   const div1 = document.getElementById('component-today-column2');
   if (!div1) return;
   let html = '';
-  const rain = data.currently.precipProbability < 0.02 ? 'none' : `<b>${Math.round(100 * data.currently.precipProbability)}% for ${Math.round(100 * data.currently.precipIntensity) / 100} in</b>`;
+  const rain = data.currently.precipProbability < 0.02 ? 'none' : `<b>${Math.round(100 * data.currently.precipProbability)}% for ${Math.round(100 * data.currently.precipIntensity) / 100} ${units.precip}</b>`;
   html += `humidity <b>${Math.round(100 * data.currently.humidity)}%</b><br>`;
   html += `dew point <b>${Math.round(data.currently.dewPoint)}°</b><br>`;
   html += `cloud cover <b>${Math.round(100 * data.currently.cloudCover)}%</b><br>`;
-  html += `pressure <b>${data.currently.pressure} mb</b><br>`;
+  html += `pressure <b>${data.currently.pressure} ${units.pressure}</b><br>`;
   html += `precipation <b>${rain}</b><br>`;
   div1.innerHTML = html;
   const div2 = document.getElementById('component-today-column3');
   if (!div2) return;
   html = '';
-  const storm = data.currently.nearestStormDistance ? `<b>${data.currently.nearestStormDistance} mi &nbsp<span style="display:inline-block;transform:rotate(${data.currently.nearestStormBearing}deg);"> ↑ </span></b>` : 'none';
+  const storm = data.currently.nearestStormDistance ? `<b>${data.currently.nearestStormDistance} ${units.distance} &nbsp<span style="display:inline-block;transform:rotate(${data.currently.nearestStormBearing}deg);"> ↑ </span></b>` : 'none';
   html += `uv index <span style="background-color: rgba(${15 * data.currently.uvIndex}, ${15 * (15 - data.currently.uvIndex)}, ${0}, 1)"><b>&nbsp${data.currently.uvIndex}&nbsp</b></span><br>`;
-  html += `visibility <b>${data.currently.visibility} mi</b><br>`;
-  html += `wind <b>${Math.round(data.currently.windSpeed)} to ${Math.round(data.currently.windGust)} mph &nbsp&nbsp<span style="display:inline-block;transform:rotate(${data.currently.windBearing}deg);"> ↑ </span></b><br>`;
+  html += `visibility <b>${data.currently.visibility} ${units.distance}</b><br>`;
+  html += `wind <b>${Math.round(data.currently.windSpeed)} to ${Math.round(data.currently.windGust)} ${units.speed} &nbsp&nbsp<span style="display:inline-block;transform:rotate(${data.currently.windBearing}deg);"> ↑ </span></b><br>`;
   html += `nearest storm ${storm}<br>`;
   const seaTemp = await updateNOAA(loc.lat, loc.lon);
   if (seaTemp) html += `sea temperature ${seaTemp}°<br>`;
