@@ -1,5 +1,5 @@
 import { log } from './log';
-import { update } from './update'; // eslint-disable-line import/no-cycle
+import { update } from './update';
 
 export class units {
   static possible = ['eu', 'us', 'uk', 'si'];

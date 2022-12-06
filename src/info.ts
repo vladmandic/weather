@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon';
 import { log } from './log';
-import { initInitial } from './update'; // eslint-disable-line import/no-cycle
+import { initInitial } from './update';
 import { escape } from './xss';
 import type { Location } from './location';
 

@@ -1,5 +1,5 @@
 import { log } from './log';
-import { initInitial } from './update'; // eslint-disable-line import/no-cycle
+import { initInitial } from './update';
 import { cors } from './cors';
 
 export type Location = { lat: number, lon: number, accuracy: number, name: string, city: string }

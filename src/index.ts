@@ -9,7 +9,7 @@ import { updateSearchInfo } from './info';
 import { updateRadar } from './radar';
 import { updateClockOverlay } from './clock-overlay';
 import { findByAddress, Location } from './location';
-import { update, initInitial } from './update'; // eslint-disable-line import/no-cycle
+import { update, initInitial } from './update';
 import { loaderCallback } from './loader';
 import './clock';
 

@@ -1,6 +1,6 @@
 import { log } from './log';
-import { findByLocation, getIPLocation, findByAddress, updateAddress, getGPSLocation } from './location'; // eslint-disable-line import/no-cycle
-import { updateIPInfo, updateStationInfo, updateGPSInfo, updateForecastAge } from './info'; // eslint-disable-line import/no-cycle
+import { findByLocation, getIPLocation, findByAddress, updateAddress, getGPSLocation } from './location';
+import { updateIPInfo, updateStationInfo, updateGPSInfo, updateForecastAge } from './info';
 import { showLoader, hideLoader } from './loader';
 import { updateAstronomy } from './astronomy';
 import { updateLegend } from './legend';

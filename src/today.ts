@@ -49,7 +49,7 @@ export async function updateToday(data, loc: Location) {
   html = '';
   const storm = data.currently.nearestStormDistance ? `<b>${data.currently.nearestStormDistance} ${units.distance} &nbsp<span style="display:inline-block;transform:rotate(${data.currently.nearestStormBearing}deg);"> ↑ </span></b>` : 'none';
   html += `uv index <span style="background-color: rgba(${15 * data.currently.uvIndex}, ${15 * (15 - data.currently.uvIndex)}, ${0}, 1)"><b>&nbsp${data.currently.uvIndex}&nbsp</b></span><br>`;
-  html += `visibility <b>${data.currently.visibility} ${units.distance}</b><br>`;
+  html += `visibility <b>${Math.round(10 * data.currently.visibility) / 10} ${units.distance}</b><br>`;
   html += `wind <b>${Math.round(data.currently.windSpeed)} to ${Math.round(data.currently.windGust)} ${units.speed} &nbsp&nbsp<span style="display:inline-block;transform:rotate(${data.currently.windBearing}deg);"> ↑ </span></b><br>`;
   html += `nearest storm ${storm}<br>`;
   const seaTemp = await updateNOAA(loc.lat, loc.lon);
